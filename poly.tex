@@ -490,6 +490,7 @@ We conclude with a theorem that links the isogenies between two
 elliptic curves with their Frobenius endomorphisms.
 
 \begin{theorem}[Sato-Tate]
+  \label{th:sato-tate}
   Two elliptic curves $E,E'$ defined over a finite field $k$ are
   isogenous over $k$ if and only if $\#E(k)=\#E'(k)$.
 \end{theorem}
@@ -1225,10 +1226,38 @@ remainder theorem. %
 To compute $t_π\bmod ℓ$, Schoof's algorithm formally constructs the
 group $E[ℓ]$, takes a generic point $P∈E[\ell]$, and then runs a
 search for the integer $t$ such that
-\[π([t]P) = [q]P + π^2(P).\]
+\[π([t]P) = [q]P + π^2(P).\] %
+The formal computation must be carried out by computing modulo a
+polynomial that vanishes on the whole $E[\ell]$; the smallest such
+polynomial is provided by the \emph{division polynomial} $ψ_ℓ$.
 
-The algorithm runs in time polynomial in $\log\#E(k)$, however it is
-quite slow in practice. %
+\begin{definition}[Division polynomial]
+  Let $E:y^2=x^3+ax+b$ be an elliptic curve, the \emph{division
+    polynomials} $ψ_m$ are defined by the initial values
+  \begin{align*}
+    ψ_1 &= 1,\\
+    ψ_2 &= 2y^2,\\
+    ψ_3 &= 3x^4 + 6ax^2 + 12bx - a^2,\\
+    ψ_4 &= (2x^6 + 10ax^4 + 40bx^3 - 10a^2x^2 - 8abx - 2a^3 - 16b^2)2y^2,
+  \end{align*}
+  and by the recurrence
+  \begin{align*}
+    ψ_{2m+1}  &= ψ_{m+2}ψ_m^3 - ψ_{m-1}ψ_{m+1}^3 &\text{for $m≥2$,}\\
+    ψ_2ψ_{2m} &= (ψ_{m+2}ψ_{m-1}^2 - ψ_{m-2}ψ_{m+1}^2)ψ_m &\text{for $m≥3$.}
+  \end{align*}
+
+  The $m$-th division polynomial $ψ_m$ vanishes on $E[m]$;
+  the multiplication-by-$m$ map can be written as
+  \[[m]P = \left(\frac{ϕ_m(P)}{ψ_m(P)^2}, \frac{ω_m(P)}{ψ_m(P)^3}\right)\]
+  for any point $P≠\O$, where $ϕ_m$ and $ω_m$ are defined as
+  \begin{align*}
+    ϕ_m &= xψ_m^2 - ψ_{m+1}ψ_{m-1},\\
+    ω_m &= ψ_{m-1}^2ψ_{m+2} + ψ_{m-2}ψ_{m+1}^2.
+  \end{align*}
+\end{definition}
+
+Schoof's algorithm runs in time polynomial in $\log\#E(k)$, however it
+is quite slow in practice. %
 Among the major advances that have enabled the use of elliptic curves
 in cryptography are the optimizations of Schoof's algorithm due to
 Atkin and Elkies~\cite{schoof95}. %
@@ -1264,10 +1293,10 @@ and from it we recover $t_π = λ + q/λ \mod \ell$.
 Elkies' method is very similar to Schoof's original way of computing
 $t_π$, however it is considerably more efficient thanks to the degree
 of the extension rings involved. %
-Indeed, to formally represent a generic point of $E[ℓ]$, we need to
-work modulo a polynomial of degree $≈ℓ^2$; whereas to formally
-represent a point of $〈P〉$, we only need to work modulo a polynomial
-of degree $≈ℓ$.
+Indeed, in Schoof's algorithm a generic point of $E[ℓ]$ is represented
+modulo the division polynomial $ψ_ℓ$, which has degree $(ℓ^2-1)/2$. %
+In Elkies' algorithm, instead, the formal representation of $〈P〉$ we
+only requires working modulo a polynomial of degree $≈ℓ$.
 
 The other cases have similar complexity gains. %
 For a more detailed overview, we address the reader
@@ -1275,17 +1304,186 @@ to~\cite{schoof95,lercier-algorithmique,elkies98,sutherland10}.
 
 \subsection{Isogeny graphs}
 
-- Isogeny graphs
-- Volcanoes
-- Division polynomials
-- Velu's formulas
+We now look at the graph structure that isogenies create on the set of
+$j$-invariants defined over a finite field. %
+We start with an easy generalization of the Sato-Tate
+theorem~\ref{th:sato-tate}.
+
+\begin{theorem}[Sato-Tate]
+  \label{th:sato-tate2}
+  Two elliptic curves $E,E'$ are isogenous if and only if their
+  endomorphisms algebras $\End(E)⊗ℚ$ and $\End(E')⊗ℚ$ are isomorphic.
+\end{theorem}
+
+An equivalence class of isogenous elliptic curves is called an
+\emph{isogeny class}. %
+In particular, we see that it is impossible for an isogeny class to
+contain both ordinary and supersingular curves. %
+When we restrict to isogenies of a prescribed degree $ℓ$, we say that
+two curves are $ℓ$-isogenous; by the dual isogeny theorem, this too is
+an equivalence relation. %
+Remark that if $E$ is $ℓ$-isogenous to $E'$, and if $E''$ is
+isomorphic to $E'$, then by composition $E$ and $E''$ are also
+$ℓ$-isogenous. %
+
+At this stage, we are only interested in elliptic curves up to
+isomorphism, i.e., $j$-invariants. %
+Accordingly, we say that two $j$-invariants are \emph{isogenous}
+whenever their corresponding curves are. %
+
+\begin{definition}[Isogeny graph]
+  An \emph{isogeny graph} is a (multi)-graph whose nodes are the
+  $j$-invariants of isogenous curves, and whose edges are isogenies
+  between them.
+\end{definition}
+
+
+\begin{figure}
+  \centering
+    \begin{tikzpicture}
+      \begin{scope}[xshift=6cm]
+        \def\crater{7}
+        \foreach \i in {1,...,\crater} {
+          \draw[fill] (360/\crater*\i:1cm) circle (5pt);
+          \draw (360/\crater*\i : 1cm) -- (360/\crater*\i+360/\crater : 1cm);
+          \foreach \j in {-1,1} {
+            \draw[fill] (360/\crater*\i : 1cm) -- (360/\crater*\i + \j*360/\crater/4 : 2cm) circle (3pt);
+            \foreach \k in {-1,0,1} {
+              \draw[fill] (360/\crater*\i + \j*360/\crater/4 : 2cm) --
+              (360/\crater*\i + + \j*360/\crater/4 + \k*360/\crater/6 : 2.5cm) circle (1pt);
+            }
+          }
+        }
+      \end{scope}
+      \begin{scope}[xshift=12cm]
+        \node at (0,2) {$\End(E)$};
+        \draw[fill] (0,1) circle(5pt) node[xshift=0.7cm]{$\O_K$} -- 
+        (0,0) circle(3pt) --
+        (0,-1) circle(1pt) node[xshift=0.7cm]{$ℤ[π]$};
+      \end{scope}
+    \end{tikzpicture}
+  
+    \caption{A volcano of $3$-isogenies (ordinary elliptic curves,
+      Elkies case), and the correspond tower of orders inside the
+      endomorphism algebra.}
+  \label{fig:volcano}
+\end{figure}
+
+The dual isogeny theorem guarantees that for every isogeny $E\to E'$
+there is a corresponding isogeny $E'\to E$ of the same degree. %
+For this reason, isogeny graphs are usually drawn undirected. %
+Figure~\ref{fig:volcano} shows a typical example of isogeny graph,
+where we restrict to isogenies of degree $3$.
+
+The classification of isogeny graphs was initiated by
+Pizer~\cite{pizer1,pizer2} and Kohel~\cite{kohel}; further algorithmic
+treatment of graphs of ordinary curves, and the now famous name of
+\emph{isogeny volcanoes} was subsequently given by Fouquet and
+Morain~\cite{fouquet+morain02}. %
+We start with some generalities.
+
+\begin{proposition}
+  \label{th:isog-count}
+  Let $E:y^2=x^3+ax+b$ be an elliptic curve defined over a finite
+  field $k$ of characteristic $p$, and let $ℓ≠p$ be a prime.
+
+  \begin{enumerate}
+  \item There are $ℓ+1$ distinct isogenies of degree $ℓ$ with domain
+    $E$ defined over the algebraic closure $\bar{k}$.
+  \item There are $0,1,2$ or $ℓ+1$ isogenies of degree $ℓ$ with domain
+    $E$ defined over $k$.
+  \item If $E$ is ordinary, there is a unique separable isogeny of
+    degree $p$ with domain $E$; there are none if $E$ is
+    supersingular.
+  \item The map $(x,y)\mapsto(x^p,y^p)$ is a purely inseparable
+    isogeny of degree $p$ from $E$ to $E^{(p)}:y^2=x^3+a^px+b^p$.
+  \end{enumerate}
+\end{proposition}
+
+There are many differences between the structure of isogeny graphs of
+ordinary curves and those of supersingular ones. %
+We focus here on the ordinary case, and we leave the supersingular one
+for the last section.
+
+\begin{proposition}[Horizontal and vertical isogenies]
+  Let $ϕ:E\to E'$ be an isogeny of prime degree $ℓ$, and let $\O,\O'$
+  be the orders corresponding to $E,E'$. %
+  Then, either $\O⊂\O'$ or $\O'⊂\O$, and one of the following is true:
+  \begin{itemize}
+  \item $\O=\O'$, in this case $ϕ$ is said to \emph{horizontal};
+  \item $[\O':\O]=ℓ$, in this case $ϕ$ is said to be \emph{ascending};
+  \item $[\O:\O']=ℓ$, in this case $ϕ$ is said to be \emph{descending}.
+  \end{itemize}
+\end{proposition}
+\begin{proof}
+  See~\cite[Prop.~21]{kohel}.
+\end{proof}
+
+Observe that vertical isogenies can only exist for primes that divide
+the conductor of $ℤ[π]$, so the horizontal case is the generic one. %
+Like we did for the SEA algorithm we can further distinguish three
+cases, depending on the value of the Legendre symbol
+$\left(\frac{D}{ℓ}\right)$, i.e., depending on whether $π$ splits
+(Elkies case), is inert (Atkin case), or ramifies modulo $ℓ$. %
+All possible cases are encoded in the following proposition.
+
+\begin{proposition}
+  Let $E$ be an elliptic curve over a finite field $k$. %
+  Let $\O$ its endomorphism ring, $f$ its conductor, $D$ its
+  discriminant, $π$ the Frobenius endormphism, $f_π$ the conductor of
+  $ℤ[π]$. %
+  Let $ℓ$ be a prime different from the characteristic of $k$, then
+  the types of degree $ℓ$ isogenies with domain $E$ are as follows:
+  \begin{itemize}
+  \item If $ℓ|f$ and $ℓ\nmid(f_π/f)$, there is one ascending isogeny;
+  \item If $ℓ|f$ and $ℓ|(f_π/f)$, there is one ascending isogeny and
+    $ℓ$ descending ones;
+  \item If $ℓ\nmid f$ and $ℓ\nmid(f_π/f)$, there are
+    $1+\left(\frac{D}{ℓ}\right)$ horizontal isogenies, where
+    $\left(\frac{D}{ℓ}\right)$ represents the Legendre symbol;
+    \item If $ℓ\nmid f$ there are $1+\left(\frac{D}{ℓ}\right)$
+      horizontal isogenies, plus $ℓ-\left(\frac{D}{ℓ}\right)$
+      descending isogenies only if $ℓ|(f_π/f)$.
+  \end{itemize}
+\end{proposition}
+\begin{proof}
+  See~\cite[Prop.~21]{kohel}.
+\end{proof}
+
+Putting the pieces together, we see that graphs of ordinary curves
+have a very rigid structure: a cycle of horizontal isogenies (Elkies
+case), possibly reduced to one point (Atkin case), or to two points
+(ramified case); and a tree of descending isogenies of height
+$v_ℓ(f_π)$ (the $ℓ$-adic valuation of the conductor of $π$). %
+Such graphs are called \emph{isogeny volcanoes} for obvious reasons
+(have a look at Figure~\ref{fig:volcano}).
+
 
 \subsection{Application: computing irreducible polynomials }
+
+% - Velu's formulas
+
 
 \subsection*{Exercices}
 
 \begin{exercice}
   Prove Lemma~\ref{th:basis-change}.
+\end{exercice}
+
+\begin{exercice}
+  Prove that $y$ divides the $m$-th division polynomial $ψ_m$ if and
+  only if $m$ is even, and that no division polynomial is divisible by
+  $y^2$.
+\end{exercice}
+
+\begin{exercice}
+  Using the Sato-Tate theorem~\ref{th:sato-tate2}, prove that two
+  curves are isogenous if and only if they have the same number of
+  points.
+\end{exercice}
+
+\begin{exercice}
+  Prove Propostion~\ref{th:isog-count}.
 \end{exercice}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1294,13 +1492,13 @@ to~\cite{schoof95,lercier-algorithmique,elkies98,sutherland10}.
 
 \section{Isogeny based cryptography}
 
-- Expander graphs
-- Cryptanalysis, GHS
-- Teske
-- Hash
-- R\&S
-- SIDH
-- Implem
+% - Expander graphs
+% - Cryptanalysis, GHS
+% - Teske
+% - Hash
+% - R\&S
+% - SIDH
+% - Implem
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1317,3 +1515,4 @@ to~\cite{schoof95,lercier-algorithmique,elkies98,sutherland10}.
 %  LocalWords:  isomorphism endomorphism endomorphisms isogenies
 %  LocalWords:  cardinality automorphisms cryptographic cryptosystem
 %  LocalWords:  parallelize homothety Homothetic invariants
+%  LocalWords:  supersingular
