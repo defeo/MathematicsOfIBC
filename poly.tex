@@ -53,7 +53,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
-\newtheorem{exercice}{Exercice}[section]
+\newtheorem{exercice}{Exercice}[part]
 
 \DeclareMathOperator{\Aut}{Aut}
 \DeclareMathOperator{\End}{End} % endomorphism ring
@@ -73,7 +73,7 @@
 \def\O{\ensuremath{\mathcal{O}}}
 \def\euler{\ensuremath{\varphi}}
 
-\title{Isogeny Based Cryptography}
+\title{Mathematics of Isogeny Based Cryptography}
 \author{Luca De Feo\\
   Universit\'e de Versailles \& Inria Saclay\\
   \url{http://defeo.lu/}}
@@ -94,8 +94,8 @@ They are by no means a reference text on the theory of elliptic
 curves, nor on cryptography; students are encouraged to complement
 these notes with some of the books recommended in the bibliography. %
 
-The presentation is divided in three sections, roughly corresponding
-to the three lectures given. %
+The presentation is divided in three parts, roughly corresponding to
+the three lectures given. %
 In an effort to keep the reader interested, each sections alternates
 between the fundamental theory of elliptic curves, and applications in
 cryptography. %
@@ -137,10 +137,16 @@ In these notes, after a review of the general theory of elliptic
 curves and isogenies, we will present the most important isogeny-based
 systems, and their cryptographic properties.
 
+{
+  \hypersetup{linkcolor=black}
+  \setcounter{tocdepth}{1}
+  \tableofcontents
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Elliptic curves and cryptography}
+\clearpage
+\part{Elliptic curves and cryptography}
 
 Throughout this section we let $k$ be a field, and we denote by
 $\bar{k}$ its algebraic closure. %
@@ -150,7 +156,7 @@ The interested reader will find more details on elliptic curves
 in~\cite{silverman:elliptic}, and on their use in cryptography
 in~\cite{joux2009algorithmic,galbraith2012mathematics}.
 
-\subsection{Elliptic curves}
+\section{Elliptic curves}
 
 Elliptic curves are projective curves of genus 1 having a specified
 base point. %
@@ -293,7 +299,7 @@ zero. %
     \[λ =
       \begin{cases}
         \frac{y_2-y_1}{x_2-x_1} &\text{if $P≠Q$,}\\
-        \frac{3x_1+a}{2y_1} &\text{if $P=Q$,}
+        \frac{3x_1^2+a}{2y_1} &\text{if $P=Q$,}
       \end{cases}
     \]
     then the point $(P_1⊕P_2)=(x_3,y_3)$ is defined by
@@ -357,7 +363,7 @@ the object of the
 \href{https://en.wikipedia.org/wiki/Millennium_Prize_Problems}{\it
   Clay Millenium Prize Problems}.
 
-\subsection{Maps between elliptic curves}
+\section{Maps between elliptic curves}
 
 Finally, we focus on maps between elliptic curves. %
 We are mostly interested in maps that preserve both facets of elliptic
@@ -428,7 +434,7 @@ endomorphisms are the scalar multiplications. %
 We shall however see some non-trivial endomorphisms soon.
 
 
-\subsection{Elliptic curves over finite fields}
+\section{Elliptic curves over finite fields}
 
 From now on we let $E$ be an elliptic curve defined over a finite
 field $k$ with $q$ elements. %
@@ -496,7 +502,7 @@ elliptic curves with their Frobenius endomorphisms.
 \end{theorem}
 
 
-\subsection{Application: Diffie-Hellman key exhange}
+\section{Application: Diffie-Hellman key exhange}
 \label{sec:appl-diff-hellm}
 
 Elliptic curves are largely present in modern technology thanks to
@@ -597,7 +603,7 @@ The resulting protocol is summarized in Figure~\ref{fig:dh}.
 \end{figure}
 
 
-\subsection{Application: Elliptic curve factoring method}
+\section{Application: Elliptic curve factoring method}
 
 A second popular use of elliptic curves in technology is for factoring
 large integers, a problem that also occurs frequently in cryptography.
@@ -716,7 +722,7 @@ Implicitly, $E(ℤ/Nℤ)$ is defined as the product group
 $E(\F_p)⊕E(F_q)$, and any attempt at inverting a non-invertible in
 $ℤ/Nℤ$ will result in a factorization of $N$.
 
-\subsection*{Exercices}
+\section*{Exercices}
 
 \begin{exercice}
   Prove Proposition~\ref{th:j}.
@@ -754,10 +760,9 @@ $ℤ/Nℤ$ will result in a factorization of $N$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \clearpage
+\part{Isogenies and applications}
 
-\section{Isogenies and applications}
-
-\subsection{Elliptic curves over $ℂ$}
+\section{Elliptic curves over $ℂ$}
 
 \begin{definition}[Complex lattice]
   A complex lattice $Λ$ is a discrete subgroup of $ℂ$ that contains an
@@ -1113,7 +1118,7 @@ Notice that in this case $\deg ϕ$ is the size of any fiber of $ϕ$.
 \end{theorem}
 
 
-\subsection{The endomorphism ring}
+\section{The endomorphism ring}
 
 We have already defined an endomorphism as an isogeny from a curve to
 itself. %
@@ -1210,7 +1215,7 @@ In our case, we can write $D_π=f^2d_K$, with $d_K$
 squarefree. % TODO: check this!
 Then, any order $ℤ[π] ⊂ \O ⊂ \O_K$ has conductor dividing $f$.
 
-\subsection*{Application: point counting}
+\section{Application: point counting}
 
 Before going more in depth into the study of the endomorphism ring,
 let us pause for a while on a simpler problem. %
@@ -1302,7 +1307,7 @@ The other cases have similar complexity gains. %
 For a more detailed overview, we address the reader
 to~\cite{schoof95,lercier-algorithmique,elkies98,sutherland10}.
 
-\subsection{Isogeny graphs}
+\section{Isogeny graphs}
 
 We now look at the graph structure that isogenies create on the set of
 $j$-invariants defined over a finite field. %
@@ -1458,13 +1463,169 @@ $v_ℓ(f_π)$ (the $ℓ$-adic valuation of the conductor of $π$). %
 Such graphs are called \emph{isogeny volcanoes} for obvious reasons
 (have a look at Figure~\ref{fig:volcano}).
 
+The action of $π$ on $E[ℓ]$, or more generally on $E[ℓ^k]$ for $k$
+large enough, can be used to determine even more precisely which
+isogenies are ascending, descending or horizontal. %
+We will not give details here, but
+see~\cite{MiretMRV05,MiretMSTV06,IonicaJ10,ionica+joux13,defeo2016explicit}.
 
-\subsection{Application: computing irreducible polynomials }
 
-% - Velu's formulas
+\section{Application: computing irreducible polynomials }
+
+In the applications seen in the first part, we have followed an old
+\emph{mantra}: whenever an algorithm relies solely on the properties
+of the multiplicative group $\F_q^*$, it can be generalized by
+replacing $\F_q^*$ with the group of points of an elliptic curve over
+$\F_q$ (or, eventually, a higher dimensional Abelian variety). %
+Typically, the generalization adds some complexity to the computation,
+but comes with the advantage of having more freedom in the choice of
+the group size and structure. %
+We now present another instance of the same \emph{mantra}, that is
+particularly remarkable in our opinion: to the best of our knowledge,
+it is the first algorithm where replacing $\F_q^*$ with $E(\F_q)$
+required some non-trivial work with isogenies.
+
+Constructing irreducible polynomials of arbitrary degree over a finite
+field $\F_q$ is a classical problem. %
+A classical solution consists in picking polynomials at random, and
+applying an irreducibility test, until an irreducible one is found. %
+This solution is not satisfactory for at least two reasons: it is not
+deterministic, and has average complexity quadratic both in the degree
+of the polynomial and in $\log q$.
+
+For a few special cases, we have well known irreducible polynomials. %
+For example, when $d$ divides $q-1$, there exist $α∈\F_q$ such that
+$X^d-α$ is irreducible. %
+Such an $α$ can be computed using Hilbert's theorem 90, or --more
+pragmatically, and assuming that the factorization of $q-1$ is known--
+by taking a random element and testing that it has no $d$-th root in
+$\F_q$. %
+It is evident that this algorithm relies on the fact that the
+multiplicative group $\F_q^*$ is cyclic of order $q-1$.
+
+At this point our \emph{mantra} suggests that we replace $α$ with a
+point $P∈E(\F_q)$ that has no $ℓ$-divisor in $E(\F_q)$, for some well
+chosen curve $E$. %
+The obvious advantage is that we now require $ℓ|\#E(\F_q)$, thus we
+are no longer limited to $ℓ|(q-1)$; however, what irreducible
+polynomial shall we take? %
+Intuition would suggest that we take the polynomial defining the
+$ℓ$-divisors of $P$; however we know that the map $[ℓ]$ has degree
+$ℓ^2$, thus the resulting polynomial would have degree too large, and
+it would not even be irreducible.
+
+This idea was first developed by Couveignes and
+Lercier~\cite{couveignes+lercier11} and then slightly generalized
+in~\cite{DeDoSc13}. %
+Their answer to the question is to decompose the map $[ℓ]$ as a
+composition of isogenies $\hat{ϕ}∘ϕ$, and then take the (irreducible)
+polynomial vanishing on the fiber $ϕ^{-1}(P)$.
+
+More precisely, let $\F_q$ be a finite field, and let $ℓ\nmid(q-1)$ be
+odd and such that $ℓ\ll q+1+2\sqrt{q}$. %
+Then there exists a curve $E$ whose cardinality $\#E(\F_q)$ is
+divisible by $\ell$. %
+The hypothesis $ℓ\nmid(q-1)$ guarantees that $G = E[ℓ]∩E(\F_q)$ is
+cyclic (see Exercice~\ref{ex:group-struct}). %
+Let $ϕ$ be the degree $ℓ$ isogeny of kernel $G$, and let $E'$ be its
+image curve. %
+Let $P$ be a point in $E'(\F_q)\setminus [ℓ]E'(\F_q)$, Couveignes and
+Lercier show that $\phi^{-1}(P)$ is an \emph{irreducible fiber}, i.e.,
+that the polynomial
+\[f(X) = \prod_{Q\in\phi^{-1}(P)}(X - x(Q))\]
+is irreducible over $\F_q$.
+
+To effectively compute the polynomial $f$, we need one last technical
+ingredient: a way to compute a representation of the isogeny $ϕ$ as a
+rational function. %
+This is given to us by the famous V\'elu's formulas~\cite{velu71}.
+
+\begin{proposition}[V\'elu's formulas]
+  Let $E:y^2=x^3+ax+b$ be an elliptic curve defined over a field $k$,
+  and let $G⊂E(\bar{k})$ be a finite subgroup. %
+  The separable isogeny $ϕ:E\to E'$ of kernel $G$ can be written as
+  \begin{equation*}
+    ϕ(P) = \left(
+      x(P) + \sum_{Q∈G\setminus\{\O\}}x(P+Q)-x(Q),
+      y(P) + \sum_{Q∈G\setminus\{\O\}}y(P+Q)-y(Q)
+    \right);
+  \end{equation*} %
+  and the curve $E'$ has equation $y^2=x^3+a'x+b'$, where
+  \begin{align*}
+    a' &= a - 5\sum_{Q∈G\setminus\{\O\}}(3x(Q)^2+a),\\
+    b' &= b - 7\sum_{Q∈G\setminus\{\O\}}(5x(Q)^3+3ax(Q)+b).
+  \end{align*}
+\end{proposition}
+\begin{proof}
+  See~\cite[\S8.2]{df+thesis}.
+\end{proof}
+
+\begin{corollary}
+  Let $E$ and $G$ be as above. %
+  Let
+  \[h(X) = \prod_{Q∈G\setminus\{\O\}}(X-x(Q)).\]
+  Then the isogeny $ϕ$ can be expressed as
+  \[ϕ(X,Y) = \left(\frac{g(X)}{h(X)}, y\left(\frac{g(x)}{h(x)}\right)'\right),\]
+  where $g(X)$ is defined by
+  \[\frac{g(X)}{h(X)} = dX-p_1-(3X^2+a)\frac{h'(X)}{h(X)}
+    - 2(X^3+aX+b)\left(\frac{h'(X)}{h(X)}\right)',\]
+  with $p_1$ the trace of $h(X)$ and $d$ its degree.
+\end{corollary}
+\begin{proof}
+  See~\cite[\S8.2]{df+thesis}.
+\end{proof}
+
+\begin{figure}
+  \begin{subfigure}{0.65\textwidth}
+    \begin{algorithmic}[1]
+      \REQUIRE A finite field $\F_q$,\\
+      a prime power $ℓ^e$ such that $ℓ\nmid(q-1)$ and $ℓ\ll q$;
+      \ENSURE An irreducible polynomial of degree $ℓ^e$.
+      \STATE Take random curves $E_0$, until one with $ℓ|\#E_0$ is found;
+      \STATE Factor $\#E_0$;
+      \FOR {$1≤i≤e$}
+      \STATE Use V\'elu's formulas to compute a degree $ℓ$ isogeny $ϕ_i:E_{i-1}\to E_i$;
+      \ENDFOR
+      \STATE Take random points $P\in E_i(\F_q)$ until one not in $[ℓ]E_i(\F_q)$ is found;
+      \RETURN The polynomial vanishing on the abscissas of $ϕ_i^{-1}∘\cdots∘ϕ_1^{-1}(P)$.
+    \end{algorithmic}
+  \end{subfigure}
+  %%
+  \hfill
+  %%
+  \begin{subfigure}{0.2\textwidth}
+    \begin{tikzpicture}
+      \def\n{4}
+      \foreach \i in {0,...,\n} {
+        \pgfmathparse{360/(\n+1)*(\i-1/2) - 90}
+        \let\angle\pgfmathresult
+        \draw (\angle:1) node (E\i) {$E_\i$};
+      }
+      \foreach \i in {0,...,\n} {
+        \pgfmathparse{int(mod(\i+1, \n+1))}
+        \let\j\pgfmathresult
+        \draw (E\i) edge[->,bend right=18] node[auto,swap] {\scriptsize$ϕ_\i$} (E\j);
+      }
+    \end{tikzpicture}
+  \end{subfigure}
+  
+  \caption{Couveignes-Lercier algorithm to compute irreducible
+    polynomials, and structure of the computed isogeny cycle.}
+  \label{fig:CL}
+\end{figure}
+
+The Couveignes-Lercier algorithm is summarized in
+Figure~\ref{fig:CL}. %
+What is most interesting, is the fact that it can be immediately
+generalized to computing irreducible polynomials of degree $ℓ^e$, by
+iterating the construction. %
+Looking at the specific parameters, it is apparent that $ℓ$ is an
+\emph{Elkies prime} for $E$ (i.e., $\left(\frac{D}{ℓ}\right)=1$), and
+that each isogeny $ϕ_i$ is horizontal, thus their composition
+eventually forms a cycle, the \emph{crater} of a volcano.
 
 
-\subsection*{Exercices}
+\section*{Exercices}
 
 \begin{exercice}
   Prove Lemma~\ref{th:basis-change}.
@@ -1486,11 +1647,31 @@ Such graphs are called \emph{isogeny volcanoes} for obvious reasons
   Prove Propostion~\ref{th:isog-count}.
 \end{exercice}
 
+\begin{exercice}
+  Prove that the dual of a horizontal isogeny is horizontal, and that
+  the dual of a descending isogeny is ascending.
+\end{exercice}
+
+\begin{exercice}
+  Prove that the height of a volcano of $ℓ$-isogenies is $v_ℓ(f_π)$,
+  the $ℓ$-adic valuation of the Frobenius endomorphism.
+\end{exercice}
+
+\begin{exercice}
+  Let $X^2-tX-q$ be the minimal polynomial of $π$, and suppose that it
+  splits as $(X-λ)(X-μ)$ in $ℤ_ℓ$ (the ring of $ℓ$-adic integers). %
+  Prove that the volcano of $ℓ$ isogenies has height $v_ℓ(λ-μ)$.
+\end{exercice}
+
+\begin{exercice}
+  \label{ex:group-struct}
+  Prove that $E[ℓ]⊂E(\F_q)$ implies $ℓ|(q-1)$.
+\end{exercice}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \clearpage
-
-\section{Isogeny based cryptography}
+\part{Isogeny based cryptography}
 
 % - Expander graphs
 % - Cryptanalysis, GHS
@@ -1502,6 +1683,7 @@ Such graphs are called \emph{isogeny volcanoes} for obvious reasons
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\clearpage
 \bibliographystyle{plain}
 \bibliography{refs}
 
@@ -1515,4 +1697,4 @@ Such graphs are called \emph{isogeny volcanoes} for obvious reasons
 %  LocalWords:  isomorphism endomorphism endomorphisms isogenies
 %  LocalWords:  cardinality automorphisms cryptographic cryptosystem
 %  LocalWords:  parallelize homothety Homothetic invariants
-%  LocalWords:  supersingular
+%  LocalWords:  supersingular irreducibility
