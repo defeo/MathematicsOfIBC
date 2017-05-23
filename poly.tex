@@ -23,7 +23,7 @@
 	pdfstartview={FitH},
 }
 
-\usepackage{tikz}
+\usepackage{tikz,pgflibraryarrows,pgflibrarysnakes}%pgflibraryplotmarks,pgflibraryshapes}
 \usetikzlibrary{matrix,decorations,decorations.text,calc}
 \pgfkeys{/triangle/.code=\tikzset{x={(-0.5cm,-0.866cm)},y={(1cm,0cm)}}}
 \pgfkeys{/lattice/.code n args={4}{\tikzset{cm={#1,#2,#3,#4,(0,0)}}}}
@@ -53,6 +53,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
+\newtheorem{problem}{Problem}
 \newtheorem{exercice}{Exercice}[part]
 
 \DeclareMathOperator{\Aut}{Aut}
@@ -71,7 +72,11 @@
 \def\P{\ensuremath{\mathbb{P}}}
 \def\F{\ensuremath{\mathbb{F}}}
 \def\O{\ensuremath{\mathcal{O}}}
+\def\tildO{\ensuremath{\tilde{O}}}
 \def\euler{\ensuremath{\varphi}}
+
+\newcommand{\bl}[1]{\textcolor{blue}{#1}}
+\newcommand{\rd}[1]{\textcolor{red}{#1}}
 
 \title{Mathematics of Isogeny Based Cryptography}
 \author{Luca De Feo\\
@@ -537,7 +542,7 @@ Then, Alice and Bob perform the following steps:
 \end{enumerate}
 
 The protocol can be easily generalized by replacing the multiplicative
-group $(ℤ/pℤ)^×$ with any other cyclic group $G=〈g〉$. %
+group $(ℤ/pℤ)^{×}$ with any other cyclic group $G=〈g〉$. %
 From Eve's point of view, she is given the knowledge of the group $G$,
 the generator $g$, and Alice's and Bob's public data $A,B∈G$; her goal
 is to recover the shared secret $g^{ab}$. %
@@ -569,7 +574,7 @@ divisor $q$ has size at least $\log_2 q ≈ 256$. %
 However, the proof of optimally does not exclude the existence of
 better algorithms for \emph{specific} groups $G$. %
 And indeed, algorithms of complexity better than $O(\sqrt{\#G})$ are
-known for the case $G=(ℤ/pℤ)^×$~\cite{joux2009algorithmic}, thus
+known for the case $G=(ℤ/pℤ)^{×}$~\cite{joux2009algorithmic}, thus
 requiring parameter of considerably larger size to guarantee
 cryptographic strength.
 
@@ -577,7 +582,7 @@ On the contrary, no algorithms better than the generic ones are known
 when $G$ is a subgroup of $E(k)$, where $E$ is an elliptic curve
 defined over a finite field $k$. %
 This has led Miller~\cite{miller86} and Koblitz~\cite{koblitz87} to
-suggest, in the 1980s, to replace $(ℤ/pℤ)^×$ in the Diffie-Helman
+suggest, in the 1980s, to replace $(ℤ/pℤ)^{×}$ in the Diffie-Helman
 protocol by the group of rational points of an elliptic curve of
 (almost) prime order over a finite field. %
 The resulting protocol is summarized in Figure~\ref{fig:dh}.
@@ -642,8 +647,8 @@ It is based on the isomorphism
 given by the Chinese remainder theorem. %
 The algorithm is detailed in Figure~\ref{fig:p-1}. %
 It works by guessing a multiple $e$ of $p-1$, then taking a random
-element $x∈(ℤ/Nℤ)^×$, to deduce a random element $y$ in
-$〈1〉⊕(ℤ/qℤ)^×$. If the guessed exponent $e$ was correct, and if
+element $x∈(ℤ/Nℤ)^{×}$, to deduce a random element $y$ in
+$〈1〉⊕(ℤ/qℤ)^{×}$. If the guessed exponent $e$ was correct, and if
 $y≠1$, the gcd of $y-1$ with $N$ yields a non-trivial factor. %
 
 \begin{figure}
@@ -699,8 +704,8 @@ For this reason it is only usable when $p-1$ has small prime factors,
 a constraint that is very unlikely to be satisfied by random primes.
 
 Lenstra's ECM algorithm is a straightforward generalization of the
-$p-1$ method, where the multiplicative groups $(ℤ/pℤ)^×$ and
-$(ℤ/qℤ)^×$ are replaced by the groups of points $E(\F_p)$ and
+$p-1$ method, where the multiplicative groups $(ℤ/pℤ)^{×}$ and
+$(ℤ/qℤ)^{×}$ are replaced by the groups of points $E(\F_p)$ and
 $E(\F_q)$ of an elliptic curve defined over $ℚ$. %
 Now, the requirement is that $\#E(\F_p)$ only has small prime
 factors. %
@@ -875,7 +880,7 @@ This is illustrated in Figure~\ref{fig:lattice-arith}.
 
 \begin{definition}[Homothetic lattices]
   Two complex lattices $Λ$ and $Λ'$ are said to be \emph{homothetic}
-  if there is a complex number $α∈ℂ^×$ such that $Λ=αΛ'$.
+  if there is a complex number $α∈ℂ^{×}$ such that $Λ=αΛ'$.
 \end{definition}
 
 Geometrically, applying a homothety to a lattice corresponds to zooms
@@ -1316,8 +1321,9 @@ theorem~\ref{th:sato-tate}.
 
 \begin{theorem}[Sato-Tate]
   \label{th:sato-tate2}
-  Two elliptic curves $E,E'$ are isogenous if and only if their
-  endomorphisms algebras $\End(E)⊗ℚ$ and $\End(E')⊗ℚ$ are isomorphic.
+  Two elliptic curves $E,E'$ defined over a finite field are isogenous
+  if and only if their endomorphism algebras $\End(E)⊗ℚ$ and
+  $\End(E')⊗ℚ$ are isomorphic.
 \end{theorem}
 
 An equivalence class of isogenous elliptic curves is called an
@@ -1541,6 +1547,7 @@ rational function. %
 This is given to us by the famous V\'elu's formulas~\cite{velu71}.
 
 \begin{proposition}[V\'elu's formulas]
+  \label{th:velu}
   Let $E:y^2=x^3+ax+b$ be an elliptic curve defined over a field $k$,
   and let $G⊂E(\bar{k})$ be a finite subgroup. %
   The separable isogeny $ϕ:E\to E'$ of kernel $G$ can be written as
@@ -1671,18 +1678,539 @@ eventually forms a cycle, the \emph{crater} of a volcano.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \clearpage
-\part{Isogeny based cryptography}
+\part{Cryptography from isogeny graphs }
 
-% - Expander graphs
-% - Cryptanalysis, GHS
-% - Teske
-% - Hash
-% - R\&S
-% - SIDH
+% We are now equipped with the fundamental tools to understand isogeny
+% based cryptography. %
+% In this last part, we review the most important protocols in the
+% family, and list some open problems. %
+% The presentation will be purposely less formal,  
+
+
+\section{Expander graphs}
+
+When we talk about \emph{Isogeny Based Cryptography}, as a topic
+distinct from \emph{Elliptic Curve Cryptography}, we usually mean
+algorithms and protocols that rely fundamentally on the structure of
+\emph{large} isogeny graphs. %
+The cryptographically interesting properties of these graphs are
+usually tied to their \emph{expansion} properties. %
+
+We recall some basic concepts of graph theory; for simplicity, we will
+restrict to undirected graphs. %
+An undirected graph $G$ is a pair $(V,E)$ where $V$ is a finite set of
+\emph{vertices} and $E⊂V×V$ is a set of unordered pairs called
+\emph{edges}. %
+Two vertices $v,v'$ are said to be \emph{connected by an edge} if
+$\{v,v'\}∈E$. %
+The \emph{neighbors} of a vertex $v$ are the vertices of $V$ connected
+to it by an edge. %
+A \emph{path} between two vertices $v,v'$ is a sequence of vertices
+$v\to v_1\to\cdots\to v'$ such that each vertex is connected to the
+next by an edge. %
+The \emph{distance} between two vertices is the length of the shortest
+path between them; if there is no such path, the vertices are said to
+be at infinite distance. %
+A graph is called \emph{connected} if any two vertices have a path
+connecting them; it is called \emph{disconnected} otherwise. %
+The \emph{diameter} of a connected graph is the largest of all
+distances among its vertices. %
+The \emph{degree} of a vertex is the number of edges pointing to (or
+from) it; a graph where every edge has degree $k$ is called
+\emph{$k$-regular}. %
+The \emph{adjacency matrix} of a graph $G$ with vertex set
+$V=\{v_1,\dots,v_n\}$ and edge set $E$, is the $n×n$ matrix where the
+$(i,j)$-th entry is $1$ if there is an edge between $v_i$ and $v_j$,
+and $0$ otherwise. %
+Because our graphs are undirected, the adjacency matrix is symmetric,
+thus it has $n$ real eigenvalues
+\[λ_1≥\cdots≥λ_n.\] %
+It is convenient to identify functions on $V$ with vectors in $ℝ^n$,
+and therefore also think of the adjacency matrix as a self-adjoint
+operator on $L^2(V)$. %
+Then can we immediately bound the eigenvalues of $G$.
+
+\begin{proposition}
+  \label{th:graph-eigen}
+  If $G$ is a $k$-regular graph, then its largest and smallest
+  eigenvalues $λ_1,λ_n$ satisfy
+  \[k=λ_1≥λ_n≥-k.\]
+\end{proposition}
+\begin{proof}
+  See~\cite[Lem.~2]{tao2011expander}.
+\end{proof}
+
+\begin{definition}[Expander graph]
+  Let $ε>0$ and $k≥1$. A $k$-regular graph is called a (one-sided)
+  \emph{$ε$-expander} if
+  \[λ_2≤(1-ε)k;\]
+  and a \emph{two-sided $ε$-expander} if it also satisfies
+  \[λ_n≥-(1-ε)k.\] %
+  A sequence $G_i=(V_i,E_i)$ of $k$-regular graphs with $\#V_i\to∞$ is
+  said to be a one-sided (resp. two-sided) \emph{expander family} if
+  there is an $ε>0$ such that $G_i$ is a one-sided (resp. two-sided)
+  $ε$-expander for all sufficiently large $i$.
+\end{definition}
+
+\begin{theorem}[Ramanujan graph]
+  Let $k≥1$, and let $G_i$ be a sequence of $k$-regular graphs. %
+  Then
+  \[\max(|λ_2|,|λ_n|) ≥ 2\sqrt{k-1} - o(1),\]
+  as $n\to ∞$. %
+  A graph such that $|λ_i|≤2\sqrt{k-1}$ for any $λ_i$ except $λ_1$ is
+  called a \emph{Ramanujan graph}.
+\end{theorem}
+
+The \emph{spectral} definition of expansion is very practical to work
+with, but gives very little intuition on the topological properties of
+the graph. %
+\emph{Edge expansion} quantifies how well subsets of vertices are
+connected to the whole graph, or, said otherwise, how far the graph is
+from being disconnected.
+
+\begin{definition}[Edge expansion]
+  Let $F⊂V$ be a subset of the vertices of $G$. %
+  The \emph{boundary of $F$}, denoted by $∂F⊂E$, is the subset of the
+  edges of $G$ that go from $F$ to $V\setminus F$. %
+  The \emph{edge expansion ratio} of $G$, denoted by $h(G)$ is the
+  quantity
+  \[h(G) = \min_{\substack{F⊂V,\\ \#F≤\#V/2}}\frac{\#∂F}{\#F}.\]
+\end{definition}
+
+Note that $h(G)=0$ if and only if $G$ is disconnected. %
+Edge expansion is strongly tied to spectral expansion, as the
+following theorem shows.
+
+\begin{theorem}[Discrete Cheeger inequality]
+  Let $G$ be a $k$-regular one-sided $ε$-expander, then
+  \[\frac{ε}{2}k≤h(G)≤\sqrt{2ε}k.\]
+\end{theorem}
+
+Expander families of graphs have many applications in theoretical
+computer science, thanks to their \emph{pseudo-randomness} properties:
+they are useful to construct \emph{pseudo-random number generators},
+\emph{error-correcting codes}, \emph{probabilistic checkable proofs},
+and, most interesting to us, \emph{cryptographic primitives}. %
+Qualitatively, we can describe them as having \emph{short diameter}
+and \emph{rapidly mixing walks}.
+
+\begin{proposition}
+  Let $G$ be a $k$-regular one sided $ε$-expander. %
+  for any vertex $v$ and any radius $r>0$, let $B(v,r)$ be the
+  \emph{ball} of vertices at distance at most $r$ from $v$. %
+  Then, there is a constant $c>0$, depending only on $k$ and $ε$, such
+  that
+  \[\#B(v,r)≥\min((1+c)^r,\#V).\]
+\end{proposition}
+
+In particular, this shows that the diameter of an expander is bounded
+by $O(\log n)$, where the constant depends only on $k$ and $ε$. %
+A \emph{random walk} of length $i$ is a path $v_1\to\cdots\to v_i$,
+defined by the random process that selects $v_i$ uniformly at random
+among the neighbors of $v_{i-1}$. %
+Loosely speaking, the next proposition says that, in an expander
+graph, random walks of length close its diameter terminate on any
+vertex with probability close to uniform. %
+
+\begin{proposition}[Mixing theorem]
+  Let $G=(V,E)$ be a $k$-regular two-sided $ε$-expander. %
+  Let $F⊂V$ be any subset of the vertices of $G$, and let $v$ be any
+  vertex in $V$. %
+  Then a random walk of length at least
+  \[\frac{\log\#F^{1/2}/2\#V}{\log(1-ε)}\] %
+  starting from $v$ will land in $F$ with probability at least
+  $\#F/2\#V$.
+\end{proposition}
+\begin{proof}
+  See~\cite{JMV}.
+\end{proof}
+
+The length in the previous proposition is also called the \emph{mixing
+  length} of the expander graph. %
+We conclude this section with two results on expansion in graphs of
+isogenies.
+
+\begin{theorem}[Supersingular graphs are Ramanujan]
+  \label{th:ss-exp}
+  Let $p,\ell$ be distinct primes, then
+  \begin{enumerate}
+  \item All supersingular $j$-invariants of curves in $\bar\F_p$ are
+    defined in $\F_{p^2}$;
+  \item There are
+    \begin{equation*}
+      \lfloor\frac{p}{12}\rfloor +
+      \begin{cases}
+        0 &\text{if $p=1\mod 12$}\\
+        1 &\text{if $p=5,7\mod 12$}\\
+        2 &\text{if $p=11\mod 12$}
+      \end{cases}
+    \end{equation*}
+    isomorphism classes of supersingular elliptic curves over
+    $\bar\F_p$;
+  \item The graph of supersingular curves in $\bar\F_p$ with
+    $ℓ$-isogenies is connected, $ℓ+1$ regular, and has the Ramanujan
+    property.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  See~\cite[V, Th.~4.1]{Sil}, \cite{pizer1,pizer2},
+  \cite{charles+lauter+goren09}.
+\end{proof}
+
+\begin{theorem}[Graphs of horizontal isogenies are expanders]
+  \label{th:ord-exp}
+  Let $\F_q$ be a finite field and let $\O⊂ℚ[\sqrt{-D}]$ be an order
+  in a quadratic imaginary field. %
+  Let $G$ be the graph whose vertices are elliptic curves over $\F_q$
+  whose endomorphism ring is isomorphic to $\O$, and whose edges are
+  (horizontal) isogenies of prime degree bounded by $(\log q)^{2+δ}$
+  for some fixed $δ>0$. %
+  Then, under the generalized Riemann hypothesis, $G$ is a regular
+  graph and there exists an $ε$, independent of $\O$ and $q$, such
+  that $G$ is a one-sided $ε$-expander.
+\end{theorem}
+\begin{proof}
+  See~\cite{JMV}.
+\end{proof}
+
+\section{Isogeny graphs in cryptanalysis}
+
+Besides the applications to point counting mentioned in the previous
+part, the first application of isogenies in cryptography has been to
+study the difficulty of the discrete logarithm problem in elliptic
+curves. %
+One can state several computational problems related to isogenies,
+both \emph{easy} and \emph{hard} ones. %
+Here are some examples.
+
+\begin{problem}[Isogeny computation]
+  Given an elliptic curve $E$ with Frobenius endomorphism $π$, and a
+  subgroup $G⊂E$ such that $π(G)=G$, compute the rational fractions
+  and the image curve of the separable isogeny $ϕ$ of kernel $G$.
+\end{problem}
+
+V\'elu's formulas (Proposition~\ref{th:velu}) give a solution to this
+problem in $\tildO(\#G)$ operations over the field of definition of
+definition of $E$. %
+This is nearly optimal, given that the output has size $O(\#G)$.
+  
+However in some special instances, e.g., when $ϕ$ is a composition of
+many small degree isogenies, the rational fractions may be represented
+more compactly, and the cost may become only logarithmic in $\#G$.
+
+\begin{problem}[Explicit isogeny]
+  Given two elliptic curves $E,E'$ over a finite field, isogenous
+  of known degree $d$, find an isogeny $ϕ:E\to E'$ of degree $d$.
+\end{problem}
+
+Remark that, up to automorphisms, the isogeny $ϕ$ is typically
+unique. %
+Elkies was the first to formulate the problem and give an
+algorithm~\cite{elkies92,elkies98} whose complexity is in $O(d^3)$ in
+general and in $\tildO(d)$ in the special context of the SEA
+algorithm~\cite{bostan+morain+salvy+schost08,lercier+sirvent08}. %
+Alternate algorithms, with complexity $O(d^2)$ in general, are due to
+Couveignes and
+others~\cite{couveignes94,couveignes96,couveignes00,df+schost09,defeo2016explicit}.
+
+\begin{problem}[Isogeny path]
+  Given two elliptic curves $E,E'$ over a finite field $k$, such that
+  $\#E=\#E'$, find an isogeny $ϕ:E\to E'$ of smooth degree.
+\end{problem}
+
+This problem, and variations thereof, is the one that occurs most in
+isogeny based cryptography. %
+It is a notoriously difficult problem, for which only algorithms
+exponential in $\log\#E$ are known in general. %
+A general strategy to tackle it is by a \emph{meet in the middle}
+random walk~\cite{galbraith99}: choose an expander graph $G$
+containing both $E$ and $E'$, and start a random walk from each
+curve. %
+By the birthday paradox, the two walks are expected to meet after
+roughly $O(\sqrt{\#G})$ steps; when a collision is detected, the 
+composition of the walks yields the desired isogeny.
+
+The meet in the middle strategy was notoriously used to extend the
+power of the GHS attack on elliptic curves defined over extension
+fields of composite degree~\cite{gaudry+hess+smart02,GHS}. %
+Without going into the details of the GHS attacks, one of its
+remarkable properties is that only a small fraction of a given isogeny
+class is vulnerable to it. %
+Finding an isogeny from an immune curve to a weak curve allows the
+attacker to map the discrete logarithm problem from one to the
+other. %
+The average size of an isogeny class of ordinary elliptic curves is
+$O(\sqrt{\#E})$, thus the meet in the middle strategy yields an
+$O(\#E^{1/4})$ attack on any curve in the class: better than a generic
+attack on the discrete logarithm problem. %
+The attack is pictured in Figure~\ref{fig:ghs}.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \path (0,0) node[anchor=east] {$E$} (6,0) node[anchor=west] {$E'$};
+    \path (-0.8,0) node[anchor=east] {weak curve}
+    (6.8,0) node[anchor=west] {strong curve};
+
+    \draw[->] (0,0) -- (0.5,-0.2);
+    \draw[->] (6,0) -- (5.5,0.2);
+    \draw[->] (0.5,-0.2) -- (1,0.2);
+    \draw[->] (5.5,0.2) -- (5,-0.2);
+    \begin{scope}[densely dotted,coils/.style={decorate,decoration={coil,aspect=0,amplitude=2pt}}]
+      \draw[coils] (1,0.2) -- (3,0.4);
+      \draw[coils] (5,-0.2) -- (3,0.4);
+      \draw[-angle 90,coils] (3,0.4) -- (3, -0.4) node[anchor=north] {$E''$};
+    \end{scope}
+  \end{tikzpicture}
+  \caption{The meet in the middle attack in weak isogeny classes.}
+  \label{fig:ghs}
+\end{figure}
+
+Similar ideas have been used to construct \emph{key escrow
+  systems}~\cite{teske06}, and to prove random reducibility of
+discrete logarithms inside some isogeny classes~\cite{JMV}.
+
+\section{Provably secure hash functions}
+
+The next application of isogeny graphs is constructing \emph{provably
+  secure hash functions}. %
+The mixing properties of expander graphs make them very good
+pseudo-random generators. %
+For the very same reason, they can also be used to define \emph{hash
+  functions}. %
+The Charles-Goren-Lauter (CGL)
+construction~\cite{charles+lauter+goren09} chooses an arbitrary start
+vertex $j_0$ in an expander graph, then takes a random walk (without
+backtracking) according to the string to be hashed, and outputs the
+arrival vertex. %
+To fix notation, let's assume that the graph is $3$-regular, then the
+value to be hashed is encoded as a binary string. %
+At each step one bit is read from the string, and its value is used to
+choose an edge from the current vertex to the next one, avoiding the
+one edge that goes back. %
+The way an edge is chosen according to the read bit need only be
+deterministic, but can be otherwise arbitrary (e.g., determined by
+some lexicographic ordering). %
+The process is pictured in Figure~\ref{fig:hash}.
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \coordinate (last) at (0,0);
+    \draw (last) node[anchor=east] {$j_0$};
+    \foreach \i in {1,...,6} {
+      \pgfmathparse{(-1)^\i}
+      \let\sign\pgfmathresult
+      \pgfmathparse{int(mod(\i+1,2))}
+      \let\bit\pgfmathresult
+      \pgfmathparse{int(mod(\i,2))}
+      \let\nbit\pgfmathresult
+      \draw[->] (last) -- (\i,\sign*0.1) node[blue,pos=0.5,yshift=\sign*0.2cm]{\small$\bit$};
+      \draw[dashed,->] (last) -- (\i,-\sign*0.5) node[gray,pos=0.5,yshift=-\sign*0.2cm]{\small$\nbit$};
+      \coordinate (last) at (\i,\sign*0.1);
+    }
+    \draw (last) node[anchor=west] {$j_i=H(010101)$};
+  \end{tikzpicture}
+  \caption{Hashing the string $010101$ using an expander graph}
+  \label{fig:hash}
+\end{figure}
+
+For the process to be a good pseudo-random function, the walks need to
+be longer than the mixing length of the graph. %
+However this is not enough to guarantee a \emph{cryptographically
+  strong} hash function. %
+Indeed the two main properties of cryptographic hash functions,
+translate in this setting as the following computational problems.
+
+\begin{problem}[Preimage resistance]
+  Given a vertex $j$ in the graph, find a path from the start vertex
+  $j_0$ to $j$.
+\end{problem}
+
+\begin{problem}[Collision resistance]
+  Find a non-trivial loop (i.e., one that does not track backwards)
+  from $j_0$ to itself.
+\end{problem}
+
+Charles, Goren and Lauter suggested two types of expander graphs to be
+used in their constructions. %
+One is based on \emph{Cayley graphs}, and was broken shortly
+afterwards~\cite{tillich2008collisions,quis}. %
+The second one is based on graphs of supersingular curves. %
+In this context, the preimage finding problem is an instance of the
+isogeny path problem, while the collision finding problem is
+equivalent to computing a non-trivial endomorphism of the start curve
+$j_0$. %
+In this sense, the CGL hash function on expander graphs has
+\emph{provable security}, meaning that its cryptographic strength can
+be provably reduced to well defined mathematical problems thought to
+be hard.
+
+Nevertheless, the CGL hash function has failed to attract the interest
+of the practitioners. %
+For one, it is considerably slower than popular hash functions such as
+those standardized by NIST. %
+More worryingly, some weaknesses have recently been
+highlighted~\cite{kohel2014quaternion}, that could potentially lead to
+backdoors in standardized parameters.
+
+
+\section{Post-quantum key exchange}
+
+We come to the last, more powerful constructions based on isogeny
+graphs. %
+We present here two key exchange protocols, similar in spirit to the
+Diffie-Hellman protocol discussed in the first part. %
+Both protocols are significantly less efficient than ECDH, however
+they are relevant because of their conjectured \emph{quantum
+  security}. %
+In recent years, the case has been made that cryptographic standards
+must be amended in view of the potential threat of general purpose
+\emph{quantum computers} becoming available. %
+It is well known, indeed, that Shor's
+algorithm~\cite{shor1994algorithms} would solve the factorization and
+the discrete logarithm problems in polynomial time on a quantum
+computer, thus sealing the fate of RSA, ECDH, and any other protocol
+based on them. %
+For this reason, the cryptographic community is actively seeking
+cryptographic primitives that would not break in polynomial time on
+quantum computers.
+
+Both protocols are based on random walks in an isogeny graph. %
+The two participants, Alice and Bob, start from the same common curve
+$E_0$, and take a (secret) random walk to some curves $E_A,E_B$. %
+After publishing their respective curves, Alice starts a new walk from
+$E_B$, while Bob starts from $E_A$. %
+By repeating the ``same'' secret steps, they both eventually arrive on
+a shared secret curve $E_S$, only known to them. %
+While the idea may seem simple, its realization is far from easy. %
+Indeed, as opposed to the hash function case, we cannot be content
+with an arbitrary labeling of the graph edges. %
+We must instead use the algebraic properties of the isogeny graphs to
+ensure that Alice and Bob's walks ``commute''.
+
+\subsection{Hard homogeneous spaces}
+
+The first protocol originates in a preprint by Couveignes~\cite{Couv},
+but was only later put into practice and popularized by Rostovtsev and
+Stolbunov~\cite{R&S,Stol}. %
+It uses random walks in graphs of ordinary curves with horizontal
+isogenies; in this sense, it is a direct application of
+Theorem~\ref{th:ord-exp}.
+
+\begin{figure}
+  \begin{subfigure}{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \node[matrix of math nodes, ampersand replacement=\&, column sep=0cm, row sep=1cm] (diagram) {
+        \& |(1)| x_0 \\
+        |(a)| g\cdot x_0 \& \& |(b)| h\cdot x_0\\
+        \& |(ab)| gh\cdot x_0 = hg\cdot x_0\\
+      };
+      \small
+      \path[->] (1) edge node[auto,swap]{$g$} (a);
+      \path[->] (1) edge node[auto]{$h$} (b);
+      \path[->] (a) edge node[auto,swap]{$h$} (ab);
+      \path[->] (b) edge node[auto]{$g$} (ab);
+    \end{tikzpicture}
+    \caption{Diffie-Hellman based on group action: $g,h$ are random
+      elements of an abelian group $G$, acting on a set $X\ni x_0$.}
+    \label{fig:dh-action}
+  \end{subfigure}
+  %%
+  \hfill
+  %%
+  \begin{subfigure}{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \begin{scope}[scale=0.5]
+        \def\crater{11}
+        \def\jump{5}
+        \def\diam{3.8cm}
+
+        \foreach \i in {1,...,\crater} {
+          \draw[blue] (360/\crater*\i : \diam) to[bend right] (360/\crater*\i+360/\crater : \diam);
+          \draw[red] (360/\crater*\i : \diam) to[bend left] (360/\crater*\i+\jump*360/\crater : \diam);
+        }
+        \foreach \i in {1,...,\crater}
+        \draw[fill] (360/\crater*\i: \diam) circle (2pt);
+      \end{scope}
+    \end{tikzpicture}
+    \caption{Two isogeny cycles superimposed}
+    \label{fig:rs}
+  \end{subfigure}
+  \caption{Key exchange based on ordinary isogeny graphs.}
+\end{figure}
+
+\subsection{Supersingular Isogeny Diffie-Hellman}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \begin{scope}
+      \draw (0,1.2) node[anchor=east,blue] {$\ker ϕ=〈P〉⊂ E[\ell_A^{e_A}]$};
+      \draw (0,0.4) node[anchor=east,red] {$\ker ψ=〈Q〉⊂ E[\ell_B^{e_B}]$};
+      \draw (0,-0.4) node[anchor=east,blue] {$\ker ϕ' = 〈\rd{ψ}(P)〉$};
+      \draw (0,-1.2) node[anchor=east,red] {$\ker ψ' = 〈\bl{ϕ}(Q)〉$};
+    \end{scope}
+    \begin{scope}[xshift=4.5cm]
+      \large
+      \node[matrix of nodes, ampersand replacement=\&, column sep=3cm, row sep=1.5cm] (diagram) {
+        |(E)| $E$ \& |(Es)| $E/〈\bl{P}〉$ \\
+        |(Ep)| {$E/〈\rd{Q}〉$} \& |(Eps)| {$E/〈\bl{P},\rd{Q}〉$}\\
+      };
+      \path[->,blue] (E) edge node[auto] {$ϕ$} (Es);
+      \path[->,blue] (Ep) edge node[auto,swap] {$ϕ'$} (Eps);
+      \path[->,red] (E) edge node[auto,swap] {$ψ$} (Ep);
+      \path[->,red] (Es) edge node[auto] {$ψ'$} (Eps);
+    \end{scope}
+  \end{tikzpicture}
+  
+  \caption{Commutative diagram of isogenies of coprime degree}
+  \label{fig:sidh-square}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \node[matrix of nodes, ampersand replacement=\&, column sep=4mm, row sep=2cm] (diagram) {
+      \& |(1)| $E$ \\
+      |(a)| \parbox{1.5cm}{$E/〈\bl{R_A}〉$\\{\footnotesize $\bl{ϕ(}\rd{P_B}\bl{)}\\\bl{ϕ(}\rd{Q_B}\bl{)}$}} \& \&
+      |(b)| \parbox{1.5cm}{$E/〈\rd{R_B}〉$\\{\footnotesize $\rd{ψ(}\bl{P_A}\rd{)}\\\rd{ψ(}\bl{Q_A}\rd{)}$}}\\
+      \normalsize $\frac{E/〈\bl{R_A}〉}{\bl{ϕ(}\rd{R_B}\bl{)}} \simeq$ \&
+      |(ab)|  $E/〈\bl{R_A},\rd{R_B}〉$ \&
+      \normalsize $\simeq \frac{E/〈\rd{R_B}〉}{\rd{ψ(}\bl{R_A}\rd{)}}$\\
+    };
+    \small
+    \path[blue] (1) edge node[auto,swap](phia) {$ϕ$} (a);
+    \path[red] (1) edge node[auto](phib) {$ψ$} (b);
+    \path[red] (a) edge node[auto,swap](psia){$ψ'$} (ab);
+    \path[blue] (b) edge node[auto](psib){$ϕ'$} (ab);
+    \path[dashed,->] (phia) edge node[auto]{\footnotesize $\bl{ϕ(}\rd{R_B}\bl{)}$} (psia);
+    \path[dashed,->] (phib) edge node[auto,swap]{\footnotesize $\rd{ψ(}\bl{R_A}\rd{)}$} (psib);
+  \end{tikzpicture}
+
+  \caption{Schematics of SIDH key exchange}
+  \label{fig:sidh}
+\end{figure}
+
 % - Implem
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Interactive protocols and signatures}
 
+
+%\section{Open problems in isogeny based cryptography}
+
+
+
+\section*{Exercices}
+
+\begin{exercice}
+  Prove Proposition~\ref{th:graph-eigen}.
+\end{exercice}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \bibliographystyle{plain}
 \bibliography{refs}
@@ -1696,5 +2224,6 @@ eventually forms a cycle, the \emph{crater} of a volcano.
 %  LocalWords:  Isogeny projective affine Abelian invertible isogeny
 %  LocalWords:  isomorphism endomorphism endomorphisms isogenies
 %  LocalWords:  cardinality automorphisms cryptographic cryptosystem
-%  LocalWords:  parallelize homothety Homothetic invariants
-%  LocalWords:  supersingular irreducibility
+%  LocalWords:  parallelize homothety Homothetic invariants Expander
+%  LocalWords:  supersingular irreducibility cryptographically
+%  LocalWords:  expander expanders
