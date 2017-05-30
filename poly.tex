@@ -797,7 +797,7 @@ A positively oriented basis is obviously not unique, though.
   See~\cite[I, Lem.~2.4]{silverman:advanced}.
 \end{proof}
 
-\begin{definition}[Complex tours]
+\begin{definition}[Complex torus]
   Let $Λ$ be a complex lattice, the quotient $ℂ/Λ$ is called a
   \emph{complex torus}.
 \end{definition}
@@ -2048,7 +2048,7 @@ be provably reduced to well defined mathematical problems thought to
 be hard.
 
 Nevertheless, the CGL hash function has failed to attract the interest
-of the practitioners. %
+of practitioners. %
 For one, it is considerably slower than popular hash functions such as
 those standardized by NIST. %
 More worryingly, some weaknesses have recently been
@@ -2066,7 +2066,7 @@ Both protocols are significantly less efficient than ECDH, however
 they are relevant because of their conjectured \emph{quantum
   security}. %
 In recent years, the case has been made that cryptographic standards
-must be amended in view of the potential threat of general purpose
+must be amended, in view of the potential threat of general purpose
 \emph{quantum computers} becoming available. %
 It is well known, indeed, that Shor's
 algorithm~\cite{shor1994algorithms} would solve the factorization and
@@ -2097,7 +2097,78 @@ but was only later put into practice and popularized by Rostovtsev and
 Stolbunov~\cite{R&S,Stol}. %
 It uses random walks in graphs of ordinary curves with horizontal
 isogenies; in this sense, it is a direct application of
-Theorem~\ref{th:ord-exp}.
+Theorem~\ref{th:ord-exp}. %
+The protocol can be viewed as a special instance of a general
+construction on \emph{Schreier graphs}, a generalization of
+\emph{Cayley graphs}.
+
+\begin{definition}[Schreier graph]
+  Let $G$ be a group \emph{acting freely} on a set $X$, in the sense
+  that there is a map
+  \begin{align*}
+    G×X &\to X\\
+    (g,x) &\mapsto g·x
+  \end{align*}
+  such that $g·x=x$ if and only if $g=1$, and $g·(h·x)=(gh)·x$, for
+  all $g,h∈G$ and $x∈X$. %
+  Let $S⊂G$ be a \emph{symetric} subset, i.e. one not containing $1$
+  and closed under inversion. %
+  The \emph{Schreier graph} of $(S,X)$ is the graph whose vertices are
+  the elements of $X$, and such that $x,x'∈X$ are connected by an edge
+  if and only if $s·x=x'$ for some $s∈S$.
+\end{definition}
+
+Because of the constraints on the group action and the set $S$,
+Schreier graphs are undirected and regular, and they usually make good
+expanders (see exercise \ref{ex:schreier}). %
+Note that Cayley graphs are the Schreier graphs of the (left) action
+of a group on itself.
+
+As an example, take a cyclic group $G$ of order $n$, then $(ℤ/nℤ)^{×}$
+acts naturally on $G$ by the law $a·g=g^a$ for any $g∈G$ and
+$a∈(ℤ/nℤ)^{×}$. %
+This action is not free on $G$, but it is on the subset $P$ of all
+generators of $G$; we can thus build the Schreier graph $(S,P)$, where
+$S$ is a symmetric subset that generates $(ℤ/nℤ)^{×}$. %
+An example of such graph for the case $n=13$ is shown in
+Figure~\ref{fig:schreier}.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \begin{scope}
+      \def\crater{12}
+      \def\jumpa{-8}
+      \def\jumpb{9}
+      \def\diam{2.5cm}
+
+      \foreach \i in {1,...,\crater} {
+        \draw[blue] (360/\crater*\i : \diam) to[bend right] (360/\crater*\i+360/\crater : \diam);
+        \draw[red] (360/\crater*\i : \diam) to[bend right] (360/\crater*\i+\jumpa*360/\crater : \diam);
+        \draw[green] (360/\crater*\i : \diam) to[bend right=50] (360/\crater*\i+\jumpb*360/\crater : \diam);
+      }
+      \foreach \i in {1,...,\crater} {
+        \pgfmathparse{int(mod(2^\i,13))}
+        \let\exp\pgfmathresult
+        \draw[fill] (360/\crater*\i: \diam) circle (2pt) +(360/\crater*\i: 0.4) node{$g^{\exp}$};
+      }
+    \end{scope}
+    \begin{scope}[xshift=4cm,yshift=1cm]
+      \draw[blue] (0,0) -- (0.5,0) (0.5,0) node[anchor=west] {$x \mapsto x^{2}$};
+      \draw[red] (0,-1) -- (0.5,-1) (0.5,-1) node[anchor=west] {$x \mapsto x^{3}$};
+      \draw[green] (0,-2) -- (0.5,-2) (0.5,-2) node[anchor=west] {$x \mapsto x^{5}$};
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Schreier graph of the generators of a group of order $13$
+    under the action of
+    $S=\{2,3,5,2^{-1},3^{-1},5^{-1}\}⊂(ℤ/13ℤ)^{×}$.}
+  \label{fig:schreier}
+\end{figure}
+
+By slightly generalizing Couveignes' definition~\cite{Couv}, we will
+now show how to construct a key exchange protocol based on this
+Schreier graph. %
+
 
 \begin{figure}
   \begin{subfigure}{0.45\textwidth}
@@ -2210,6 +2281,12 @@ Theorem~\ref{th:ord-exp}.
   Prove Proposition~\ref{th:graph-eigen}.
 \end{exercice}
 
+\begin{exercice}
+  \label{ex:schreier}
+  Show that a Schreier graph $(S⊂G, X)$ is an $ε$-expander if and only
+  if $S$ generates $G$.
+\end{exercice}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \bibliographystyle{plain}
@@ -2226,4 +2303,4 @@ Theorem~\ref{th:ord-exp}.
 %  LocalWords:  cardinality automorphisms cryptographic cryptosystem
 %  LocalWords:  parallelize homothety Homothetic invariants Expander
 %  LocalWords:  supersingular irreducibility cryptographically
-%  LocalWords:  expander expanders
+%  LocalWords:  expander expanders Schreier
