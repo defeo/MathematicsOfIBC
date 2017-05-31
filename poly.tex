@@ -6,21 +6,26 @@
 \usepackage{amsmath,amsthm,amsfonts,amssymb}
 \usepackage{unicode}
 \usepackage{subcaption}
+\usepackage[type={CC},modifier={by-nc},imagemodifier={-eu},version={4.0},imagewidth=5em]{doclicense}
+\usepackage{fancyhdr}
 
 \usepackage{algorithmic}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 \algsetup{linenodelimiter=.}
 
-\usepackage{hyperref}
+\usepackage[pdfusetitle]{hyperref}
 \hypersetup{
-	unicode=true,
-	colorlinks=true,
-	citecolor=blue!70!black,
-	filecolor=black,
-	linkcolor=red!70!black,
-	urlcolor=blue,
-	pdfstartview={FitH},
+  unicode=true,
+  colorlinks=true,
+  citecolor=blue!70!black,
+  filecolor=black,
+  linkcolor=red!70!black,
+  urlcolor=blue,
+  pdfstartview={FitH},
+  pdfauthor={Luca De Feo},
+  pdfsubject={Mathematics},
+  pdfkeywords={Cryptography, Number theory, Elliptic curves, Isogenies},
 }
 
 \usepackage{tikz,pgflibraryarrows,pgflibrarysnakes}%pgflibraryplotmarks,pgflibraryshapes}
@@ -87,6 +92,10 @@
 
 \begin{document}
 \maketitle
+\thispagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\cfoot{\doclicenseThis}
 
 \section*{Introduction}
 
@@ -589,7 +598,7 @@ The resulting protocol is summarized in Figure~\ref{fig:dh}.
 
 \begin{figure}
   \centering
-  \begin{tabular}{l *{2}{p{0.25\textwidth}<{\centering}}}
+  \begin{tabular}{l *{2}{p{25ex}<{\centering}}}
     \hline
     Public parameters & \multicolumn{2}{l}{Finite field $\F_p$, with $\log_2p≈256$,}\\
                       & \multicolumn{2}{l}{Elliptic curve $E/\F_p$, such that $\#E(\F_p)$ is prime,}\\
@@ -2107,15 +2116,15 @@ construction on \emph{Schreier graphs}, a generalization of
   that there is a map
   \begin{align*}
     G×X &\to X\\
-    (g,x) &\mapsto g·x
+    (σ,x) &\mapsto σ·x
   \end{align*}
-  such that $g·x=x$ if and only if $g=1$, and $g·(h·x)=(gh)·x$, for
-  all $g,h∈G$ and $x∈X$. %
-  Let $S⊂G$ be a \emph{symetric} subset, i.e. one not containing $1$
+  such that $σ·x=x$ if and only if $σ=1$, and $σ·(τ·x)=(στ)·x$, for
+  all $σ,τ∈G$ and $x∈X$. %
+  Let $S⊂G$ be a \emph{symmetric} subset, i.e. one not containing $1$
   and closed under inversion. %
   The \emph{Schreier graph} of $(S,X)$ is the graph whose vertices are
   the elements of $X$, and such that $x,x'∈X$ are connected by an edge
-  if and only if $s·x=x'$ for some $s∈S$.
+  if and only if $σ·x=x'$ for some $σ∈S$.
 \end{definition}
 
 Because of the constraints on the group action and the set $S$,
@@ -2125,13 +2134,14 @@ Note that Cayley graphs are the Schreier graphs of the (left) action
 of a group on itself.
 
 As an example, take a cyclic group $G$ of order $n$, then $(ℤ/nℤ)^{×}$
-acts naturally on $G$ by the law $a·g=g^a$ for any $g∈G$ and
-$a∈(ℤ/nℤ)^{×}$. %
+acts naturally on $G$ by the law $σ·g=g^σ$ for any $g∈G$ and
+$σ∈(ℤ/nℤ)^{×}$. %
 This action is not free on $G$, but it is on the subset $P$ of all
 generators of $G$; we can thus build the Schreier graph $(S,P)$, where
 $S$ is a symmetric subset that generates $(ℤ/nℤ)^{×}$. %
 An example of such graph for the case $n=13$ is shown in
-Figure~\ref{fig:schreier}.
+Figure~\ref{fig:schreier}, where the set $S⊂(ℤ/13ℤ)^{×}$ has been
+chosen to contain $2,3,5$ and their inverses.
 
 \begin{figure}
   \centering
@@ -2154,9 +2164,9 @@ Figure~\ref{fig:schreier}.
       }
     \end{scope}
     \begin{scope}[xshift=4cm,yshift=1cm]
-      \draw[blue] (0,0) -- (0.5,0) (0.5,0) node[anchor=west] {$x \mapsto x^{2}$};
-      \draw[red] (0,-1) -- (0.5,-1) (0.5,-1) node[anchor=west] {$x \mapsto x^{3}$};
-      \draw[green] (0,-2) -- (0.5,-2) (0.5,-2) node[anchor=west] {$x \mapsto x^{5}$};
+      \draw[blue] (0,0) -- (0.5,0) (0.5,0) node[black,anchor=west] {$x \mapsto x^{2}$};
+      \draw[red] (0,-1) -- (0.5,-1) (0.5,-1) node[black,anchor=west] {$x \mapsto x^{3}$};
+      \draw[green] (0,-2) -- (0.5,-2) (0.5,-2) node[black,anchor=west] {$x \mapsto x^{5}$};
     \end{scope}
   \end{tikzpicture}
   \caption{Schreier graph of the generators of a group of order $13$
@@ -2165,10 +2175,136 @@ Figure~\ref{fig:schreier}.
   \label{fig:schreier}
 \end{figure}
 
-By slightly generalizing Couveignes' definition~\cite{Couv}, we will
-now show how to construct a key exchange protocol based on this
-Schreier graph. %
+By slightly generalizing Couveignes' work~\cite{Couv}, we will now
+show how to construct a key exchange protocol based on this family of
+Schreier graphs. %
+We will restrict to cyclic groups of prime order $p$, and we will have
+the cryptosystem security grow exponentially in $p$. %
+Let $G=〈g〉$ be a cyclic group of order $p$; let $D⊂(ℤ/pℤ)^{×}$ be a
+generating set such that $σ∈D$ implies $σ^{-1}∉D$; and let
+$S = D∪D^{-1}$. %
+We call \emph{directed route} a sequence of elements of $D$. %
+A directed route $ρ∈D^*$, together with a \emph{starting vertex}
+$g∈G$, defines a walk in the Schreier graph $(S,G)$ by starting in
+$g$, and successively taking the edges corresponding to the labels in
+$ρ$. %
+If $ρ$ is a directed route, and $g∈G$, we write $ρ(g)$ for vertex
+where the walk defined by $ρ$ and $g$ ends. %
+We can now define a key exchange protocol where the secrets are random
+directed routes, and the public data are vertices of the Schreier
+graph. %
+The protocol is summarized in Figure~\ref{fig:walk-dh}.
 
+\begin{figure}
+  \centering
+  \begin{tabular}{l *{2}{p{30ex}<{\centering}}}
+    \hline
+    Public parameters & \multicolumn{2}{l}{A group $G$ of prime order $p$,}\\
+                      & \multicolumn{2}{l}{A generating set $D⊂(ℤ/pℤ)^{×}$ such that $σ∈D⇒σ^{-1}∉D$,}\\
+                      & \multicolumn{2}{l}{A generator $g$ of $G$.}\\
+    \hline
+                      & {\bf Alice} & {\bf Bob}\\
+    \hline
+    Pick random secret & $ρ_A∈D^*$ & $ρ_B∈D^*$\\
+    Compute public data & $g_A = ρ_A(g)$ & $g_B = ρ_B(g)$\\
+    Exchange data &  \hfill $g_A \longrightarrow$ & $\longleftarrow g_B$ \hfill\strut \\
+    Compute shared secret & $g_{AB} = ρ_A(g_B)$ & $g_{AB} = ρ_B(g_A)$
+  \end{tabular}
+  
+  \caption{Key exchange protocol based on random walks in a Schreier graph.}
+  \label{fig:walk-dh}
+\end{figure}
+
+A graphical example of this protocol with $p=13$ and $D=\{2,3,5\}$ is
+given in Figure~\ref{fig:dh-walk-pict}. %
+To understand why it works, observe that if $ρ$ is a route of length $m$
+\[ρ=(σ_1,\dots,σ_m),\]
+then
+\[ρ(g) = g^{\prod σ_i}\] %
+for any $g∈G$. %
+Hence, the order of the steps in a route does not count: what counts
+is only how many times each element of $D$ appears in $ρ$. %
+We immediately realize that this protocol is nothing else than the
+classical Diffie-Hellman protocol on the group $G$, presented in a
+twisted way.%
+\footnote{A minor difference lies in the fact that this protocol
+  avoids non-primitive elements of $G$, whereas the classical
+  Diffie-Hellman protocol may well use public keys belonging to a
+  subgroup of $G$.} %
+
+\begin{figure}
+  \centering
+  \newcommand{\myedge}[3]{
+    \draw[#3] (360/\crater*#1 : \diam) to[bend right] (360/\crater*#2 : \diam);
+  }
+  \begin{tikzpicture}
+    \begin{scope}
+      \def\crater{12}
+      \def\jumpa{-8}
+      \def\jumpb{9}
+      \def\diam{2cm}
+      \foreach \i in {1,...,\crater} {
+        \pgfmathparse{int(mod(2^\i,13))}
+        \let\exp\pgfmathresult
+        \draw[fill] (360/\crater*\i: \diam) circle (2pt);
+      }
+      % Alice 1
+      \myedge{0}{1}{blue}\myedge{1}{5}{red}\myedge{5}{6}{blue}\myedge{6}{3}{green}
+      % Bob 2
+      \begin{scope}[dashed,thick]
+        \myedge{3}{7}{red}\myedge{7}{11}{red}\myedge{11}{8}{green}\myedge{8}{9}{blue}
+      \end{scope}
+      \draw (0 : \diam + 0.4cm) node {$g$};
+      \draw (360/\crater*3 : \diam + 0.4cm) node {$g_A$};
+      \draw (360/\crater*9 : \diam + 0.4cm) node {$g_{AB}$};
+    \end{scope}
+    
+    \begin{scope}[xshift=6.5cm]
+      \def\crater{12}
+      \def\jumpa{-8}
+      \def\jumpb{9}
+      \def\diam{2cm}
+      \foreach \i in {1,...,\crater} {
+        \pgfmathparse{int(mod(2^\i,13))}
+        \let\exp\pgfmathresult
+        \draw[fill] (360/\crater*\i: \diam) circle (2pt);
+      }
+      % Bob 1
+      \begin{scope}[dashed,thick]
+        \myedge{0}{4}{red}\myedge{4}{8}{red}\myedge{8}{5}{green}\myedge{5}{6}{blue}
+      \end{scope}
+      % Alice 2
+      \myedge{6}{7}{blue}\myedge{7}{11}{red}\myedge{11}{0}{blue}\myedge{0}{9}{green}
+      \draw (0 : \diam + 0.4cm) node {$g$};
+      \draw (360/\crater*6 : \diam + 0.4cm) node {$g_B$};
+      \draw (360/\crater*9 : \diam + 0.4cm) node {$g_{AB}$};
+    \end{scope}
+  \end{tikzpicture}  
+
+  \caption{Example of key exchange on the Schreier graph of
+    Figure~\ref{fig:schreier}.  Alice's route is represented by
+    continuous lines, Bob's route by dashed lines. On the left, Bob
+    computes the shared secret starting from Alice's public data. On
+    the right, Alice does the analogous computation.}
+  \label{fig:dh-walk-pict}
+\end{figure}
+
+For this protocol to have the same security as the original
+Diffie-Helman, we need the public keys $g_A,g_B$ to be (almost)
+uniformly distributed. %
+Hence, we shall require that the graph is an expander, and that walks
+are longer than the mixing length; i.e., that $D$ generates
+$(ℤ/pℤ)^{×}$, and that walks have length $\sim\log p$. %
+Since a secret route is simply defined by the number of times each
+element of $D$ is present, we shall also need
+$\#D\sim \log p/\loglog p$ in order to have a large enough key
+space. %
+If we respect all these constraints, we end up with a protocol that is
+essentially equivalent to the original Diffie-Hellman, only less
+efficient.
+
+It is now an easy exercise to generalize to other Schreier graphs. %
+How this applies to isogeny graphs is still not evident, though. %
 
 \begin{figure}
   \begin{subfigure}{0.45\textwidth}
