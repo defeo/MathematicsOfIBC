@@ -1233,6 +1233,7 @@ squarefree. % TODO: check this!
 Then, any order $ℤ[π] ⊂ \O ⊂ \O_K$ has conductor dividing $f$.
 
 \section{Application: point counting}
+\label{sec:appl-point-count}
 
 Before going more in depth into the study of the endomorphism ring,
 let us pause for a while on a simpler problem. %
@@ -1912,6 +1913,7 @@ many small degree isogenies, the rational fractions may be represented
 more compactly, and the cost may become only logarithmic in $\#G$.
 
 \begin{problem}[Explicit isogeny]
+  \label{prob:explicit-isog}
   Given two elliptic curves $E,E'$ over a finite field, isogenous
   of known degree $d$, find an isogeny $ϕ:E\to E'$ of degree $d$.
 \end{problem}
@@ -2413,7 +2415,48 @@ The general idea was already present in Couveignes' work~\cite{Couv},
 but it was Rostovtsev and Stolbunov who proposed to use isogeny
 computations to effectively implement the protocol~\cite{R&S,Stol}. %
 
+The protocol implicitly uses the set $\Ell_q(\O)$ of elliptic curves
+over $\F_q$ with complex multiplication by some order $\O$; however it
+never explicitly computes $\O$. %
+Instead, it determines parameters in the following order:
+\begin{enumerate}
+\item A \emph{large enough} finite field $\F_q$;
+\item A curve $E$ defined over $\F_q$;
+\item The Frobenius discriminant $D_π=t_π^2-4q$ of $E$ is computed
+  through point counting, and it is verified that it contains a
+  \emph{large enough} prime factor;
+\item A set $L=\{ℓ_1,\dots,ℓ_m\}$ of primes that split in $ℤ[π]$,
+  i.e., such that $\left(\frac{D_π}{ℓ_i}\right)=1$;
+\item For each prime $ℓ_i$, the factorization
+  \[π^2-t_ππ+q=(π-λ_i)(π-μ_i)\mod ℓ_i\] %
+  is computed, and one of the roots, say $λ_i$, is chosen arbitrarily
+  as \emph{positive direction}.
+\end{enumerate}
 
+The condition on the $ℓ_i$'s guarantees that each graph of
+$ℓ_i$-isogenies on $\Ell_q(\O)$ is $2$-regular. %
+The choice of a \emph{positive direction} allows us to \emph{orient}
+the graph, by associating to $λ_i$ the isogeny with kernel
+$E[ℓ_i]∩\ker(π-λ_i)$. %
+The key exchange now proceeds like the ordinary Diffie-Hellman
+protocol:
+\begin{enumerate}
+\item Alice chooses a random walk made of steps in $L$ along the
+  positive direction; denote the walk by $ρ_A∈L^*$, and denote by
+  $E_A=ρ_A(E)$ the curve where the walk terminates. %
+  Note that $E_A$ does only depends on how many times each $ℓ_i$
+  appears in $ρ_A$, and not on their order.
+\item Bob does the same, choosing a random walk $ρ_B$ and computing
+  $E_B=ρ_B(E)$.
+\item Alice and Bob exchange $E_A$ and $E_B$.
+\item Alice computes the \emph{shared secret} $ρ_A(E_B)$.
+\item Bob computes the \emph{shared secret} $ρ_B(E_A)$.
+\end{enumerate}
+The actual computations are carried out by solving \emph{explicit
+  isogeny problems} (see Problem~\ref{prob:explicit-isog}), in much
+the same way they are done in the Elkies case of the SEA algorithm
+(see Section~\ref{sec:appl-point-count}). %
+The protocol is summarized in Figure~\ref{fig:rns}.
 
 \begin{figure}
   \centering
@@ -2426,16 +2469,20 @@ computations to effectively implement the protocol~\cite{R&S,Stol}. %
     \hline
                       & {\bf Alice} & {\bf Bob}\\
     \hline
-    Pick random secret & $ρ_A⊂L$ & $ρ_B⊂L$\\
+    Pick random secret & $ρ_A∈L^*$ & $ρ_B∈L^*$\\
     Compute public data & $E_A = ρ_A(E)$ & $E_B = ρ_B(E)$\\
     Exchange data &  \hfill $E_A \longrightarrow$ & $\longleftarrow E_B$ \hfill\strut \\
     Compute shared secret & $E_{AB} = ρ_A(E_B)$ & $E_{AB} = ρ_B(E_A)$
   \end{tabular}
   
-  \caption{Rostovtsev \& Stolbunov key exchange protocol based on
-    random walks in an isogeny graph.}
+  \caption{Rostovtsev-Stolbunov key exchange protocol based on random
+    walks in an isogeny graph.}
   \label{fig:rns}
 \end{figure}
+
+We conclude this section with a discussion on the security of the
+Rostovtsev-Stolbunov protocol. %
+
 
 
 \subsection{Supersingular Isogeny Diffie-Hellman}
