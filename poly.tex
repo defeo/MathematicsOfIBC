@@ -72,6 +72,8 @@
 \DeclareMathOperator{\im}{Im}
 \DeclareMathOperator{\GL}{GL}
 \DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\Cl}{Cl}
+\DeclareMathOperator{\Ell}{Ell}
 
 \def\A{\ensuremath{\mathbb{A}}}
 \def\P{\ensuremath{\mathbb{P}}}
@@ -79,6 +81,7 @@
 \def\O{\ensuremath{\mathcal{O}}}
 \def\tildO{\ensuremath{\tilde{O}}}
 \def\euler{\ensuremath{\varphi}}
+\def\a{\ensuremath{\mathfrak{a}}}
 
 \newcommand{\bl}[1]{\textcolor{blue}{#1}}
 \newcommand{\rd}[1]{\textcolor{red}{#1}}
@@ -1173,9 +1176,9 @@ contains any other order of $K$.
   The ring $\End(E)$ is isomorphic to one of the following:
   \begin{itemize}
   \item $ℤ$, only if $p=0$;
-  \item An order in a quadratic imaginary field (a number field of the
-    form $ℚ[\sqrt{-D}]$ for some $D>0$); in this case we say that $E$
-    has \emph{complex multiplication};
+  \item An order $\O$ in a quadratic imaginary field (a number field
+    of the form $ℚ[\sqrt{-D}]$ for some $D>0$); in this case we say
+    that $E$ has \emph{complex multiplication} by $\O$;
   \item Only if $p>0$, a maximal order in the quaternion algebra
     ramified at $p$ and $∞$; in this case we say that $E$ is
     \emph{supersingular}.
@@ -1871,9 +1874,10 @@ isogenies.
   Let $\F_q$ be a finite field and let $\O⊂ℚ[\sqrt{-D}]$ be an order
   in a quadratic imaginary field. %
   Let $G$ be the graph whose vertices are elliptic curves over $\F_q$
-  whose endomorphism ring is isomorphic to $\O$, and whose edges are
+  with complex multiplication by $\O$, and whose edges are
   (horizontal) isogenies of prime degree bounded by $(\log q)^{2+δ}$
   for some fixed $δ>0$. %
+  Assume that $G$ is non-empty. %
   Then, under the generalized Riemann hypothesis, $G$ is a regular
   graph and there exists an $ε$, independent of $\O$ and $q$, such
   that $G$ is a one-sided $ε$-expander.
@@ -2066,6 +2070,7 @@ backdoors in standardized parameters.
 
 
 \section{Post-quantum key exchange}
+\label{sec:post-quantum-key}
 
 We come to the last, more powerful constructions based on isogeny
 graphs. %
@@ -2220,7 +2225,7 @@ given in Figure~\ref{fig:dh-walk-pict}. %
 To understand why it works, observe that if $ρ$ is a route of length $m$
 \[ρ=(σ_1,\dots,σ_m),\]
 then
-\[ρ(g) = g^{\prod σ_i}\] %
+\[ρ(g) = \exp_g\left(\prod σ_i\right)\] %
 for any $g∈G$. %
 Hence, the order of the steps in a route does not count: what counts
 is only how many times each element of $D$ appears in $ρ$. %
@@ -2304,51 +2309,134 @@ essentially equivalent to the original Diffie-Hellman, only less
 efficient.
 
 It is now an easy exercise to generalize to other Schreier graphs. %
-How this applies to isogeny graphs is still not evident, though. %
+To see how this applies to isogeny graphs, we must take a step back,
+and define some more objects related to elliptic curves.
+
+\begin{definition}[Fractional ideal]
+  Let $\O$ be an order in a number field $K$. A \emph{fractional
+    ideal} of $\O$ is a non-zero subgroup $I⊂K$ such that
+  \begin{itemize}
+  \item $xI⊂I$ for all $x∈\O$, and
+  \item there exists a non-zero $x∈\O$ such that $xI⊂\O$.
+  \end{itemize}
+  
+  A fractional ideal is called \emph{principal} if it is of the form
+  $x\O$ for some $x∈K$.
+\end{definition}
+
+Note that the ideals of $\O$ are exactly the fractional ideals
+contained in $\O$; however, from now on we will simply call
+\emph{ideals} the fraction ideals, and we will use the name
+\emph{integral ideal} for ordinary ones. %
+An ideal $I$ is said to be \emph{invertible} if there is another ideal
+$J$ such that $IJ=\O$. %
+Invertible ideals form an Abelian group, written multiplicatively,
+under the operation
+\[IJ = \{ xy \;|\; x∈I, y∈J \}.\] %
+It is easily verified that $\O$ is the neutral element of the group,
+and that principal ideals form a subgroup of it.
+
+\begin{proposition}[Ideal class group]
+  Let $\O$ be an order in a number field $K$. %
+  Let $\mathcal{I}(\O)$ be its group of invertible ideals, and
+  $\mathcal{P}(\O)$ the subgroup of principal ideals. %
+  The \emph{(ideal) class group} of $\O$ is the quotient
+  \[\Cl(\O) = \mathcal{I}(\O)/\mathcal{P}(\O).\]
+  It is a finite Abelian group. %
+  Its order, denoted by $h(\O)$, is called the \emph{class number} of
+  $\O$.
+\end{proposition}
+
+The class group is a fundamental object in the study of number fields
+and their Galois theory. %
+What is relevant to us, is the fact that the elements of $\Cl(\O)$ are
+\emph{represented} by horizontal isogenies, a fact that is developed
+in the theory of \emph{complex multiplication}. %
+We only take here a small peek at the theory;
+see~\cite{lang1987elliptic,silverman:advanced,cox2011primes} for a
+detailed account.
+
+\begin{definition}[$\a$-torsion]
+  Let $E$ be an elliptic curve defined over a finite field $\F_q$. %
+  Let $\O$ be the endomorphism ring of $E$, and let $\a⊂\O$
+  be an integral invertible ideal of norm coprime to $q$. %
+  We define the \emph{$\a$-torsion subgroup} of $E$ as
+  \[E[\a] = \{P∈E \;|\; α(P) = 0 \text{ for all } α∈\a\}.\] %
+\end{definition}
+
+Given an ideal $\a⊂\O$ as above, it is natural to define the
+(separable) isogeny $φ_{\a}:E\to E_{\a}$ whose kernel is $E[\a]$. %
+This definition can be readily extended to inseparable isogenies. %
+Since $\a$ is invertible, we can show that $\End(E)≃\End(E_\a)≃\O$,
+that $E_\a$ only depends on the class of $\a$ in $\Cl(\O)$, and that
+the map $(\a,E)\mapsto E_\a$ defines a group action of $\Cl(\O)$ on
+the set of elliptic curves with complex multiplication by $\O$.
+
+\begin{theorem}
+  Let $\F_q$ be a finite field, and let $\O⊂ℚ[\sqrt{-D}]$ be an order
+  in a quadratic imaginary field. %
+  Denote by $\Ell_q(\O)$ the set of elliptic curves defined over
+  $\F_q$ with complex multiplication by $\O$.
+
+  Assume that $\Ell_q(\O)$ is non-empty, then the class group
+  $\Cl(\O)$ acts \emph{freely} and \emph{transitively} on it; i.e.,
+  there is a map
+  \begin{align*}
+    \Cl(\O)×\Ell_q(\O) &\to \Ell_q(\O)\\
+    (\a,E) &\mapsto \a·E
+  \end{align*}
+  such that $\a·(\mathfrak{b}·E)=(\a\mathfrak{b})·E$ for all
+  $\a,\mathfrak{b}∈\Cl(\O)$ and $E∈\Ell_q(\O)$, and such that for any
+  $E,E'∈\Ell_q(\O)$ there is a unique $\a∈\Cl(\O)$ such that
+  $E'=\a·E$. %
+\end{theorem}
+
+A set, that is acted upon freely and transitively by a group $G$, is
+also called a \emph{principal homogeneous space} or a \emph{torsor}
+for $G$. %
+An immediate consequence of the theorem above is that the torsor
+$\Ell_q(\O)$ has cardinality equal to the class number $h(\O)$. %
+
+Following on from the connection between isogenies and ideals, suppose
+that that $ℓ\O$ splits into prime ideals as
+$ℓ\O=\mathfrak{l}\bar{\mathfrak{l}}$. %
+Set $S=\{\mathfrak{l},\bar{\mathfrak{l}}\}$, then the Schreier graph
+of $(S, \Ell_q(\O))$ is exactly the graph of horizontal
+$\ell$-isogenies on $\Ell_q(\O)$. %
+More generally, if we let $S⊂\Cl(\O)$ be a symmetric subset, its
+Schreier graph is a graph of horizontal isogenies, and it is an
+expander if and only if $S$ generates $\Cl(\O)$.
+
+Based on this observation, we can now give a key exchange protocol
+based on random walks in graphs of horizontal isogenies. %
+The general idea was already present in Couveignes' work~\cite{Couv},
+but it was Rostovtsev and Stolbunov who proposed to use isogeny
+computations to effectively implement the protocol~\cite{R&S,Stol}. %
+
+
 
 \begin{figure}
-  \begin{subfigure}{0.45\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \node[matrix of math nodes, ampersand replacement=\&, column sep=0cm, row sep=1cm] (diagram) {
-        \& |(1)| x_0 \\
-        |(a)| g\cdot x_0 \& \& |(b)| h\cdot x_0\\
-        \& |(ab)| gh\cdot x_0 = hg\cdot x_0\\
-      };
-      \small
-      \path[->] (1) edge node[auto,swap]{$g$} (a);
-      \path[->] (1) edge node[auto]{$h$} (b);
-      \path[->] (a) edge node[auto,swap]{$h$} (ab);
-      \path[->] (b) edge node[auto]{$g$} (ab);
-    \end{tikzpicture}
-    \caption{Diffie-Hellman based on group action: $g,h$ are random
-      elements of an abelian group $G$, acting on a set $X\ni x_0$.}
-    \label{fig:dh-action}
-  \end{subfigure}
-  %%
-  \hfill
-  %%
-  \begin{subfigure}{0.45\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \begin{scope}[scale=0.5]
-        \def\crater{11}
-        \def\jump{5}
-        \def\diam{3.8cm}
-
-        \foreach \i in {1,...,\crater} {
-          \draw[blue] (360/\crater*\i : \diam) to[bend right] (360/\crater*\i+360/\crater : \diam);
-          \draw[red] (360/\crater*\i : \diam) to[bend left] (360/\crater*\i+\jump*360/\crater : \diam);
-        }
-        \foreach \i in {1,...,\crater}
-        \draw[fill] (360/\crater*\i: \diam) circle (2pt);
-      \end{scope}
-    \end{tikzpicture}
-    \caption{Two isogeny cycles superimposed}
-    \label{fig:rs}
-  \end{subfigure}
-  \caption{Key exchange based on ordinary isogeny graphs.}
+  \centering
+  \begin{tabular}{l *{2}{p{30ex}<{\centering}}}
+    \hline
+    Public parameters & \multicolumn{2}{l}{An elliptic curve $E$ over a finite field $\F_q$,}\\
+                      & \multicolumn{2}{l}{$D_π$, the discriminant of the Frobenius endomorphism of $E$,}\\
+                      & \multicolumn{2}{l}{A set of primes $L=\{ℓ_1,\dots,ℓ_m\}$ such that $\left(\frac{D_π}{ℓ_i}\right)=1$,}\\
+                      & \multicolumn{2}{l}{A \emph{Frobenius eigenvalue} $λ_i$ for each $ℓ_i$,}\\
+    \hline
+                      & {\bf Alice} & {\bf Bob}\\
+    \hline
+    Pick random secret & $ρ_A⊂L$ & $ρ_B⊂L$\\
+    Compute public data & $E_A = ρ_A(E)$ & $E_B = ρ_B(E)$\\
+    Exchange data &  \hfill $E_A \longrightarrow$ & $\longleftarrow E_B$ \hfill\strut \\
+    Compute shared secret & $E_{AB} = ρ_A(E_B)$ & $E_{AB} = ρ_B(E_A)$
+  \end{tabular}
+  
+  \caption{Rostovtsev \& Stolbunov key exchange protocol based on
+    random walks in an isogeny graph.}
+  \label{fig:rns}
 \end{figure}
+
 
 \subsection{Supersingular Isogeny Diffie-Hellman}
 
@@ -2423,6 +2511,12 @@ How this applies to isogeny graphs is still not evident, though. %
   if $S$ generates $G$.
 \end{exercice}
 
+\begin{exercice}
+  \label{ex:elgamal}
+  Derive encryption protocols \emph{\'a la} El Gamal from the key
+  exchange protocols of Section~\ref{sec:post-quantum-key}.
+\end{exercice}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \bibliographystyle{plain}
@@ -2438,5 +2532,5 @@ How this applies to isogeny graphs is still not evident, though. %
 %  LocalWords:  isomorphism endomorphism endomorphisms isogenies
 %  LocalWords:  cardinality automorphisms cryptographic cryptosystem
 %  LocalWords:  parallelize homothety Homothetic invariants Expander
-%  LocalWords:  supersingular irreducibility cryptographically
-%  LocalWords:  expander expanders Schreier
+%  LocalWords:  supersingular irreducibility cryptographically torsor
+%  LocalWords:  expander expanders Schreier coprime
