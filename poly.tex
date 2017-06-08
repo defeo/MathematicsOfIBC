@@ -1888,6 +1888,7 @@ isogenies.
 \end{proof}
 
 \section{Isogeny graphs in cryptanalysis}
+\label{sec:isog-graphs-crypt}
 
 Besides the applications to point counting mentioned in the previous
 part, the first application of isogenies in cryptography has been to
@@ -2367,7 +2368,7 @@ detailed account.
 \end{definition}
 
 Given an ideal $\a⊂\O$ as above, it is natural to define the
-(separable) isogeny $φ_{\a}:E\to E_{\a}$ whose kernel is $E[\a]$. %
+(separable) isogeny $ϕ_{\a}:E\to E_{\a}$ whose kernel is $E[\a]$. %
 This definition can be readily extended to inseparable isogenies. %
 Since $\a$ is invertible, we can show that $\End(E)≃\End(E_\a)≃\O$,
 that $E_\a$ only depends on the class of $\a$ in $\Cl(\O)$, and that
@@ -2482,10 +2483,88 @@ The protocol is summarized in Figure~\ref{fig:rns}.
 
 We conclude this section with a discussion on the security of the
 Rostovtsev-Stolbunov protocol. %
+All the protocol's security rests on the isogeny path problem: given
+$E$ and $E_A$, find an isogeny $ϕ:E\to E_A$ of smooth order. %
+To be safe against exhaustive search and meet in the middle attacks as
+seen in Section~\ref{sec:isog-graphs-crypt}, the set $\Ell_q(\O)$ must
+be large. %
+On average $\#\Ell_q(\O)\sim \sqrt{q}$, thus we shall take
+$\log_2 q≈512$ for a security level of at most $128$ bits. %
+However, some isogeny classes are much smaller than average, this is
+why we also need check that $D_π$ has a large prime factor.
 
+Furthermore, for the public and private curves to be (almost)
+uniformly distributed in $\Ell_q(\O)$, we need the isogeny graph to be
+connected; equivalently, we need the ideals $(ℓ_i,π-λ_i)$ to generate
+$\Cl(\O)$. %
+Theorem~\ref{th:ord-exp} ensures this is the case if
+$\#L\sim (\log q)^2$, however it is usually sufficient to take a much
+smaller set in practice. %
+It is not enough to have an expander: we also need the random walks to
+be longer than the mixing length, that is $\sim\log q$. %
+And, since the key space grows exponentially with $\#L$, rather than
+with the walk length, we shall also ask that
+$\#L\sim \log q/\loglog q$.
+
+When all conditions are met, the best known attack against this
+cryptosystem is the meet in the middle strategy, which runs in
+$O(\sqrt[4]{q})$ steps. %
+However, the real case for this system is made by looking at attacks
+performed on a \emph{quantum computer}. %
+It is well known that Shor's algorithm~\cite{shor1994algorithms}
+breaks the Diffie-Hellman cryptosystem in polynomial time on a quantum
+computer, and thus it also breaks the protocol of
+Figure~\ref{fig:walk-dh}. %
+More generally, Shor's algorithm can solve the (generalized) discrete
+logarithm problem in any Abelian group, and in particular in
+$\Cl(\O)$. %
+However, in the Rostovtsev-Stolbunov protocol, the attacker only sees
+$E$, $E_A$ and $E_B$. %
+Since there is no canonical way to map the curves to elements of
+$\Cl(\O)$, it is not enough to be able to solve discrete logarithms in
+it.
+
+Childs, Jao and Soukharev~\cite{childs2014constructing} have shown how
+to adapt quantum algorithms by Regev~\cite{regev04} and
+Kuperberg~\cite{Kup} to solve the ordinary isogeny path problem in
+subexponential time. %
+Although their attack does not qualify as a total break, it makes the
+Rostovtsev-Stolbunov protocol even less practical. %
+Indeed, the protocol is already very slow, mainly due to the
+relatively large size of the isogeny degree set $L$. %
+If parameter sizes must be further enlarged to protect against quantum
+attacks, it seems plausible that the Rostovtsev-Stolbunov protocol may
+never be used in practice.
 
 
 \subsection{Supersingular Isogeny Diffie-Hellman}
+
+We finally come to the last cryptographic construction from isogeny
+graphs. %
+Graphs of supersingular isogenies have two main features for
+constructing key exchange protocols, compared to ordinary graphs. %
+First, one isogeny degree is sufficient to obtain an expander graph;
+this has the potential to produce more efficient protocols. %
+Second, there is no action of an Abelian group, such as $\Cl(\O)$, on
+it; it seems thus harder to use quantum computers to solve the isogeny
+path problem in them.
+
+But the absence of a group action also makes it impossible to directly
+generalize the Rostovtsev-Stolbunov protocol to supersingular
+graphs. %
+It turns out, however, that there is an algebraic structure acting on
+supersingular graphs. %
+We have seen that, if $E$ is a supersingular curve defined over $\F_p$
+or $\F_{p^2}$, its endomorphism ring is isomorphic to an order in the
+quaternion algebra $ℚ_{p,∞}$ ramified at $p$ and at infinity. %
+There is more: supersingular curves are in correspondence with the
+maximal orders of $ℚ_{p,∞}$, and their left ideals act on the graph
+like isogenies. %
+It would be rather technical to go into the details of the theory of
+quaternion algebra and their maximal orders. %
+We address the interested reader to~\cite{belding08-thesis}. %
+Instead, we describe here a key exchange protocol, only using the
+language of isogenies.
 
 \begin{figure}
   \centering
