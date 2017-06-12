@@ -2653,11 +2653,11 @@ corresponds to a kernel of size $ℓ_A^{e_A}$; and this kernel is cyclic
 if and only if the walk \emph{does not backtrack}. %
 
 Hence, Alice choosing a secret walk of length $e_A$ is equivalent to
-her choosing a secret cyclic subgroup $〈P〉⊂E[ℓ_A^{e_A}]$. %
+her choosing a secret cyclic subgroup $〈A〉⊂E[ℓ_A^{e_A}]$. %
 If we let Alice choose one such subgroup, and Bob choose similarly a
-secret $〈Q〉⊂E[ℓ_B^{e_B}]$, then there is a well defined subgroup
-$〈P〉+〈Q〉=〈P,Q〉$, defining an isogeny to $E/〈P,Q〉$. %
-Since we have taken care to choose $ℓ_A≠ℓ_B$, the group $〈P,Q〉$ is
+secret $〈B〉⊂E[ℓ_B^{e_B}]$, then there is a well defined subgroup
+$〈A〉+〈B〉=〈A,B〉$, defining an isogeny to $E/〈A,B〉$. %
+Since we have taken care to choose $ℓ_A≠ℓ_B$, the group $〈A,B〉$ is
 cyclic of order $ℓ_A^{e_A}ℓ_B^{e_B}$. %
 This is illustrated in Figure~\ref{fig:sidh-diag}.
 
@@ -2665,21 +2665,21 @@ This is illustrated in Figure~\ref{fig:sidh-diag}.
   \centering
   \begin{tikzpicture}
     \begin{scope}
-      \draw (0,1.2) node[anchor=east] {$\bl{\ker ϕ=〈P〉}⊂ E[\ell_A^{e_A}]$};
-      \draw (0,0.4) node[anchor=east] {$\rd{\ker ψ=〈Q〉}⊂ E[\ell_B^{e_B}]$};
-      \draw (0,-0.4) node[anchor=east] {$\ker ϕ' = 〈\rd{ψ}\bl{(P)}〉$};
-      \draw (0,-1.2) node[anchor=east] {$\ker ψ' = 〈\bl{ϕ}\rd{(Q)}〉$};
+      \draw (0,1.2) node[anchor=east] {$\bl{\ker α=〈A〉}⊂ E[\ell_A^{e_A}]$};
+      \draw (0,0.4) node[anchor=east] {$\rd{\ker β=〈B〉}⊂ E[\ell_B^{e_B}]$};
+      \draw (0,-0.4) node[anchor=east] {$\ker α' = 〈\rd{β}\bl{(A)}〉$};
+      \draw (0,-1.2) node[anchor=east] {$\ker β' = 〈\bl{α}\rd{(B)}〉$};
     \end{scope}
     \begin{scope}[xshift=4.5cm]
       \large
       \node[matrix of nodes, ampersand replacement=\&, column sep=3cm, row sep=1.5cm] (diagram) {
-        |(E)| $E$ \& |(Es)| $E/〈\bl{P}〉$ \\
-        |(Ep)| {$E/〈\rd{Q}〉$} \& |(Eps)| {$E/〈\bl{P},\rd{Q}〉$}\\
+        |(E)| $E$ \& |(Es)| $E/〈\bl{A}〉$ \\
+        |(Ep)| {$E/〈\rd{B}〉$} \& |(Eps)| {$E/〈\bl{A},\rd{B}〉$}\\
       };
-      \path[->,blue] (E) edge node[auto] {$ϕ$} (Es);
-      \path[->] (Ep) edge node[auto,swap] {$ϕ'$} (Eps);
-      \path[->,red] (E) edge node[auto,swap] {$ψ$} (Ep);
-      \path[->] (Es) edge node[auto] {$ψ'$} (Eps);
+      \path[->,blue] (E) edge node[auto] {$α$} (Es);
+      \path[->] (Ep) edge node[auto,swap] {$α'$} (Eps);
+      \path[->,red] (E) edge node[auto,swap] {$β$} (Ep);
+      \path[->] (Es) edge node[auto] {$β'$} (Eps);
     \end{scope}
   \end{tikzpicture}
   \caption{Commutative isogeny diagram constructed from Alice's and
@@ -2690,17 +2690,18 @@ This is illustrated in Figure~\ref{fig:sidh-diag}.
 \end{figure}
 
 At this point, we would like to define a protocol where Alice and Bob
-choose random cyclic subgroups $〈P〉$ and $〈Q〉$ in some \emph{large
+choose random cyclic subgroups $〈A〉$ and $〈B〉$ in some \emph{large
   enough} torsion groups, and exchange enough information to both
-compute $E/〈P,Q〉$, without revealing their respective secrets. %
+compute $E/〈A,B〉$ (up to isomorphism), without revealing their
+respective secrets. %
 We are faced with two difficulties, though:
 \begin{enumerate}
-\item The points of $〈P〉$ (or $〈Q〉$) may not be rational. %
+\item The points of $〈A〉$ (or $〈B〉$) may not be rational. %
   Indeed, in general they may be defined over a field extension of
   degree as large as $ℓ_A^{e_A}$, thus requiring an exponential amount
   of information to be explicitly represented.
 \item The diagram in Figure~\ref{fig:sidh-diag} shows no way by which
-  Alice and Bob could compute $E/〈P,Q〉$ without revealing their
+  Alice and Bob could compute $E/〈A,B〉$ without revealing their
   secrets to each other.
 \end{enumerate}
 
@@ -2711,36 +2712,143 @@ totally elementary in the supersingular one, as the following
 proposition shows.
 
 \begin{theorem}[Group structure of supersingular curves]
+  Let $p$ be a prime, and let $E$ be a supersingular curve defined
+  over a finite field $\F_q$ with $q=p^m$ elements. %
+  Let $t$ be the trace of the Frobenius endomorphism of $E/k$, then
+  one of the following is true:
+  \begin{itemize}
+  \item $m$ is odd and
+    \begin{itemize}
+    \item $t=0$, or
+    \item $p=2$ and $t^2=2q$, or
+    \item $p=3$ and $t^2=3q$;
+    \end{itemize}
+  \item $m$ is even and
+    \begin{itemize}
+    \item $t^2=4q$, or
+    \item $t^2=q$, and $j(E)=0$, and $E$ is not isomorphic to
+      $y^2=x^3±1$, or
+    \item $t^2=0$, and $j(E)=1728$, and $E$ is not isomorphic to
+      $y^2=x^3±x$.
+    \end{itemize}
+  \end{itemize}
   
+  The group structure of $E(\F_q)$ is one of the following:
+  \begin{itemize}
+  \item If $t^2=q,2q,3q$, then $E(\F_q)$ is cyclic;
+  \item If $t=0$, then $E(\F_q)$ is either cyclic, or isomorphic to
+    $ℤ/\frac{q+1}{2}ℤ⊕ℤ/2ℤ$;
+  \item If $t=∓2\sqrt{q}$, then $E(\F_q)≃(ℤ/(\sqrt{q}±1)ℤ)^2$.
+  \end{itemize}
 \end{theorem}
 \begin{proof}
   See~\cite{waterhouse69,MOV}.
 \end{proof}
 
+Of all the cases, the only one we are concerned with is $q=p^2$, and
+$E(\F_q)≃(ℤ/(p±1)ℤ)^2$. %
+Since we have full control on $p$, we can choose it so that $E(\F_q)$
+contains two large subgroups $E[ℓ_A^{e_A}]$ and $E[ℓ_B^{e_B}]$ of
+coprime order. %
+Hence, once $ℓ_A^{e_A}$ and $ℓ_B^{e_B}$ are fixed, we look for a prime
+of the form $p=ℓ_A^{e_A}ℓ_B^{e_B}f∓1$, where $f$ is a small
+cofactor. %
+In practice, such primes are abundant, and we can easily take $f=1$. %
+This solves the first problem: $E(\F_q)$ now contains
+$ℓ_A^{e_A-1}(ℓ_A+1)$ cyclic subgroups of order $ℓ_A^{e_A}$, each
+defining a distinct isogeny; hence, a single point $A∈E(\F_q)$ is
+enough to represent an isogeny walk of length $e_A$.
+
+The second problem is solved by a very peculiar trick, which sets SIDH
+apart from other isogeny based protocols. %
+The idea is to let Alice and Bob publish some additional information
+to help each other compute the shared secret. %
+Let us summarize what are the quantities know to Alice and Bob. %
+To set up the cryptosystem, they have publicly agreed on a prime $p$
+and a supersingular curve $E$ such that
+\[E(\F_{p^2}) ≃ (ℤ/ℓ_A^{e_A}ℤ)^2⊕(ℤ/ℓ_B^{e_B}ℤ)^2⊕(ℤ/fℤ).\] %
+It will be convenient to also fix public bases of their respective
+torsion groups:
+\begin{align*}
+  E[ℓ_A^{e_A}] &= 〈P_A,Q_A〉,\\
+  E[ℓ_B^{e_B}] &= 〈P_B,Q_B〉.
+\end{align*}
+To start the protocol, they choose random secret subgroups
+\begin{align*}
+  〈A〉 &= 〈[m_A]P_A+[n_A]Q_A〉 ⊂ E[ℓ_A^{e_A}],\\  
+  〈B〉 &= 〈[m_B]P_B+[n_B]Q_B〉 ⊂ E[ℓ_B^{e_B}],
+\end{align*}
+of respective orders $ℓ_A^{e_A},ℓ_B^{e_B}$, and compute the secret
+isogenies
+\begin{align*}
+  α : E &\to E/〈Α〉,\\
+  β : E &\to E/〈B〉.
+\end{align*}
+They respectively publish $E_A=E/〈Α〉$ and $E_B=E/〈B〉$. %
+
+Now, to compute the shared secret $E/〈A,B〉$, Alice needs to compute
+the isogeny $α':E/〈B〉\to E/〈A,B〉$, whose kernel is generated by
+$β(A)$. %
+We see that the kernel of $α'$ depends on both secrets, thus Alice
+cannot compute it without Bob's assistance. %
+The trick here is for Bob to publish the values $β(P_A)$ and $β(Q_A)$:
+they do not require the knowledge of Alice's secret, and it is
+conjectured that they do not give any advantage in computing $α'$ to
+an attacker. %
+From Bob's published values, Alice can compute $β(A)$ as
+$[m_A]β(P_A) + [n_A]β(Q_A)$, and complete the protocol. %
+Bob performs the analogous computation, with the help of Alice. %
+The protocol is summarized in Figure~\ref{fig:sidh-prot}, and
+schematized in Figure~\ref{fig:sidh}.
+
+\begin{figure}
+  \centering
+  \begin{tabular}{l *{2}{p{32ex}<{\centering}}}
+    \hline
+    Public parameters & \multicolumn{2}{l}{Primes $ℓ_A,ℓ_B$, and a prime $p=ℓ_A^{e_A}ℓ_B^{e_B}f∓1$,}\\
+                      & \multicolumn{2}{l}{A supersingular elliptic curve $E$ over $\F_{p^2}$ of order $(p±1)^2$,}\\
+                      & \multicolumn{2}{l}{A basis $〈P_A,Q_A〉$ of $E[ℓ_A^{e_A}]$,}\\
+                      & \multicolumn{2}{l}{A basis $〈P_B,Q_B〉$ of $E[ℓ_B^{e_B}]$,}\\
+    \hline
+                      & {\bf Alice} & {\bf Bob}\\
+    \hline
+    Pick random secret & $A=[m_A]P_A+[n_A]Q_A$ & $B=[m_B]P_B+[n_B]Q_B$\\[1ex]
+    Compute secret isogeny & $α:E\to E_A=E/〈A〉$ & $β:E\to E_B=E/〈B〉$\\[1ex]
+    Exchange data &  \hfill $E_A,α(P_B),α(Q_B) \longrightarrow$ & $\longleftarrow E_B,β(P_A),β(Q_A)$ \hfill\strut \\[1ex]
+    Compute shared secret & $E/〈A,B〉 = E_B/〈β(A)〉$ & $E/〈A,B〉 = E_A/〈α(B)〉$
+  \end{tabular}
+  
+  \caption{Supersingular Isogeny Diffie-Hellman key exchange protocol.}
+  \label{fig:sidh-prot}
+\end{figure}
 
 \begin{figure}
   \centering
   \begin{tikzpicture}
     \node[matrix of nodes, ampersand replacement=\&, column sep=4mm, row sep=2cm] (diagram) {
       \& |(1)| $E$ \\
-      |(a)| \parbox{1.5cm}{$E/〈\bl{R_A}〉$\\{\footnotesize $\bl{ϕ(}\rd{P_B}\bl{)}\\\bl{ϕ(}\rd{Q_B}\bl{)}$}} \& \&
-      |(b)| \parbox{1.5cm}{$E/〈\rd{R_B}〉$\\{\footnotesize $\rd{ψ(}\bl{P_A}\rd{)}\\\rd{ψ(}\bl{Q_A}\rd{)}$}}\\
-      \normalsize $\frac{E/〈\bl{R_A}〉}{\bl{ϕ(}\rd{R_B}\bl{)}} \simeq$ \&
-      |(ab)|  $E/〈\bl{R_A},\rd{R_B}〉$ \&
-      \normalsize $\simeq \frac{E/〈\rd{R_B}〉}{\rd{ψ(}\bl{R_A}\rd{)}}$\\
+      |(a)| \parbox{1.5cm}{$E/〈\bl{A}〉$\\{\footnotesize $\bl{α}(P_B)\\\bl{α}(Q_B)$}} \& \&
+      |(b)| \parbox{1.5cm}{$E/〈\rd{B}〉$\\{\footnotesize $\rd{β}(P_A)\\\rd{β}(Q_A)$}}\\
+      \normalsize $\frac{E/〈\bl{A}〉}{\rd{α(B)}} \simeq$ \&
+      |(ab)|  $E/〈\bl{A},\rd{B}〉$ \&
+      \normalsize $\simeq \frac{E/〈\rd{B}〉}{\bl{β(A)}}$\\
     };
     \small
-    \path[blue] (1) edge node[auto,swap](phia) {$ϕ$} (a);
-    \path[red] (1) edge node[auto](phib) {$ψ$} (b);
-    \path[red] (a) edge node[auto,swap](psia){$ψ'$} (ab);
-    \path[blue] (b) edge node[auto](psib){$ϕ'$} (ab);
-    \path[dashed,->] (phia) edge node[auto]{\footnotesize $\bl{ϕ(}\rd{R_B}\bl{)}$} (psia);
-    \path[dashed,->] (phib) edge node[auto,swap]{\footnotesize $\rd{ψ(}\bl{R_A}\rd{)}$} (psib);
+    \path[blue] (1) edge node[auto,swap](phia) {$α$} (a);
+    \path[red] (1) edge node[auto](phib) {$β$} (b);
+    \path[red] (a) edge node[auto,swap](psia){$β'$} (ab);
+    \path[blue] (b) edge node[auto](psib){$α'$} (ab);
+    \path[dashed,->] (phia) edge node[auto]{\footnotesize $\rd{α(B)}$} (psia);
+    \path[dashed,->] (phib) edge node[auto,swap]{\footnotesize $\bl{β(A)}$} (psib);
   \end{tikzpicture}
 
-  \caption{Schematics of SIDH key exchange}
+  \caption{Schematics of SIDH key exchange. Quantities only known to
+    Alice are drawn in blue, quantities only known to Bob in red.}
   \label{fig:sidh}
 \end{figure}
+
+\paragraph{Security}
+
 
 % - Implem
 
