@@ -113,7 +113,7 @@ these notes with some of the books recommended in the bibliography. %
 
 The presentation is divided in three parts, roughly corresponding to
 the three lectures given. %
-In an effort to keep the reader interested, each sections alternates
+In an effort to keep the reader interested, each part alternates
 between the fundamental theory of elliptic curves, and applications in
 cryptography. %
 We often prefer to have the main ideas flow smoothly, rather than
@@ -165,7 +165,7 @@ systems, and their cryptographic properties.
 \clearpage
 \part{Elliptic curves and cryptography}
 
-Throughout this section we let $k$ be a field, and we denote by
+Throughout this part we let $k$ be a field, and we denote by
 $\bar{k}$ its algebraic closure. %
 We review the basic theory of elliptic curves, and two classic
 applications in cryptography. %
@@ -357,7 +357,7 @@ The torsion part is easily characterized.
 \end{proposition}
 \begin{proof}
   See~\cite[Coro.~6.4]{silverman:elliptic}. For the characteristic $0$
-  case see also next section.
+  case see also next part.
 \end{proof}
 
 For curves defined over a field of positive characteristic $p$, the
@@ -439,7 +439,7 @@ It turns out that isogenies are algebraic maps as well.
 
 Two curves are called \emph{isogenous} if there exists an isogeny
 between them. %
-We shall see in the next section that this is an equivalence relation.
+We shall see in the next part that this is an equivalence relation.
 
 Isogenies from a curve to itself are called \emph{endomorphisms}. %
 The prototypical endomorphism is the multiplication-by-$m$
@@ -1091,7 +1091,7 @@ field. %
 We finish this section by summarizing the most important algebraic
 properties of isogenies; we start with a technical definition.
 
-\begin{definition}[Degree]
+\begin{definition}[Degree, separability]
   Let $ϕ:E\to E'$ be an isogeny defined over a field $k$, and let
   $k(E),k(E')$ be the function fields of $E,E'$. %
   By composing $\phi$ with the functions of $k(E')$, we obtain a
@@ -1116,7 +1116,23 @@ properties of isogenies; we start with a technical definition.
 In practice, most of the time we will be considering separable
 isogenies, and we can take $\deg ϕ = \#\ker ϕ$ as the definition of
 the degree. %
-Notice that in this case $\deg ϕ$ is the size of any fiber of $ϕ$.
+Notice that in this case $\deg ϕ$ is the size of any fiber of $ϕ$. %
+Separable isogenies are completely determined by their kernel, as the
+following proposition shows.
+
+\begin{proposition}
+  Let $E$ be an elliptic curve, and let $G$ be a finite subgroup of
+  $E$. %
+  There are a unique elliptic curve $E'$, and a unique separable
+  isogeny $ϕ$, such that $\ker ϕ=G$ and $ϕ:E\to E'$. %
+\end{proposition}
+\begin{proof}
+  See~\cite[Prop.~III, 4.12]{silverman:elliptic}.
+\end{proof}
+
+The proposition justifies introducing the notation $E/G$ for the image
+curve $E'$. %
+We conclude with a fundamental theorem on isogenies.
 
 \begin{theorem}[Dual isogeny]
   Let $ϕ:E\to E'$ be an isogeny of degree $m$. %
@@ -1306,9 +1322,9 @@ acts as a matrix
 $M=\left(\begin{smallmatrix}λ&0\\0&μ\end{smallmatrix}\right)$. %
 Each of the two eigenspaces of $M$ is the kernel of an isogeny of
 degree $ℓ$ from $E$ to another curve $E'$. %
-If we can determine $E'$ corresponding to, e.g., $〈P〉$, then we can
-compute the isogeny $ϕ:E\to E'$, and use it to formally represent the
-point $P$. %
+If we can determine the curve corresponding to, e.g., $〈P〉$, then we
+can compute the isogeny $ϕ:E\to E/〈P〉$, and use it to formally
+represent the point $P$. %
 Then, $λ$ is recovered by solving the equation
 \[[λ]P = π(P),\]
 and from it we recover $t_π = λ + q/λ \mod \ell$.
@@ -1427,7 +1443,7 @@ We start with some generalities.
 There are many differences between the structure of isogeny graphs of
 ordinary curves and those of supersingular ones. %
 We focus here on the ordinary case, and we leave the supersingular one
-for the last section.
+for the last part.
 
 \begin{proposition}[Horizontal and vertical isogenies]
   Let $ϕ:E\to E'$ be an isogeny of prime degree $ℓ$, and let $\O,\O'$
@@ -1563,14 +1579,14 @@ This is given to us by the famous V\'elu's formulas~\cite{velu71}.
   \label{th:velu}
   Let $E:y^2=x^3+ax+b$ be an elliptic curve defined over a field $k$,
   and let $G⊂E(\bar{k})$ be a finite subgroup. %
-  The separable isogeny $ϕ:E\to E'$ of kernel $G$ can be written as
+  The separable isogeny $ϕ:E\to E/G$, of kernel $G$, can be written as
   \begin{equation*}
     ϕ(P) = \left(
       x(P) + \sum_{Q∈G\setminus\{\O\}}x(P+Q)-x(Q),
       y(P) + \sum_{Q∈G\setminus\{\O\}}y(P+Q)-y(Q)
     \right);
   \end{equation*} %
-  and the curve $E'$ has equation $y^2=x^3+a'x+b'$, where
+  and the curve $E/G$ has equation $y^2=x^3+a'x+b'$, where
   \begin{align*}
     a' &= a - 5\sum_{Q∈G\setminus\{\O\}}(3x(Q)^2+a),\\
     b' &= b - 7\sum_{Q∈G\setminus\{\O\}}(5x(Q)^3+3ax(Q)+b).
@@ -2541,13 +2557,14 @@ never be used in practice.
 
 We finally come to the last cryptographic construction from isogeny
 graphs. %
-Graphs of supersingular isogenies have two main features for
-constructing key exchange protocols, compared to ordinary graphs. %
+Compared to the ordinary case, graphs of supersingular isogenies have
+two attractive features for constructing key exchange protocols. %
 First, one isogeny degree is sufficient to obtain an expander graph;
-this has the potential to produce more efficient protocols. %
+by choosing one small prime degree, we have the opportunity to
+construct more efficient protocols. %
 Second, there is no action of an Abelian group, such as $\Cl(\O)$, on
-it; it seems thus harder to use quantum computers to solve the isogeny
-path problem in them.
+then; it seems thus harder to use quantum computers to speed up the
+supersingular isogeny path problem.
 
 But the absence of a group action also makes it impossible to directly
 generalize the Rostovtsev-Stolbunov protocol to supersingular
@@ -2561,19 +2578,97 @@ There is more: supersingular curves are in correspondence with the
 maximal orders of $ℚ_{p,∞}$, and their left ideals act on the graph
 like isogenies. %
 It would be rather technical to go into the details of the theory of
-quaternion algebra and their maximal orders. %
-We address the interested reader to~\cite{belding08-thesis}. %
-Instead, we describe here a key exchange protocol, only using the
-language of isogenies.
+quaternion algebras and their maximal orders; instead, we describe the
+key exchange protocol using only the language of isogenies, with the
+\emph{caveat} that its security can only be properly evaluated by
+also looking at its quaternion counterpart. %
+The interested reader will find more details on quaternion algebras
+in~\cite{waterhouse69,pizer1,pizer2,kohel,belding08-thesis,kohel2014quaternion}.
+
+The key idea of the Supersingular Isogeny Diffie-Hellman protocol
+(SIDH) is to let Alice and Bob take random walks in two distinct
+isogeny graphs on the same vertex set. %
+In practice, we choose a \emph{large enough} prime $p$, and two
+\emph{small} primes $ℓ_A$ and $ℓ_B$. %
+The vertex set is going to consist of the supersingular $j$-invariants
+defined over $\F_{p^2}$, Alice's graph is going to be made of
+$ℓ_A$-isogenies, while Bob is going to use $ℓ_B$-isogenies. %
+Figure~\ref{fig:sup-97-2-3} shows a toy example of such graphs, where
+$p=97$, $ℓ_A=2$ and $ℓ_B=3$.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \def\graph{
+      \begin{scope}[every node/.style={fill,black,circle,inner sep=2pt}]
+        \node at (0,0)  (1){};
+        \node at (0,4) (20){};
+        \node at (2,1)  (16z){};
+        \node at (-2,1)  (81z){};
+        \node at (-1,2) (77z){};
+        \node at (1,2)  (20z){};
+        \node at (-2,3)  (85z){};
+        \node at (2,3)  (12z){};
+      \end{scope}
+    }
+    
+    \graph
+    \begin{scope}[blue,every loop/.style={looseness=50}]
+      \path (1) edge (20) edge (16z) edge (81z);
+      \path (20) edge[loop left] (20) edge[loop right] (20);
+      \path (16z) edge (81z) edge (77z);
+      \path (81z) edge (20z);
+      \path (77z) edge (20z) edge (85z);
+      \path (20z) edge (12z);
+      \path (12z) edge[bend right=10] (85z) edge[bend left=10] (85z);
+    \end{scope}
+        
+    \begin{scope}[xshift=6cm]
+      \graph
+      \begin{scope}[red]
+        \path (1) edge (85z) edge (81z) edge (12z) edge (16z);
+        \path (20) edge (85z) edge (77z) edge (20z) edge (12z);
+        \path (81z) edge (85z) edge (77z) edge (16z);
+        \path (85z) edge (12z);
+        \path (12z) edge (16z);
+        \path (16z) edge (20z);
+        \path (20z) edge[bend right=10] (77z) edge[bend left=10] (77z);
+      \end{scope}
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Supersingular isogeny graphs of degree 2 (left, blue) and 3
+    (right, red) on $\F_{97^2}$.}
+  \label{fig:sup-97-2-3}
+\end{figure}
+
+Even this, though, is not sufficient to define a key exchange
+protocol, because there is no canonical way of labeling the edges of
+these graphs. %
+We shall introduce, then, a very \emph{ad hoc} construction leveraging
+the group structure of elliptic curves. %
+Recall that a separable isogeny is uniquely defined by its kernel, and
+that in this case $\deg ϕ = \#\ker ϕ$. %
+More precisely, a walk of length $e_A$ in the $ℓ_A$-isogeny graph
+corresponds to a kernel of size $ℓ_A^{e_A}$; and this kernel is cyclic
+if and only if the walk \emph{does not backtrack}. %
+
+Hence, Alice choosing a secret walk of length $e_A$ is equivalent to
+her choosing a secret cyclic subgroup $〈P〉⊂E[ℓ_A^{e_A}]$. %
+If we let Alice choose one such subgroup, and Bob choose similarly a
+secret $〈Q〉⊂E[ℓ_B^{e_B}]$, then there is a well defined subgroup
+$〈P〉+〈Q〉=〈P,Q〉$, defining an isogeny to $E/〈P,Q〉$. %
+Since we have taken care to choose $ℓ_A≠ℓ_B$, the group $〈P,Q〉$ is
+cyclic of order $ℓ_A^{e_A}ℓ_B^{e_B}$. %
+This is illustrated in Figure~\ref{fig:sidh-diag}.
 
 \begin{figure}
   \centering
   \begin{tikzpicture}
     \begin{scope}
-      \draw (0,1.2) node[anchor=east,blue] {$\ker ϕ=〈P〉⊂ E[\ell_A^{e_A}]$};
-      \draw (0,0.4) node[anchor=east,red] {$\ker ψ=〈Q〉⊂ E[\ell_B^{e_B}]$};
-      \draw (0,-0.4) node[anchor=east,blue] {$\ker ϕ' = 〈\rd{ψ}(P)〉$};
-      \draw (0,-1.2) node[anchor=east,red] {$\ker ψ' = 〈\bl{ϕ}(Q)〉$};
+      \draw (0,1.2) node[anchor=east] {$\bl{\ker ϕ=〈P〉}⊂ E[\ell_A^{e_A}]$};
+      \draw (0,0.4) node[anchor=east] {$\rd{\ker ψ=〈Q〉}⊂ E[\ell_B^{e_B}]$};
+      \draw (0,-0.4) node[anchor=east] {$\ker ϕ' = 〈\rd{ψ}\bl{(P)}〉$};
+      \draw (0,-1.2) node[anchor=east] {$\ker ψ' = 〈\bl{ϕ}\rd{(Q)}〉$};
     \end{scope}
     \begin{scope}[xshift=4.5cm]
       \large
@@ -2582,15 +2677,46 @@ language of isogenies.
         |(Ep)| {$E/〈\rd{Q}〉$} \& |(Eps)| {$E/〈\bl{P},\rd{Q}〉$}\\
       };
       \path[->,blue] (E) edge node[auto] {$ϕ$} (Es);
-      \path[->,blue] (Ep) edge node[auto,swap] {$ϕ'$} (Eps);
+      \path[->] (Ep) edge node[auto,swap] {$ϕ'$} (Eps);
       \path[->,red] (E) edge node[auto,swap] {$ψ$} (Ep);
-      \path[->,red] (Es) edge node[auto] {$ψ'$} (Eps);
+      \path[->] (Es) edge node[auto] {$ψ'$} (Eps);
     \end{scope}
   \end{tikzpicture}
-  
-  \caption{Commutative diagram of isogenies of coprime degree}
-  \label{fig:sidh-square}
+  \caption{Commutative isogeny diagram constructed from Alice's and
+    Bob's secrets. %
+    Quantities known to Alice are drawn in blue, those known to Bob
+    are drawn in red.}
+  \label{fig:sidh-diag}
 \end{figure}
+
+At this point, we would like to define a protocol where Alice and Bob
+choose random cyclic subgroups $〈P〉$ and $〈Q〉$ in some \emph{large
+  enough} torsion groups, and exchange enough information to both
+compute $E/〈P,Q〉$, without revealing their respective secrets. %
+We are faced with two difficulties, though:
+\begin{enumerate}
+\item The points of $〈P〉$ (or $〈Q〉$) may not be rational. %
+  Indeed, in general they may be defined over a field extension of
+  degree as large as $ℓ_A^{e_A}$, thus requiring an exponential amount
+  of information to be explicitly represented.
+\item The diagram in Figure~\ref{fig:sidh-diag} shows no way by which
+  Alice and Bob could compute $E/〈P,Q〉$ without revealing their
+  secrets to each other.
+\end{enumerate}
+
+We will solve both problems by carefully controlling the group
+structure of our supersingular curves. %
+This is something that is very hard to do in the ordinary case, but
+totally elementary in the supersingular one, as the following
+proposition shows.
+
+\begin{theorem}[Group structure of supersingular curves]
+  
+\end{theorem}
+\begin{proof}
+  See~\cite{waterhouse69,MOV}.
+\end{proof}
+
 
 \begin{figure}
   \centering
