@@ -99,6 +99,7 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0.4pt}
 \cfoot{\doclicenseThis}
+\lfoot{\LaTeX{} source code available at \url{https://github.com/defeo/ema2017/}.}
 
 \section*{Introduction}
 
@@ -2848,12 +2849,78 @@ schematized in Figure~\ref{fig:sidh}.
 \end{figure}
 
 \paragraph{Security}
+It is clear that the key space of SIDH depends on the size of the
+subgroups $E[ℓ_A^{e_A}]$ and $E[ℓ_B^{e_B}]$, hence we must take
+$ℓ_A^{e_A}\sim ℓ_B^{e_B}$ so to make attacks equally hard against
+Alice or Bob's public data. %
+However this puts serious constraints on the isogeny walks performed
+in SIDH. %
+Indeed, we have seen that the size of the supersingular isogeny graph
+is $O(p)$, whereas the size of Alice's (or Bob's) public key space is
+only $O(\sqrt{p})$. %
+Said otherwise, Alice and Bob take random walks \emph{much shorter}
+than the diameter of the graph. %
+At the moment, it is not clear how this affects the security of the
+protocol.
+
+To choose an appropriate size for $p$, we start by looking at attacks
+that only use the $j$-invariants published by Alice and Bob. %
+Given curves $E$ and $E_A$, connected by an isogeny of degree
+$ℓ_A^{e_A}$, an easy variation on the meet-in-the-middle paradigm
+finds the secret isogeny in $O(ℓ_A^{e_A/2})$ steps (and
+$O(ℓ_A^{e_A/2})$ storage) as follows: tabulate all possible walks of
+length $\lfloor e_A/2\rfloor$ starting from $E$, then iterate over the
+walks of length $\lceil e_A/2\rceil$ starting from $E_A$, until a
+collision is found. %
+The same collision can also be found with $O(ℓ_A^{e_A/3})$ queries to
+a quantum oracle, using a quantum algorithm due to
+Tani~\cite{tani2009claw}. %
+Because the isogeny walks are shorter than the diameter, we expect to
+find only one collision, and that is precisely Alice's secret isogeny.
+
+Hence, taking $\log_2p=n$ offers a classical security of $\sim n/4$
+bits, and a quantum security of $\sim n/6$ qubits. %
+It turns out these are the best known attacks against SIDH, even
+taking into account the additional information passed by Alice and
+Bob. %
+We can formally state this as a hardness assumption called SSDDH. %
+
+\begin{problem}[Supersingular Decision Diffie-Hellman]
+  Let $E,ℓ_A,ℓ_B,e_A,e_B,P_A,Q_A,P_B,Q_B$ be the parameters of an SIDH
+  protocol.
+
+  Given a tuple sampled with probability $1/2$ from one of
+  the following two distributions:
+  \begin{enumerate} 
+  \item $(E/〈A〉, ϕ(P_B), ϕ(Q_B), E/〈B〉, ψ(P_A), ψ(Q_A), E/〈A,B〉)$, where
+    \begin{itemize}
+    \item $A∈E$ is a uniformly random point of order $ℓ_A^{e_A}$,
+    \item $B∈E$ is a uniformly random point of order $ℓ_B^{e_B}$,
+    \item $ϕ:E\to E/〈A〉$ is the isogeny of kernel $〈A〉$, and
+    \item $ψ:E \to E/〈B〉$ is the isogeny of kernel $〈B〉$;
+    \end{itemize}
+  \item $(E/〈A〉, ϕ(P_B), ϕ(Q_B), E/〈B〉, ψ(P_A), ψ(Q_A), E/〈C〉)$,
+    where $A,B,ϕ,ψ$ are as above, and where $C∈E$ is a uniformly random
+    point of order $ℓ_A^{e_A}ℓ_B^{e_B}$;
+  \end{enumerate}
+  determine from which distribution the tuple is sampled.
+\end{problem}
+
+Assuming SSDDH is hard, we can formally prove the security of the
+key exchange against \emph{passive adversaries}, i.e., those
+adversaries who can see all messages sent between Alice and Bob, but
+who do not modify them. %
+We address the interested reader to~\cite{defeo+jao+plut12} for the
+technical details.
+
+It is apparent that SSDDH is a very special instance of the isogeny
+path problem. %
+
 
 
 % - Implem
 
 \section{Interactive protocols and signatures}
-
 
 %\section{Open problems in isogeny based cryptography}
 
