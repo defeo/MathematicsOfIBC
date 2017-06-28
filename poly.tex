@@ -2564,7 +2564,7 @@ First, one isogeny degree is sufficient to obtain an expander graph;
 by choosing one small prime degree, we have the opportunity to
 construct more efficient protocols. %
 Second, there is no action of an Abelian group, such as $\Cl(\O)$, on
-then; it seems thus harder to use quantum computers to speed up the
+them; it thus seems harder to use quantum computers to speed up the
 supersingular isogeny path problem.
 
 But the absence of a group action also makes it impossible to directly
@@ -2764,10 +2764,10 @@ The second problem is solved by a very peculiar trick, which sets SIDH
 apart from other isogeny based protocols. %
 The idea is to let Alice and Bob publish some additional information
 to help each other compute the shared secret. %
-Let us summarize what are the quantities know to Alice and Bob. %
+Let us summarize what are the quantities known to Alice and Bob. %
 To set up the cryptosystem, they have publicly agreed on a prime $p$
 and a supersingular curve $E$ such that
-\[E(\F_{p^2}) ≃ (ℤ/ℓ_A^{e_A}ℤ)^2⊕(ℤ/ℓ_B^{e_B}ℤ)^2⊕(ℤ/fℤ).\] %
+\[E(\F_{p^2}) ≃ (ℤ/ℓ_A^{e_A}ℤ)^2⊕(ℤ/ℓ_B^{e_B}ℤ)^2⊕(ℤ/fℤ)^2.\] %
 It will be convenient to also fix public bases of their respective
 torsion groups:
 \begin{align*}
@@ -2914,11 +2914,80 @@ We address the interested reader to~\cite{defeo+jao+plut12} for the
 technical details.
 
 It is apparent that SSDDH is a very special instance of the isogeny
-path problem. %
+path problem; it is thus conceivable that specially crafted algorithms
+could break SIDH without solving the generic isogeny path problem. %
+As an illustration, consider the following problem.
+
+\begin{problem}
+  Let $E,ℓ_A,ℓ_B,e_A,e_B,P_A,Q_A,P_B,Q_B$ be the parameters of an SIDH
+  protocol.
+
+  Let $A∈E$ be a point of order $ℓ_A^{e_A}$, and let $ϕ:E\to E/〈A〉$. %
+  Given $E/〈Α〉$, $ϕ(P_B)$ and $ϕ(Q_B)$ compute $ϕ(R)$ for an
+  arbitrary point $R∈E$ of order $ℓ_A^{e_A}$.
+\end{problem}
+
+It is easy to verify that solving this problem immediately reveals the
+secret $〈A〉$. Indeed, $ϕ(R)$ is an element of $\ker\hat{ϕ}$, from
+which we can recover $\hat{ϕ}$ and $ϕ$, and thus $〈A〉$. %
+An efficient solution to this problem completely breaks SIDH, without
+doing anything for the generic isogeny path problem.%
+\footnote{The converse reduction is not evident either: given an
+  oracle solving the isogeny path problem, how can we break SIDH? %
+  A partial answer is given
+  in~\cite{kohel2014quaternion,galbraithsecurity}, where it is shown
+  that, knowing the endomorphism rings of $E$ and $E/〈A〉$, an
+  attacker can solve the isogeny path problem, and then break SIDH, in
+  polynomial time.}
+
+And indeed, although the security of SSDDH is still unblemished at the
+time of writing, several polynomial-time attacks have appeared against
+variations of SIDH. %
+The interested reader will find more details in the following
+references:
+\begin{itemize}
+\item A key-recovery attack against a \emph{static key} version of
+  SIDH, where Alice uses a long term secret
+  isogeny~\cite{galbraithsecurity};
+\item Key-recovery attacks in various \emph{leakage
+    models}~\cite{galbraithsecurity,gelin2017loop,ti2017fault};
+\item Key recovery attacks against some \emph{unbalanced} variants
+  of SIDH~\cite{cryptoeprint:2017:571}.
+\end{itemize}
+Finally, it is worth mentioning that there is a quantum subexponential
+attack~\cite{biasse2014quantum} in the case where both $E$ and
+$E/〈A〉$ are defined over $\F_p$.
 
 
+\paragraph{Efficient implementation}
+What makes SIDH interesting is its relatively good efficiency,
+especially when compared with other isogeny-based protocols. %
+Several optimizations are required in order to achieve a compact and
+fast implementation, competitive with other post-quantum key-exchange
+candidates. %
+In short, one must optimize each of these levels:
+\begin{itemize}
+\item The arithmetic of $\F_p$ benefits from the special form of
+  $p$, especially for primes of the form $p=2^a3^b-1$, as explained
+  in~\cite{costello2016sidh,vercauteren-sidh-fp,cryptoeprint:2016:986};
+\item The arithmetic of $\F_{p^2}$ benefits from the fact that $-1$ is
+  not a square in $\F_p$, whenever $p=-1\mod 2$;
+\item The arithmetic of elliptic curves benefits from using Montgomery
+  models, and optimized formulas for doublings, triplings and
+  isogenies~\cite{defeo+jao+plut12,costello2016sidh,cryptoeprint:2017:504};
+\item Field inversions can be avoided using projective coordinates and
+  \emph{projectivized curve equations}~\cite{costello2016sidh};
+\item The full computation and evaluation of the secret isogeny from a
+  generator of its kernel must be performed using a quasi-linear
+  algorithm first described in~\cite{defeo+jao+plut12}.
+\end{itemize}
 
-% - Implem
+Undoubtedly, the latter is the most novel and surprising of the
+optimizations. %
+For lack of space, we do not describe any of them here, and we
+primarily address the interested reader to~\cite{defeo+jao+plut12}
+and~\cite{costello2016sidh}.
+
 
 \section{Interactive protocols and signatures}
 
@@ -2940,7 +3009,7 @@ path problem. %
 
 \begin{exercice}
   \label{ex:elgamal}
-  Derive encryption protocols \emph{\'a la} El Gamal from the key
+  Derive encryption protocols \emph{\`a la} El Gamal from the key
   exchange protocols of Section~\ref{sec:post-quantum-key}.
 \end{exercice}
 
