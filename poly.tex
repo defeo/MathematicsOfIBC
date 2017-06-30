@@ -2848,7 +2848,7 @@ schematized in Figure~\ref{fig:sidh}.
   \label{fig:sidh}
 \end{figure}
 
-\paragraph{Security}
+We end with a discussion on parameter sizes. %
 It is clear that the key space of SIDH depends on the size of the
 subgroups $E[ℓ_A^{e_A}]$ and $E[ℓ_B^{e_B}]$, hence we must take
 $ℓ_A^{e_A}\sim ℓ_B^{e_B}$ so to make attacks equally hard against
@@ -2878,12 +2878,60 @@ Tani~\cite{tani2009claw}. %
 Because the isogeny walks are shorter than the diameter, we expect to
 find only one collision, and that is precisely Alice's secret isogeny.
 
-Hence, taking $\log_2p=n$ offers a classical security of $\sim n/4$
-bits, and a quantum security of $\sim n/6$ qubits. %
 It turns out these are the best known attacks against SIDH, even
 taking into account the additional information passed by Alice and
 Bob. %
-We can formally state this as a hardness assumption called SSDDH. %
+Hence, taking $\log_2p=n$ offers a classical security of $\sim n/4$
+bits, and a quantum security of $\sim n/6$ qubits. %
+In conclusion, to obtain a 128-qubit and 192-bit secure system, we
+would have to find a 768-bit prime of the for
+$p=ℓ_A^{e_A}ℓ_B^{e_B}f±1$, with $e_A\log_2ℓ_A\sim e_B\log_2ℓ_B\sim384$. %
+In practice, we usually take $ℓ_A=2$ and $ℓ_B=3$ for efficiency
+reasons, and an example of one such prime is $p=2^{387}3^{242}-1$.
+
+
+\section{Further topics in isogeny based cryptography}
+
+We conclude these notes with a brief overview of the current research
+topics in isogeny based cryptography. %
+We only focus on constructions derived from supersingular isogenies,
+as they currently are the most promising ones.
+
+\paragraph{Efficient implementation of SIDH}
+What makes SIDH interesting is its relatively good efficiency,
+especially when compared with other isogeny-based protocols. %
+However, several optimizations are required in order to achieve a
+compact and fast implementation, competitive with other post-quantum
+key-exchange candidates. %
+In short, one must optimize each of these levels:
+\begin{itemize}
+\item The arithmetic of $\F_p$ benefits from the special form of
+  $p$, especially for primes of the form $p=2^a3^b-1$, as explained
+  in~\cite{costello2016sidh,vercauteren-sidh-fp,cryptoeprint:2016:986};
+\item The arithmetic of $\F_{p^2}$ benefits from the fact that $-1$ is
+  not a square in $\F_p$, whenever $p=-1\mod 2$;
+\item The arithmetic of elliptic curves benefits from using Montgomery
+  models, and optimized formulas for doublings, triplings and
+  isogenies~\cite{defeo+jao+plut12,costello2016sidh,cryptoeprint:2017:504};
+\item Field inversions can be avoided using projective coordinates and
+  \emph{projectivized curve equations}~\cite{costello2016sidh};
+\item The full computation and evaluation of the secret isogeny from a
+  generator of its kernel must be performed using a quasi-linear
+  algorithm first described in~\cite{defeo+jao+plut12}.
+\end{itemize}
+
+Undoubtedly, the latter is the most novel and surprising of the
+optimizations. %
+For lack of space, we do not describe any of them here, and we
+primarily address the interested reader to~\cite{defeo+jao+plut12}
+and~\cite{costello2016sidh}.
+
+
+\paragraph{Security of SIDH}
+We can formally state the security of SIDH as a hardness assumption on
+a problem called SSDDH. %
+As mentioned previously, the best known algorithms for SSDDH have
+exponential complexity, even on a quantum computer.
 
 \begin{problem}[Supersingular Decision Diffie-Hellman]
   Let $E,ℓ_A,ℓ_B,e_A,e_B,P_A,Q_A,P_B,Q_B$ be the parameters of an SIDH
@@ -2906,10 +2954,10 @@ We can formally state this as a hardness assumption called SSDDH. %
   determine from which distribution the tuple is sampled.
 \end{problem}
 
-Assuming SSDDH is hard, we can formally prove the security of the
-key exchange against \emph{passive adversaries}, i.e., those
-adversaries who can see all messages sent between Alice and Bob, but
-who do not modify them. %
+Assuming SSDDH is hard, we can formally prove the security of the key
+exchange against \emph{passive adversaries}, i.e., those adversaries
+who can see all messages sent between Alice and Bob, but who do not
+modify them. %
 We address the interested reader to~\cite{defeo+jao+plut12} for the
 technical details.
 
@@ -2959,39 +3007,41 @@ attack~\cite{biasse2014quantum} in the case where both $E$ and
 $E/〈A〉$ are defined over $\F_p$.
 
 
-\paragraph{Efficient implementation}
-What makes SIDH interesting is its relatively good efficiency,
-especially when compared with other isogeny-based protocols. %
-Several optimizations are required in order to achieve a compact and
-fast implementation, competitive with other post-quantum key-exchange
-candidates. %
-In short, one must optimize each of these levels:
+\paragraph{Other protocols}
+Key exchange is not the only public-key protocol that can be derived
+from isogeny graphs. %
+It is easy, for example, to derive a public-key encryption protocol
+similar to El Gamal from either the Rostovtsev-Stolbunov protocol or
+SIDH. %
+We illustrate the second:
 \begin{itemize}
-\item The arithmetic of $\F_p$ benefits from the special form of
-  $p$, especially for primes of the form $p=2^a3^b-1$, as explained
-  in~\cite{costello2016sidh,vercauteren-sidh-fp,cryptoeprint:2016:986};
-\item The arithmetic of $\F_{p^2}$ benefits from the fact that $-1$ is
-  not a square in $\F_p$, whenever $p=-1\mod 2$;
-\item The arithmetic of elliptic curves benefits from using Montgomery
-  models, and optimized formulas for doublings, triplings and
-  isogenies~\cite{defeo+jao+plut12,costello2016sidh,cryptoeprint:2017:504};
-\item Field inversions can be avoided using projective coordinates and
-  \emph{projectivized curve equations}~\cite{costello2016sidh};
-\item The full computation and evaluation of the secret isogeny from a
-  generator of its kernel must be performed using a quasi-linear
-  algorithm first described in~\cite{defeo+jao+plut12}.
+\item Alice's secret key is an isogeny $α:E\to E/〈A〉$; her public
+  key contains $E/〈A〉$ and the evaluation of $α$ on \emph{Bob's
+    basis} $〈P_B,Q_B〉$.
+\item To encrypt a message $m$, Bob chooses a random $β:E\to E/〈B〉$,
+  and computes the shared secret $E/〈A,B〉$, which he converts to a
+  binary string $s$ (e.g., by hashing the $j$ invariant of
+  $E/〈A,B〉$); he sends to Alice the message
+  $(E/〈B〉,β(P_A),β(Q_A),m⊕s)$.
+\item To decrypt, Alice uses $E/〈B〉,β(P_A),β(Q_A)$ to compute the
+  shared secret $E/〈A,B〉$, which she converts to $s$, and finally
+  she unmasks $m⊕s$.
 \end{itemize}
 
-Undoubtedly, the latter is the most novel and surprising of the
-optimizations. %
-For lack of space, we do not describe any of them here, and we
-primarily address the interested reader to~\cite{defeo+jao+plut12}
-and~\cite{costello2016sidh}.
+In~\cite{defeo+jao+plut12}, it is proven that this protocol is IND-CPA
+secure under the SSDDH assumption. %
+Achieving IND-CCA2 security is harder, as the attack against static
+keys in~\cite{galbraithsecurity} shows, however it is possible to
+apply a generic transformation to obtain an IND-CCA2 secure \emph{key
+  encapsulation mechanism}.
 
+One may expect that digital signatures would also generalize easily to
+the isogeny setting, but both Schnorr signatures and ECDSA rely on the
+existence of a group law on the public data, something that is missing
+both in the ordinary and in the supersingular case.
 
-\section{Interactive protocols and signatures}
-
-%\section{Open problems in isogeny based cryptography}
+To our rescue, comes a zero-knowledge protocol based on the same
+construction used for SIDH, as shown in Figure~\ref{fig:sidh-diag}.
 
 
 
