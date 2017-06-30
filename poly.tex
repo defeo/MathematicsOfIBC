@@ -1300,7 +1300,7 @@ Schoof's algorithm runs in time polynomial in $\log\#E(k)$, however it
 is quite slow in practice. %
 Among the major advances that have enabled the use of elliptic curves
 in cryptography are the optimizations of Schoof's algorithm due to
-Atkin and Elkies~\cite{schoof95}. %
+Atkin and Elkies~\cite{atkin88,atkin91,elkies92,schoof95,elkies98}. %
 Both improvements use a better understanding of the action of $π$ on
 $E[ℓ]$. %
 Assume that $ℓ$ is different from the characteristic, we have already
@@ -3040,9 +3040,72 @@ the isogeny setting, but both Schnorr signatures and ECDSA rely on the
 existence of a group law on the public data, something that is missing
 both in the ordinary and in the supersingular case.
 
-To our rescue, comes a zero-knowledge protocol based on the same
-construction used for SIDH, as shown in Figure~\ref{fig:sidh-diag}.
+\begin{figure}
+  \centering
+  \begin{tabular}{l *{2}{p{32ex}<{\centering}}}
+    \hline
+    Parameters & \multicolumn{2}{l}{Primes $ℓ_A,ℓ_B$, and a prime $p=ℓ_A^{e_A}ℓ_B^{e_B}f∓1$,}\\
+               & \multicolumn{2}{l}{A supersingular elliptic curve $E$ over $\F_{p^2}$ of order $(p±1)^2$,}\\
+               & \multicolumn{2}{l}{A basis $〈P_B,Q_B〉$ of $E[ℓ_B^{e_B}]$.}\\
+    \hline
+    Secret key & \multicolumn{2}{l}{An isogney $α:E\to E/〈A〉$ of degree $ℓ_A^{e_A}$.}\\
+    \hline
+    Public key & \multicolumn{2}{l}{The curve $E/〈A〉$, the images $α(P_B),α(Q_B)$.}\\
+    \hline
+                      & {\bf Alice} & {\bf Bob}\\
+    \hline
+    Pick random & $B∈E[ℓ_B^{e_B}]$ of order $ℓ_B^{e_B}$ \\[1ex]
+    Compute masking isogeny & $β:E\to E/〈B〉$\\[1ex]
+    Commit &  \hfill $(E/〈B〉,E/〈A,B〉) \longrightarrow$\\[1ex]
+    Challenge && $\longleftarrow b∈\{0,1\}$ \hfill\strut \\[1ex]
+    Reveal & \hfill if $b=0$, send $(B,α(B)) \phantom{\longrightarrow}$\\[1ex]
+               & \hfill if $b=1$, send $β(A) \longrightarrow$
+  \end{tabular}
+  
+  \caption{Supersingular Isogeny Zero-Knowledge Identification protocol.}
+  \label{fig:sidh-zk}
+\end{figure}
 
+To our rescue, comes a zero-knowledge protocol based on the same
+construction shown in Figure~\ref{fig:sidh-diag}. %
+In this protocol, Alice's secret key is an isogeny $α:E\to E/〈A〉$;
+her public key is the curve $E/〈A〉$, together with a description of
+the action of $α$ on $E[ℓ_B^{e_B}]$, as in SIDH. %
+To prove knowledge of $α$ to Bob, she takes a random subgroup
+$〈B〉⊂E[ℓ_B^{e_B}]$, computes a commutative diagram as in
+Figure~\ref{fig:sidh-diag}, and sends to Bob the curves $E/〈B〉$ and
+$E/〈A,B〉$. %
+To verify that Alice knows the secret, Bob asks her one of two
+questions at random:
+\begin{itemize}
+\item either reveal the point $B$ and its image $α(B)$,
+\item or reveal the point $β(A)$.
+\end{itemize}
+When he receives Alice answer, he accepts only if the points do define
+isogenies between the curves $E,E/〈A〉,E/〈B〉,E/〈A,B〉$.  The
+protocol is summarized in Figure~\ref{fig:sidh-zk}.
+
+Intuitively, if Alice respects the protocol, she always succeeds in
+convincing Bob. %
+If she cheats, she only has one chance out of two of guessing Bob's
+challenge and succeed in tricking him. %
+Thus, by iterating the protocol a sufficient number of times, a
+cheater's chance of success decreases exponentially. %
+The protocol is zero-knowledge because revealing $B$ and $α(B)$ does
+not reveal anything that Bob does not already know. %
+Revealing $β(A)$ is trickier, and we need to make one more security
+assumption, named DSSP, to prove zero knowledge. %
+In~\cite{defeo+jao+plut12} it is proven that this protocol is secure
+and zero-knowledge under the SSDDH\footnote{Actually, a weaker
+  assumption named CSSI.} and DDSP assumptions. %
+In the same paper, a variant of the protocol where Bob challenges
+Alice to reveal one out of three informations, namely one of
+$Β,α(B),β(A)$ is also hinted at. %
+This variant is less efficient, since a cheater has $2/3$ chances of
+success, however its security relies on the isogeny walk problem,
+rather than SSDDH.
+
+From the protocol, we can
 
 
 \section*{Exercices}
