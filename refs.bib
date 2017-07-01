@@ -678,20 +678,14 @@ requirement is only polynomial.},
     year = {2003}
 }
 
-@electronic{defeo+jao+plut12,
-    abstract = {We present new candidates for quantum-resistant public-key cryptosystems based on the conjectured difficulty of finding isogenies between supersingular elliptic curves.  The main technical idea in our scheme is that we transmit the images of torsion bases under the isogeny in order to allow the parties to construct a shared commutative square despite the noncommutativity of the endomorphism ring.  Our work is motivated by the recent development of a subexponential-time quantum algorithm for constructing isogenies between ordinary elliptic curves. In the supersingular case, by contrast, the fastest known quantum attack remains exponential, since the noncommutativity of the endomorphism ring means that the approach used in the ordinary case does not apply. We give a precise formulation of the necessary computational assumptions along with a discussion of their validity, and prove the security of our protocols under these assumptions. In addition, we present implementation results showing that our protocols are multiple orders of magnitude faster than previous isogeny-based cryptosystems over ordinary curves. <P> This paper is an extended version of\~{}\cite{pqcrypto}. We add a new zero-knowledge identification scheme, and detailed security proofs for the protocols. We also present a new, asymptotically faster, algorithm for key generation, a thorough study of its optimization, and new experimental data.},
-    author = {De Feo, Luca and Jao, David and Pl\^{u}t, J\'{e}r\^{o}me},
-    citeulike-article-id = {10862817},
-    citeulike-linkout-0 = {http://eprint.iacr.org/2011/506},
-    day = {15},
-    howpublished = {Cryptology ePrint Archive, Report 2011/506},
-    keywords = {cryptography, elliptic\_curve, isogenies, supersingular},
-    month = sep,
-    posted-at = {2012-07-06 23:48:30},
-    priority = {0},
-    title = {Towards quantum-resistant cryptosystems from supersingular elliptic curve isogenies},
-    url = {http://eprint.iacr.org/2011/506},
-    year = {2011}
+@article{defeo+jao+plut12,
+  title={Towards quantum-resistant cryptosystems from supersingular elliptic curve isogenies},
+  author={De Feo, Luca and Jao, David and Pl{\^u}t, J{\'e}r{\^o}me},
+  journal={Journal of Mathematical Cryptology},
+  volume={8},
+  number={3},
+  pages={209--247},
+  year={2014}
 }
 
 @misc{oeis,
@@ -1628,31 +1622,6 @@ characteristic p=29,...,97.},
     url = {http://dx.doi.org/10.1007/BF02351717},
     volume = {1},
     year = {1988}
-}
-
-@inproceedings{fiat+shamir87,
-    abstract = {In this paper we describe simple identification and signature schemes which enable any user to prove his identity and the authenticity of his messages to any other user without shared or public keys. The schemes are provably secure against any known or chosen message attack if factoring is difficult, and typical implementations require only 1\% to 4\% of the number of modular multiplications required by the {RSA} scheme. Due to their simplicity, security and speed, these schemes are ideally suited for microprocessor-based devices such as smart cards, personal computers, and remote control systems.},
-    address = {Berlin, Heidelberg},
-    author = {Fiat, Amos and Shamir, Adi},
-    booktitle = {Advances in Cryptology — CRYPTO' 86},
-    chapter = {12},
-    citeulike-article-id = {943028},
-    citeulike-linkout-0 = {http://dx.doi.org/10.1007/3-540-47721-7_12},
-    citeulike-linkout-1 = {http://www.springerlink.com/content/cp9tqrxmgdr55rv5},
-    doi = {10.1007/3-540-47721-7_12},
-    editor = {Odlyzko, Andrew M.},
-    isbn = {978-3-540-18047-0},
-    journal = {Lecture Notes in Computer Science : Advances in Cryptology - CRYPTO '86: Proceedings},
-    keywords = {cryptography, protocols, zero\_knowledge},
-    pages = {186-194},
-    posted-at = {2012-06-06 14:10:33},
-    priority = {0},
-    publisher = {Springer Berlin / Heidelberg},
-    series = {Lecture Notes in Computer Science},
-    title = {How To Prove Yourself: Practical Solutions to Identification and Signature Problems},
-    url = {http://dx.doi.org/10.1007/3-540-47721-7_12},
-    volume = {263},
-    year = {1987}
 }
 
 @inproceedings{shamir89-pkp,
@@ -8506,7 +8475,7 @@ url="http://dx.doi.org/10.1007/s00208-013-0906-5"
 @inproceedings{costello2016sidh,
 author="Costello, Craig and Longa, Patrick and Naehrig, Michael",
 editor="Robshaw, Matthew and Katz, Jonathan",
-title="Efficient Algorithms for Supersingular Isogeny Diffie-Hellman",
+title="Efficient Algorithms for {S}upersingular {I}sogeny {D}iffie-{H}ellman",
 bookTitle="Advances in Cryptology -- CRYPTO 2016: 36th Annual International Cryptology Conference",
 year="2016",
 publisher="Springer Berlin Heidelberg",
@@ -8609,6 +8578,61 @@ year={2016}
     howpublished = {Cryptology ePrint Archive, Report 2017/504},
     year = {2017},
     note = {\url{http://eprint.iacr.org/2017/504}},
+}
+
+@misc{cryptoeprint:2017:186,
+    author = {Youngho Yoo and Reza Azarderakhsh and Amir Jalali and David Jao and Vladimir Soukharev},
+    title = {A Post-Quantum Digital Signature Scheme Based on Supersingular Isogenies},
+    howpublished = {Cryptology ePrint Archive, Report 2017/186},
+    year = {2017},
+    note = {\url{http://eprint.iacr.org/2017/186}},
+}
+
+@misc{cryptoeprint:2016:1154,
+    author = {Steven D. Galbraith and Christophe Petit and Javier Silva},
+    title = {Signature Schemes Based On Supersingular Isogeny Problems},
+    howpublished = {Cryptology ePrint Archive, Report 2016/1154},
+    year = {2016},
+    note = {\url{http://eprint.iacr.org/2016/1154}},
+}
+
+@inproceedings{fiat1986prove,
+  title={How to prove yourself: Practical solutions to identification and signature problems},
+  author={Fiat, Amos and Shamir, Adi},
+  booktitle={Conference on the Theory and Application of Cryptographic Techniques},
+  pages={186--194},
+  year={1986},
+  organization={Springer}
+}
+
+@inproceedings{azarderakhsh2016key,
+  title={Key compression for isogeny-based cryptosystems},
+  author={Azarderakhsh, Reza and Jao, David and Kalach, Kassem and Koziel, Brian and Leonardi, Christopher},
+  booktitle={Proceedings of the 3rd ACM International Workshop on ASIA Public-Key Cryptography},
+  pages={1--10},
+  year={2016},
+  organization={ACM}
+}
+
+@Inbook{Costello2017,
+author="Costello, Craig
+and Jao, David
+and Longa, Patrick
+and Naehrig, Michael
+and Renes, Joost
+and Urbanik, David",
+editor="Coron, Jean-S{\'e}bastien
+and Nielsen, Jesper Buus",
+title="Efficient Compression of SIDH Public Keys",
+bookTitle="Advances in Cryptology -- EUROCRYPT 2017: 36th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Paris, France, April 30 -- May 4, 2017, Proceedings, Part I",
+year="2017",
+publisher="Springer International Publishing",
+address="Cham",
+pages="679--706",
+abstract="Supersingular isogeny Diffie-Hellman (SIDH) is an attractive candidate for post-quantum key exchange, in large part due to its relatively small public key sizes. A recent paper by Azarderakhsh, Jao, Kalach, Koziel and Leonardi showed that the public keys defined in Jao and De Feo's original SIDH scheme can be further compressed by around a factor of two, but reported that the performance penalty in utilizing this compression blew the overall SIDH runtime out by more than an order of magnitude. Given that the runtime of SIDH key exchange is currently its main drawback in relation to its lattice- and code-based post-quantum alternatives, an order of magnitude performance penalty for a factor of two improvement in bandwidth presents a trade-off that is unlikely to favor public-key compression in many scenarios.",
+isbn="978-3-319-56620-7",
+doi="10.1007/978-3-319-56620-7_24",
+url="http://dx.doi.org/10.1007/978-3-319-56620-7_24"
 }
 
 

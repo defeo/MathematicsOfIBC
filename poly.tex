@@ -2587,8 +2587,9 @@ The interested reader will find more details on quaternion algebras
 in~\cite{waterhouse69,pizer1,pizer2,kohel,belding08-thesis,kohel2014quaternion}.
 
 The key idea of the Supersingular Isogeny Diffie-Hellman protocol
-(SIDH) is to let Alice and Bob take random walks in two distinct
-isogeny graphs on the same vertex set. %
+(SIDH), first proposed in~\cite{jao+defeo2011}, is to let Alice and
+Bob take random walks in two distinct isogeny graphs on the same
+vertex set. %
 In practice, we choose a \emph{large enough} prime $p$, and two
 \emph{small} primes $ℓ_A$ and $ℓ_B$. %
 The vertex set is going to consist of the supersingular $j$-invariants
@@ -2926,6 +2927,19 @@ For lack of space, we do not describe any of them here, and we
 primarily address the interested reader to~\cite{defeo+jao+plut12}
 and~\cite{costello2016sidh}.
 
+By putting together all the optimizations mentioned above, the SIDH
+scheme can be made relatively practical, as shown
+in~\cite{defeo+jao+plut12,costello2016sidh}, although one of two order
+of magnitude slower than other post-quantum competitors. %
+Where SIDH really excel, is in its \emph{very short key sizes},
+actually the shortest among post-quantum candidates, at the time of
+writing. %
+This key size can be shrunk even more through \emph{key compression}
+techniques~\cite{azarderakhsh2016key,Costello2017}. %
+However, the size of the isogeny graph in SIDH is much larger than the
+size of the key space, it is thus, in principle, possible to make even
+shorter keys; how to do this efficiently is still an open question.
+
 
 \paragraph{Security of SIDH}
 We can formally state the security of SIDH as a hardness assumption on
@@ -3081,31 +3095,67 @@ questions at random:
 \item either reveal the point $B$ and its image $α(B)$,
 \item or reveal the point $β(A)$.
 \end{itemize}
-When he receives Alice answer, he accepts only if the points do define
-isogenies between the curves $E,E/〈A〉,E/〈B〉,E/〈A,B〉$.  The
-protocol is summarized in Figure~\ref{fig:sidh-zk}.
+After receiving Alice's answer, he accepts only if the points do
+define isogenies between the curves $E,E/〈A〉,E/〈B〉,E/〈A,B〉$ as
+expected. %
+The protocol is summarized in Figure~\ref{fig:sidh-zk}.
 
 Intuitively, if Alice respects the protocol, she always succeeds in
 convincing Bob. %
 If she cheats, she only has one chance out of two of guessing Bob's
 challenge and succeed in tricking him. %
 Thus, by iterating the protocol a sufficient number of times, a
-cheater's chance of success decreases exponentially. %
+cheater's chance of success can be made arbitrarily small at
+exponential pace. %
 The protocol is zero-knowledge because revealing $B$ and $α(B)$ does
 not reveal anything that Bob does not already know. %
 Revealing $β(A)$ is trickier, and we need to make one more security
-assumption, named DSSP, to prove zero knowledge. %
+assumption, named Decisional Supersingular Product (DSSP), to prove
+zero knowledge. %
 In~\cite{defeo+jao+plut12} it is proven that this protocol is secure
 and zero-knowledge under the SSDDH\footnote{Actually, a weaker
-  assumption named CSSI.} and DDSP assumptions. %
-In the same paper, a variant of the protocol where Bob challenges
-Alice to reveal one out of three informations, namely one of
-$Β,α(B),β(A)$ is also hinted at. %
-This variant is less efficient, since a cheater has $2/3$ chances of
-success, however its security relies on the isogeny walk problem,
-rather than SSDDH.
+  assumption named CSSI.} and DSSP assumptions.%
+\footnote{The paper~\cite{defeo+jao+plut12} also hints at a variant of
+  the zero-knowledge protocol where Bob challenges Alice to open one
+  out of three commitments, namely one of $Β,α(B),β(A)$. %
+  This variant is less efficient, since a cheater has $2/3$ chances of
+  success, however its security relies on the stronger isogeny walk
+  problem, rather than on SSDDH.}
 
-From the protocol, we can
+Using a generic construction, such as the Fiat-Shamir
+heuristic~\cite{fiat1986prove}, it is possible to derive a signature
+scheme from the zero-knowledge protocol above. %
+Alternative signature schemes based on the same construction, with
+different desirable properties, are presented
+in~\cite{cryptoeprint:2016:1154,cryptoeprint:2017:186}. %
+However, all these protocols suffer from the high cost of having to
+iterate hundreds of times the basic building block of
+Figure~\ref{fig:sidh-zk}. %
+Obtaining an efficient signature scheme from isogeny assumptions is
+still an open problem.
+
+More protocols can be obtained by slightly generalizing the SIDH
+construction. %
+If we allow the prime to be of the form
+$p=ℓ_A^{e_A}ℓ_B^{e_B}ℓ_C^{e_C}±1$, we can construct a commutative cube
+in the same way the square of Figure~\ref{fig:sidh-diag} was
+constructed. %
+Using primes of this form, Sun, Tian and Wang have proposed a
+\emph{strong designated verifier} signature
+scheme~\cite{sun2012toward}. %
+Adding one more prime $ℓ_D$ in the mix, Jao and Soukharev have
+proposed \emph{undeniable} signatures~\cite{jao2014isogeny}.
+The drawback of all these schemes is that, as we add more torsion
+subgroups to the base curve, the size of the primes grows, making the
+schemes less and less practical. %
+
+In general, isogeny graphs are much less flexible than the classical
+discrete logarithm problem. %
+Many of the protocols that have been built on discrete logarithms fail
+to be ported to isogeny based cryptography. %
+Devising new post-quantum protocols, retaining some of the desirable
+properties of classical ones, is a very active area of research in
+isogeny based cryptography.
 
 
 \section*{Exercices}
