@@ -137,8 +137,8 @@ It is nowadays a staple in public-key cryptography. %
 The 2000s have seen two major innovations in ECC: the rise of
 \emph{Pairing Based Cryptography} (PBC), epitomized by Joux' one-round
 tripartite Diffie-Hellman key exchange, and the advent of
-Isogeny-based cryptography, initiated by the works of Teske and
-Rostovtsev \& Stolbunov. %
+Isogeny-based cryptography, initiated by the works of Couveignes,
+Teske and Rostovtsev \& Stolbunov. %
 While PBC has attracted most of the attention during the first decade,
 thanks to its revolutionary applications, isogeny based cryptography
 has stayed mostly discrete during this time. %
@@ -198,8 +198,8 @@ lines in affine space passing through the origin.
 
 The equivalence class of a projective point $(x_0,\dots,x_n)$ is
 customarily denoted by $(x_0:\cdots:x_n)$. %
-The set \emph{$k$-rational points}, denoted by $\P^n(k)$, is defined
-as
+The set of the \emph{$k$-rational points}, denoted by $\P^n(k)$, is
+defined as
 \[\P^n(k) = \left\{(x_0:\cdots:x_n)∈\P^n\;\middle|\; x_i ∈ k \text{ for all $i$}\right\}.\] %
 By fixing arbitrarily the coordinate $x_n=0$, we define a projective
 space of dimension $n-1$, which we call the \emph{space at infinity};
@@ -350,7 +350,7 @@ The torsion part is easily characterized.
   \item If $p>0$ is the characteristic of $k$, then 
     \[E[p^i] ≃
       \begin{cases}
-        ℤ/p^iℤ & \text{for any $i≥0$,}\\
+        ℤ/p^iℤ & \text{for any $i≥0$, or}\\
         \{\O\} & \text{for any $i≥0$.}
       \end{cases}
     \]
@@ -396,7 +396,7 @@ It is easily verified that the only such maps take the form
 for some $u∈\bar{k}$, thus defining an \emph{isomorphism} between the
 curve $y^2=x^3+au^4x+bu^6$ and the curve $(y')^2 = (x')^3 + ax' +
 b$. %
-Isomorphism classes are traditionally encoded by an invariant whose
+Isomorphism classes are traditionally encoded by an invariant, which
 origins can be tracked back to complex analysis.
 
 \begin{proposition}[$j$-invariant]
@@ -435,7 +435,7 @@ It turns out that isogenies are algebraic maps as well.
   \end{enumerate}
 \end{theorem}
 \begin{proof}
-  See\cite[III, Th.~4.8]{silverman:elliptic}.
+  See~\cite[III, Th.~4.8]{silverman:elliptic}.
 \end{proof}
 
 Two curves are called \emph{isogenous} if there exists an isogeny
@@ -461,7 +461,7 @@ algebraic group $E(\bar{k})$ only contains torsion elements, and we
 have already characterized precisely the structure of the torsion part
 of $E$.
 
-Curves over finite fields always have a non-trivial endomorphism.
+Curves over finite fields always have a special endomorphism.
 
 \begin{definition}[Frobenius endomorphism]
   Let $E$ be an elliptic curve defined over a field with $q$ elements,
@@ -485,7 +485,7 @@ Curves over finite fields always have a non-trivial endomorphism.
   \[|\#E(k) - q - 1| ≤ 2\sqrt{q}.\]
 \end{corollary}
 \begin{proof}
-  See\cite[V, Th.~1.1]{silverman:elliptic}.
+  See~\cite[V, Th.~1.1]{silverman:elliptic}.
 \end{proof}
 
 It turns out that the cardinality of $E$ over its \emph{base field}
@@ -570,9 +570,10 @@ a computational point of view.
   \[g^{\log_g(A)} = A.\]
 \end{definition}
 
-It is evident that if Eve can compute discrete logarithms in $G$, then
-she can compute the shared secret; the converse is not true in
-general, but it is widely believed to be. %
+It is evident that if Eve can compute discrete logarithms in $G$
+efficiently, then she can also efficiently compute the shared secret;
+the converse is not known to be true in general, but it is widely
+believed to be. %
 Thus, the strength of the Diffie-Hellman protocol is entirely
 dependent on the \emph{hardness} of the \emph{discrete logarithm
   problem} in the group $G$.
@@ -588,7 +589,7 @@ However, the proof of optimally does not exclude the existence of
 better algorithms for \emph{specific} groups $G$. %
 And indeed, algorithms of complexity better than $O(\sqrt{\#G})$ are
 known for the case $G=(ℤ/pℤ)^{×}$~\cite{joux2009algorithmic}, thus
-requiring parameter of considerably larger size to guarantee
+requiring parameters of considerably larger size to guarantee
 cryptographic strength.
 
 On the contrary, no algorithms better than the generic ones are known
@@ -1156,9 +1157,9 @@ We conclude with a fundamental theorem on isogenies.
 
 We have already defined an endomorphism as an isogeny from a curve to
 itself. %
-If we add the multiplication-by-$0$, the set of all endomorphisms of
-$E$ form a ring under the operations of addition and composition,
-denoted by $\End(E)$. %
+If we add the multiplication-by-$0$ to it, the set of all
+endomorphisms of $E$ form a ring under the operations of addition and
+composition, denoted by $\End(E)$. %
 
 We have already seen that the multiplication-by-$m$ is a different
 endomorphism for any integer $m$, thus $ℤ⊂\End(E)$. %
@@ -1335,7 +1336,7 @@ $t_π$, however it is considerably more efficient thanks to the degree
 of the extension rings involved. %
 Indeed, in Schoof's algorithm a generic point of $E[ℓ]$ is represented
 modulo the division polynomial $ψ_ℓ$, which has degree $(ℓ^2-1)/2$. %
-In Elkies' algorithm, instead, the formal representation of $〈P〉$ we
+In Elkies' algorithm, instead, the formal representation of $〈P〉$
 only requires working modulo a polynomial of degree $≈ℓ$.
 
 The other cases have similar complexity gains. %
@@ -1405,7 +1406,7 @@ whenever their corresponding curves are. %
     \end{tikzpicture}
   
     \caption{A volcano of $3$-isogenies (ordinary elliptic curves,
-      Elkies case), and the correspond tower of orders inside the
+      Elkies case), and the corresponding tower of orders inside the
       endomorphism algebra.}
   \label{fig:volcano}
 \end{figure}
@@ -1417,9 +1418,10 @@ Figure~\ref{fig:volcano} shows a typical example of isogeny graph,
 where we restrict to isogenies of degree $3$.
 
 The classification of isogeny graphs was initiated by
-Pizer~\cite{pizer1,pizer2} and Kohel~\cite{kohel}; further algorithmic
-treatment of graphs of ordinary curves, and the now famous name of
-\emph{isogeny volcanoes} was subsequently given by Fouquet and
+Mestre~\cite{Mestre}, Pizer~\cite{pizer1,pizer2} and
+Kohel~\cite{kohel}; further algorithmic treatment of graphs of
+ordinary curves, and the now famous name of \emph{isogeny volcanoes}
+was subsequently given by Fouquet and
 Morain~\cite{fouquet+morain02}. %
 We start with some generalities.
 
@@ -1470,7 +1472,7 @@ All possible cases are encoded in the following proposition.
 
 \begin{proposition}
   Let $E$ be an elliptic curve over a finite field $k$. %
-  Let $\O$ its endomorphism ring, $f$ its conductor, $D$ its
+  Let $\O$ be its endomorphism ring, $f$ its conductor, $D$ its
   discriminant, $π$ the Frobenius endormphism, $f_π$ the conductor of
   $ℤ[π]$. %
   Let $ℓ$ be a prime different from the characteristic of $k$, then
