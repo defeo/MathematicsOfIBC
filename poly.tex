@@ -104,10 +104,10 @@
 \section*{Introduction}
 
 These lectures notes were written for a summer school on
-\emph{Mathematics for Post-quantum cryptography} in Thiès, Senegal. %
+\emph{Mathematics for post-quantum cryptography} in Thiès, Senegal. %
 They try to provide a guide for Masters' students to get through the
 vast literature on elliptic curves, without getting lost on their way
-to learning isogeny-based cryptography. %
+to learning isogeny based cryptography. %
 They are by no means a reference text on the theory of elliptic
 curves, nor on cryptography; students are encouraged to complement
 these notes with some of the books recommended in the bibliography. %
@@ -137,7 +137,7 @@ It is nowadays a staple in public-key cryptography. %
 The 2000s have seen two major innovations in ECC: the rise of
 \emph{Pairing Based Cryptography} (PBC), epitomized by Joux' one-round
 tripartite Diffie-Hellman key exchange, and the advent of
-Isogeny-based cryptography, initiated by the works of Couveignes,
+Isogeny based cryptography, initiated by the works of Couveignes,
 Teske and Rostovtsev \& Stolbunov. %
 While PBC has attracted most of the attention during the first decade,
 thanks to its revolutionary applications, isogeny based cryptography
@@ -147,12 +147,12 @@ partly shifted to isogenies. %
 The main reason for this is the sudden realization by the
 cryptographic community of the very possibly near arrival of a
 \emph{general purpose quantum computer}. %
-While the capabilities of such futuristic machine would render all ECC
+While the capabilities of such futuristic machine would render all of ECC
 and PBC suddenly worthless, isogeny based cryptography seems to resist
 much better to the cryptanalytic powers of the quantum computer.
 
 In these notes, after a review of the general theory of elliptic
-curves and isogenies, we will present the most important isogeny-based
+curves and isogenies, we will present the most important isogeny based
 systems, and their cryptographic properties.
 
 {
@@ -645,7 +645,7 @@ constant amount of memory, and is very easy to parallelize. %
 For these reasons, ECM is typically used to factor integers having
 medium sized prime factors.
 
-From now on we suppose that $N=pq$ is an integer whose factorization
+From now on we suppose that $N=pq$ is an integer which factorization
 we wish to compute, where $p$ and $q$ are distinct primes. %
 Without loss of generality, we can suppose that $p<q$.
 
@@ -1077,7 +1077,7 @@ corresponding elliptic curves.
 \end{proof}
 
 Looking again at Figure~\ref{fig:torsion}, we see that there is a
-second isogeny $\hat{ϕ}$ from $Λ'$ to $Λ/3$, whose kernel is generated
+second isogeny $\hat{ϕ}$ from $Λ'$ to $Λ/3$, which kernel is generated
 by $b∈Λ'$. %
 The composition $\hat{ϕ}∘ϕ$ is an endomorphism of $ℂ/Λ$, up to the
 homothety sending $Λ/3$ to $Λ$, and we verify that it corresponds to
@@ -1374,8 +1374,8 @@ Accordingly, we say that two $j$-invariants are \emph{isogenous}
 whenever their corresponding curves are. %
 
 \begin{definition}[Isogeny graph]
-  An \emph{isogeny graph} is a (multi)-graph whose nodes are the
-  $j$-invariants of isogenous curves, and whose edges are isogenies
+  An \emph{isogeny graph} is a (multi)-graph which nodes are the
+  $j$-invariants of isogenous curves, and which edges are isogenies
   between them.
 \end{definition}
 
@@ -1561,7 +1561,7 @@ polynomial vanishing on the fiber $ϕ^{-1}(P)$.
 
 More precisely, let $\F_q$ be a finite field, and let $ℓ\nmid(q-1)$ be
 odd and such that $ℓ\ll q+1+2\sqrt{q}$. %
-Then there exists a curve $E$ whose cardinality $\#E(\F_q)$ is
+Then there exists a curve $E$ which cardinality $\#E(\F_q)$ is
 divisible by $\ell$. %
 The hypothesis $ℓ\nmid(q-1)$ guarantees that $G = E[ℓ]∩E(\F_q)$ is
 cyclic (see Exercice~\ref{ex:group-struct}). %
@@ -1746,7 +1746,7 @@ be at infinite distance. %
 A graph is called \emph{connected} if any two vertices have a path
 connecting them; it is called \emph{disconnected} otherwise. %
 The \emph{diameter} of a connected graph is the largest of all
-distances among its vertices. %
+distances between its vertices. %
 The \emph{degree} of a vertex is the number of edges pointing to (or
 from) it; a graph where every edge has degree $k$ is called
 \emph{$k$-regular}. %
@@ -1841,7 +1841,7 @@ A \emph{random walk} of length $i$ is a path $v_1\to\cdots\to v_i$,
 defined by the random process that selects $v_i$ uniformly at random
 among the neighbors of $v_{i-1}$. %
 Loosely speaking, the next proposition says that, in an expander
-graph, random walks of length close its diameter terminate on any
+graph, random walks of length close to its diameter terminate on any
 vertex with probability close to uniform. %
 
 \begin{proposition}[Mixing theorem]
@@ -1893,8 +1893,8 @@ isogenies.
   \label{th:ord-exp}
   Let $\F_q$ be a finite field and let $\O⊂ℚ[\sqrt{-D}]$ be an order
   in a quadratic imaginary field. %
-  Let $G$ be the graph whose vertices are elliptic curves over $\F_q$
-  with complex multiplication by $\O$, and whose edges are
+  Let $G$ be the graph which vertices are elliptic curves over $\F_q$
+  with complex multiplication by $\O$, and which edges are
   (horizontal) isogenies of prime degree bounded by $(\log q)^{2+δ}$
   for some fixed $δ>0$. %
   Assume that $G$ is non-empty. %
@@ -1925,7 +1925,7 @@ Here are some examples.
 
 V\'elu's formulas (Proposition~\ref{th:velu}) give a solution to this
 problem in $\tildO(\#G)$ operations over the field of definition of
-definition of $E$. %
+$E$. %
 This is nearly optimal, given that the output has size $O(\#G)$.
   
 However in some special instances, e.g., when $ϕ$ is a composition of
@@ -1941,8 +1941,8 @@ more compactly, and the cost may become only logarithmic in $\#G$.
 Remark that, up to automorphisms, the isogeny $ϕ$ is typically
 unique. %
 Elkies was the first to formulate the problem and give an
-algorithm~\cite{elkies92,elkies98} whose complexity is in $O(d^3)$ in
-general and in $\tildO(d)$ in the special context of the SEA
+algorithm~\cite{elkies92,elkies98} with complexity $O(d^3)$ in
+general, and $\tildO(d)$ in the special context of the SEA
 algorithm~\cite{bostan+morain+salvy+schost08,lercier+sirvent08}. %
 Alternate algorithms, with complexity $O(d^2)$ in general, are due to
 Couveignes and
@@ -2087,8 +2087,8 @@ of practitioners. %
 For one, it is considerably slower than popular hash functions such as
 those standardized by NIST. %
 More worryingly, some weaknesses have recently been
-highlighted~\cite{kohel2014quaternion}, that could potentially lead to
-backdoors in standardized parameters.
+highlighted~\cite{kohel2014quaternion,cryptoeprint:2017:962}, that
+could potentially lead to backdoors in standardized parameters.
 
 
 \section{Post-quantum key exchange}
@@ -2149,7 +2149,7 @@ construction on \emph{Schreier graphs}, a generalization of
   all $σ,τ∈G$ and $x∈X$. %
   Let $S⊂G$ be a \emph{symmetric} subset, i.e. one not containing $1$
   and closed under inversion. %
-  The \emph{Schreier graph} of $(S,X)$ is the graph whose vertices are
+  The \emph{Schreier graph} of $(S,X)$ is the graph which vertices are
   the elements of $X$, and such that $x,x'∈X$ are connected by an edge
   if and only if $σ·x=x'$ for some $σ∈S$.
 \end{definition}
@@ -2163,7 +2163,7 @@ of a group on itself.
 As an example, take a cyclic group $G$ of order $n$, then $(ℤ/nℤ)^{×}$
 acts naturally on $G$ by the law $σ·g=g^σ$ for any $g∈G$ and
 $σ∈(ℤ/nℤ)^{×}$. %
-This action is not free on $G$, but it is on the subset $P$ of all
+This action is not free on $G$, but it is so on the subset $P$ of all
 generators of $G$; we can thus build the Schreier graph $(S,P)$, where
 $S$ is a symmetric subset that generates $(ℤ/nℤ)^{×}$. %
 An example of such graph for the case $n=13$ is shown in
@@ -2206,7 +2206,7 @@ By slightly generalizing Couveignes' work~\cite{Couv}, we will now
 show how to construct a key exchange protocol based on this family of
 Schreier graphs. %
 We will restrict to cyclic groups of prime order $p$, and we will have
-the cryptosystem security grow exponentially in $p$. %
+the cryptosystem security grow exponentially in $\log p$. %
 Let $G=〈g〉$ be a cyclic group of order $p$; let $D⊂(ℤ/pℤ)^{×}$ be a
 generating set such that $σ∈D$ implies $σ^{-1}∉D$; and let
 $S = D∪D^{-1}$. %
@@ -2249,7 +2249,7 @@ To understand why it works, observe that if $ρ$ is a route of length $m$
 then
 \[ρ(g) = \exp_g\left(\prod σ_i\right)\] %
 for any $g∈G$. %
-Hence, the order of the steps in a route does not count: what counts
+Hence, the order of the steps in a route does not matter: what counts
 is only how many times each element of $D$ appears in $ρ$. %
 We immediately realize that this protocol is nothing else than the
 classical Diffie-Hellman protocol on the group $G$, presented in a
@@ -2387,7 +2387,7 @@ detailed account.
 \end{definition}
 
 Given an ideal $\a⊂\O$ as above, it is natural to define the
-(separable) isogeny $ϕ_{\a}:E\to E_{\a}$ whose kernel is $E[\a]$. %
+(separable) isogeny $ϕ_{\a}:E\to E_{\a}$, where $E_{\a}=E/E[\a]$. %
 This definition can be readily extended to inseparable isogenies. %
 Since $\a$ is invertible, we can show that $\End(E)≃\End(E_\a)≃\O$,
 that $E_\a$ only depends on the class of $\a$ in $\Cl(\O)$, and that
@@ -2413,7 +2413,7 @@ the set of elliptic curves with complex multiplication by $\O$.
   $E'=\a·E$. %
 \end{theorem}
 
-A set, that is acted upon freely and transitively by a group $G$, is
+A set that is acted upon freely and transitively by a group $G$, is
 also called a \emph{principal homogeneous space} or a \emph{torsor}
 for $G$. %
 An immediate consequence of the theorem above is that the torsor
@@ -2464,8 +2464,8 @@ protocol:
 \item Alice chooses a random walk made of steps in $L$ along the
   positive direction; denote the walk by $ρ_A∈L^*$, and denote by
   $E_A=ρ_A(E)$ the curve where the walk terminates. %
-  Note that $E_A$ does only depends on how many times each $ℓ_i$
-  appears in $ρ_A$, and not on their order.
+  Note that $E_A$ only depends on how many times each $ℓ_i$ appears in
+  $ρ_A$, and not on their order.
 \item Bob does the same, choosing a random walk $ρ_B$ and computing
   $E_B=ρ_B(E)$.
 \item Alice and Bob exchange $E_A$ and $E_B$.
@@ -2791,14 +2791,14 @@ isogenies
 They respectively publish $E_A=E/〈Α〉$ and $E_B=E/〈B〉$. %
 
 Now, to compute the shared secret $E/〈A,B〉$, Alice needs to compute
-the isogeny $α':E/〈B〉\to E/〈A,B〉$, whose kernel is generated by
+the isogeny $α':E/〈B〉\to E/〈A,B〉$, which kernel is generated by
 $β(A)$. %
 We see that the kernel of $α'$ depends on both secrets, thus Alice
 cannot compute it without Bob's assistance. %
 The trick here is for Bob to publish the values $β(P_A)$ and $β(Q_A)$:
 they do not require the knowledge of Alice's secret, and it is
-conjectured that they do not give any advantage in computing $α'$ to
-an attacker. %
+conjectured that they do not give any advantage in computing
+$E/〈A,B〉$ to an attacker. %
 From Bob's published values, Alice can compute $β(A)$ as
 $[m_A]β(P_A) + [n_A]β(Q_A)$, and complete the protocol. %
 Bob performs the analogous computation, with the help of Alice. %
@@ -2902,7 +2902,7 @@ as they currently are the most promising ones.
 
 \paragraph{Efficient implementation of SIDH}
 What makes SIDH interesting is its relatively good efficiency,
-especially when compared with other isogeny-based protocols. %
+especially when compared with other isogeny based protocols. %
 However, several optimizations are required in order to achieve a
 compact and fast implementation, competitive with other post-quantum
 key-exchange candidates. %
@@ -2914,8 +2914,9 @@ In short, one must optimize each of these levels:
 \item The arithmetic of $\F_{p^2}$ benefits from the fact that $-1$ is
   not a square in $\F_p$, whenever $p=-1\mod 2$;
 \item The arithmetic of elliptic curves benefits from using Montgomery
-  models, and optimized formulas for doublings, triplings and
-  isogenies~\cite{defeo+jao+plut12,costello2016sidh,cryptoeprint:2017:504};
+  models, and optimized formulas for doublings, triplings, scalar
+  multiplications and
+  isogenies~\cite{defeo+jao+plut12,costello2016sidh,cryptoeprint:2017:504,cryptoeprint:2017:1015};
 \item Field inversions can be avoided using projective coordinates and
   \emph{projectivized curve equations}~\cite{costello2016sidh};
 \item The full computation and evaluation of the secret isogeny from a
@@ -2931,9 +2932,9 @@ and~\cite{costello2016sidh}.
 
 By putting together all the optimizations mentioned above, the SIDH
 scheme can be made relatively practical, as shown
-in~\cite{defeo+jao+plut12,costello2016sidh}, although one of two order
-of magnitude slower than other post-quantum competitors. %
-Where SIDH really excel, is in its \emph{very short key sizes},
+in~\cite{defeo+jao+plut12,costello2016sidh}, although one or two
+orders of magnitude slower than other post-quantum competitors. %
+Where SIDH really excels, is in its \emph{very short key sizes},
 actually the shortest among post-quantum candidates, at the time of
 writing. %
 This key size can be shrunk even more through \emph{key compression}
@@ -3046,9 +3047,9 @@ We illustrate the second:
 
 In~\cite{defeo+jao+plut12}, it is proven that this protocol is IND-CPA
 secure under the SSDDH assumption. %
-Achieving IND-CCA2 security is harder, as the attack against static
+Achieving IND-CCA security is harder, as the attack against static
 keys in~\cite{galbraithsecurity} shows, however it is possible to
-apply a generic transformation to obtain an IND-CCA2 secure \emph{key
+apply a generic transformation to obtain an IND-CCA secure \emph{key
   encapsulation mechanism}.
 
 One may expect that digital signatures would also generalize easily to
