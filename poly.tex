@@ -731,7 +731,7 @@ It features two remarkable subtleties. %
 First, it would feel natural to pick a random elliptic curve
 $E:y^2=x^3+ax+b$ by picking random $a$ and $b$, however taking a point
 on such curve would then require computing a square root modulo $N$, a
-problem that is known to be has hard as factoring $N$. %
+problem that is known to be as hard as factoring $N$. %
 For this reason, the algorithm starts by taking a random point, and
 then deduces the equation of $E$ from it. %
 Secondly, all computations on coordinates happen in the projective
@@ -756,7 +756,7 @@ $ℤ/Nℤ$ will result in a factorization of $N$.
 \end{exercice}
 
 \begin{exercice}
-  Using Proposition~\ref{th:weil}, devise an algorithm to effectively
+  Using Theorem~\ref{th:weil}, devise an algorithm to effectively
   compute $\#E(\F_{q^n})$ given $\#E(\F_q)$.
 \end{exercice}
 
@@ -1667,7 +1667,7 @@ eventually forms a cycle, the \emph{crater} of a volcano.
 \section*{Exercices}
 
 \begin{exercice}
-  Prove Lemma~\ref{th:basis-change}.
+  Prove Proposition~\ref{th:basis-change}.
 \end{exercice}
 
 \begin{exercice}
