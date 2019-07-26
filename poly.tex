@@ -955,7 +955,7 @@ Indeed, we can prove that the two are in one-to-one correspondence.
 
 By comparing the two definitions for the $j$-invariants, we see that
 $j(Λ)=j(E)$. %
-So, for any homotety class of complex tori, we have a corresponding
+So, for any homothety class of complex tori, we have a corresponding
 isomorphism class of elliptic curves. %
 The converse is also true.
 
@@ -971,7 +971,7 @@ Using the correspondence between elliptic curves and complex tori, we
 now have a new perspective on their group structure. %
 Looking at complex tori, it becomes immediately evident why the
 torsion part has rank $2$, i.e. why $E[m]≃(ℤ/mℤ)^2$. %
-This is illustrated in Figure~\ref{fig:torsion}; in the picture wee
+This is illustrated in Figure~\ref{fig:torsion}; in the picture we
 see two lattices $Λ$ and $Λ'$, generated respectively by the black and
 the red dots. %
 The multiplication-by-$m$ map corresponds then to
@@ -1070,7 +1070,7 @@ corresponding elliptic curves.
   Let $E,E'$ be elliptic curves over $ℂ$, with corresponding lattices
   $Λ,Λ'$. %
   There is a bijection between the group of isogenies from $E$ to $E'$
-  and the group of maps $ϕ_α$ for all $α$ such that $Λ⊂αΛ'$.
+  and the group of maps $ϕ_α$ for all $α$ such that $αΛ⊂Λ'$.
 \end{theorem}
 \begin{proof}
   See~\cite[VI, Th.~4.1]{silverman:elliptic}.
@@ -1125,15 +1125,16 @@ following proposition shows.
 \begin{proposition}
   Let $E$ be an elliptic curve, and let $G$ be a finite subgroup of
   $E$. %
-  There are a unique elliptic curve $E'$, and a unique separable
-  isogeny $ϕ$, such that $\ker ϕ=G$ and $ϕ:E\to E'$. %
+  There are a unique elliptic curve $E'$, up composition with an
+  isomorphism $E'≃E''$, and a unique separable isogeny $ϕ$, such that
+  $\ker ϕ=G$ and $ϕ:E\to E'$. %
 \end{proposition}
 \begin{proof}
   See~\cite[Prop.~III, 4.12]{silverman:elliptic}.
 \end{proof}
 
-The proposition justifies introducing the notation $E/G$ for the image
-curve $E'$. %
+The proposition justifies introducing the notation $E/G$ for the
+(isomorphism class of the) image curve $E'$. %
 We conclude with a fundamental theorem on isogenies.
 
 \begin{theorem}[Dual isogeny]
@@ -1471,9 +1472,9 @@ $\left(\frac{D}{ℓ}\right)$, i.e., depending on whether $π$ splits
 All possible cases are encoded in the following proposition.
 
 \begin{proposition}
-  Let $E$ be an elliptic curve over a finite field $k$. %
+  Let $E$ be an ordinary elliptic curve over a finite field $k$. %
   Let $\O$ be its endomorphism ring, $f$ its conductor, $D$ its
-  discriminant, $π$ the Frobenius endormphism, $f_π$ the conductor of
+  discriminant, $π$ the Frobenius endomorphism, $f_π$ the conductor of
   $ℤ[π]$. %
   Let $ℓ$ be a prime different from the characteristic of $k$, then
   the types of degree $ℓ$ isogenies with domain $E$ are as follows:
@@ -1592,7 +1593,7 @@ This is given to us by the famous V\'elu's formulas~\cite{velu71}.
   and the curve $E/G$ has equation $y^2=x^3+a'x+b'$, where
   \begin{align*}
     a' &= a - 5\sum_{Q∈G\setminus\{\O\}}(3x(Q)^2+a),\\
-    b' &= b - 7\sum_{Q∈G\setminus\{\O\}}(5x(Q)^3+3ax(Q)+b).
+    b' &= b - 7\sum_{Q∈G\setminus\{\O\}}(5x(Q)^3+3ax(Q)+2b).
   \end{align*}
 \end{proposition}
 \begin{proof}
@@ -1828,7 +1829,7 @@ and \emph{rapidly mixing walks}.
 
 \begin{proposition}
   Let $G$ be a $k$-regular one sided $ε$-expander. %
-  for any vertex $v$ and any radius $r>0$, let $B(v,r)$ be the
+  For any vertex $v$ and any radius $r>0$, let $B(v,r)$ be the
   \emph{ball} of vertices at distance at most $r$ from $v$. %
   Then, there is a constant $c>0$, depending only on $k$ and $ε$, such
   that
@@ -1870,7 +1871,7 @@ isogenies.
     defined in $\F_{p^2}$;
   \item There are
     \begin{equation*}
-      \lfloor\frac{p}{12}\rfloor +
+      \left\lfloor\frac{p}{12}\right\rfloor +
       \begin{cases}
         0 &\text{if $p=1\mod 12$}\\
         1 &\text{if $p=5,7\mod 12$}\\
@@ -1900,7 +1901,7 @@ isogenies.
   Assume that $G$ is non-empty. %
   Then, under the generalized Riemann hypothesis, $G$ is a regular
   graph and there exists an $ε$, independent of $\O$ and $q$, such
-  that $G$ is a one-sided $ε$-expander.
+  that $G$ is a two-sided $ε$-expander.
 \end{theorem}
 \begin{proof}
   See~\cite{JMV}.
