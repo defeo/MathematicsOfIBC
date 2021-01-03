@@ -423,7 +423,7 @@ elliptic curves is called an \emph{isogeny}. %
 It turns out that isogenies are algebraic maps as well.
 
 \begin{theorem}
-  Let $E,E'$ be two elliptic curves, and let $\phi:E→E$ be a map between
+  Let $E,E'$ be two elliptic curves, and let $\phi:E→E'$ be a map between
   them. %
   The following conditions are equivalent:
   \begin{enumerate}
@@ -731,7 +731,7 @@ It features two remarkable subtleties. %
 First, it would feel natural to pick a random elliptic curve
 $E:y^2=x^3+ax+b$ by picking random $a$ and $b$, however taking a point
 on such curve would then require computing a square root modulo $N$, a
-problem that is known to be has hard as factoring $N$. %
+problem that is known to be as hard as factoring $N$. %
 For this reason, the algorithm starts by taking a random point, and
 then deduces the equation of $E$ from it. %
 Secondly, all computations on coordinates happen in the projective
@@ -756,7 +756,7 @@ $ℤ/Nℤ$ will result in a factorization of $N$.
 \end{exercise}
 
 \begin{exercise}
-  Using Proposition~\ref{th:weil}, devise an algorithm to effectively
+  Using Theorem~\ref{th:weil}, devise an algorithm to effectively
   compute $\#E(\F_{q^n})$ given $\#E(\F_q)$.
 \end{exercise}
 
@@ -1668,7 +1668,7 @@ eventually forms a cycle, the \emph{crater} of a volcano.
 \section*{Exercises}
 
 \begin{exercise}
-  Prove Lemma~\ref{th:basis-change}.
+  Prove Proposition~\ref{th:basis-change}.
 \end{exercise}
 
 \begin{exercise}
@@ -1694,7 +1694,7 @@ eventually forms a cycle, the \emph{crater} of a volcano.
 
 \begin{exercise}
   Prove that the height of a volcano of $ℓ$-isogenies is $v_ℓ(f_π)$,
-  the $ℓ$-adic valuation of the Frobenius endomorphism.
+  the $ℓ$-adic valuation of the conductor of $ℤ[π]$.
 \end{exercise}
 
 \begin{exercise}
