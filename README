@@ -1,0 +1,10 @@
+# Isogeny Graphs in Cryptography
+
+These lectures notes were written for the summer school on *Graph
+Theory Meets Cryptography* in Würzburg, Germany, in July 2019.  Their
+goal is to survey the mathematical background of isogeny-based
+cryptography, a blossoming new field with applications to post-quantum
+cryptography and blockchains.  They are by no means a reference text
+on the theory of elliptic curves, nor on cryptography; readers are
+encouraged to complement these notes with the references given in the
+bibliography.

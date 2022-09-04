@@ -1,3 +1,4 @@
-docs/poly.pdf: poly.tex refs.bib unicode.sty
-	latexmk --pdf --outdir=docs poly.tex
-	latexmk --pdf -c --outdir=docs poly.tex
+poly.pdf: FORCE
+	latexmk -pdf -halt-on-error -file-line-error poly.tex
+
+FORCE:
