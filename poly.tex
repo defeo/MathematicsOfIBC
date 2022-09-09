@@ -88,12 +88,20 @@
 \newcommand{\bl}[1]{\textcolor{blue}{#1}}
 \newcommand{\rd}[1]{\textcolor{red}{#1}}
 
-\title{Isogeny Graphs in Cryptography}
-\author{Luca De Feo\\
-  Universit\'e Paris Saclay -- UVSQ\\
+\title{Mathematics of Isogeny Based Cryptography}
+\author{Luca De Feo\\[1em]
+  \textcolor{gray}{Université de Versailles, Versailles, France}\\
+  \textcolor{gray}{Inria Saclay, Palaiseau, France}\\
+  IBM Research Europe, Z\"urich, Switzerland\\
   \url{https://defeo.lu/}}
-\date{Graph Theory Meets Cryptography\\
-  July 29 -- August 2, 2019, Wurzb\"urg, Germany}
+\date{
+  \begin{tabular}{r @{~--~} l}
+    \color{gray}v1 & \color{gray}May 2017, Thi\`es, Senegal\\
+    \color{gray}v2 & \color{gray}August 2019, Wurzb\"urg, Germany\\
+    v3 & September 2022, Bonn, Germany
+  \end{tabular}
+}
+
 
 \begin{document}
 \maketitle
@@ -101,15 +109,35 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0.4pt}
 \cfoot{\doclicenseThis}
-\lfoot{\LaTeX{} source code available at \url{https://github.com/defeo/wurzburg/}.}
+\lfoot{\LaTeX{} source code available at \url{https://github.com/defeo/MathematicsOfIBC/}.}
 
-\section*{Introduction}
+\section*{Preface}
 
-These lectures notes were written for the summer school 
-\emph{Graph Theory Meets Cryptography} in Wurzb\"urg, Germany. %
+These lecture notes were first written in 2017 for a summer school on
+\emph{Mathematics for post-quantum cryptography} held in Thiès,
+Senegal, under the patronage of the \emph{\'Ecoles Math\'ematiques
+  Africaines} program and of \href{https://www.cimpa.info/}{CIMPA}.
+This version is archived as~\cite{defeo2017isogenybased}.
 
-The presentation is divided in four parts, roughly corresponding to
-the four lectures given. %
+The second revision~\cite{defeo2017isogenybased} appeared in 2019 at
+the summer school
+\href{https://ifm.mathematik.uni-wuerzburg.de/summerschool2019/}{\emph{Graph
+    Theory Meets Cryptography}} in Wurzb\"urg, Germany. %
+
+This third revision was written in the summer of 2022 for the school
+\href{https://cryptabit.bit.uni-bonn.de/2022}{crypt@b-it} in Bonn,
+Germany.
+
+Over the course of these 5 years, isogeny based cryptography has
+evolved from a niche topic into a respectable subfield of public-key
+cryptography, going through phases of excitement and of existential
+doubt~\cite{}. %
+Today isogeny based cryptography is too vast to be taught in a single
+week of lectures, hence these notes do not attempt at drawing a
+complete picture. %
+Instead, they are meant to give the bases to enter the field and,
+hopefully, start doing exciting research.
+
 
 {
   \hypersetup{linkcolor=black}
@@ -187,8 +215,8 @@ For a general definition, see~\cite[Chap.~III]{silverman:elliptic}.
 
 It is customary to write Eq.~\eqref{eq:weierstrass} in \emph{affine
   form}. %
-By defining the coordinates $x=X/Z$ and $y=Y/Z$, we equivalently
-define the elliptic curve as the locus of the equation
+By defining the coordinate functions $x=X/Z$ and $y=Y/Z$, we
+equivalently define the elliptic curve as the locus of the equation
 \[y^2 = x^3 + ax +b,\]
 plus the point at infinity $\O=(0:1:0)$.
 
@@ -376,26 +404,35 @@ $\bar{k}$, they are so over an extension of $k$ of degree dividing
 $6$. %
 An isomorphism between two elliptic curves defined over $k$, that is
 itself not defined over $k$ is called a \emph{twist}. %
-Any curve has a \emph{quadratic twist}, unique up to isomorphism,
-obtained by taking $u∉k$ such that $u^2∈k$. %
+Any curve defined over a non-quadratically-closed field\footnote{A
+  field is quadratically closed if every element has square root.} has
+\emph{quadratic twists} obtained by taking $u∉k$ such that $u^2∈k$. %
 The two curves of $j$-invariant $0$ and $1728$ also have \emph{cubic},
 \emph{sextic} and \emph{quartic twists}.
 
-A surjective group morphism, not necessarily invertible, between two
-elliptic curves is called an \emph{isogeny}. %
-It turns out that isogenies are algebraic maps as well.
+More general algebraic maps, i.e.\ non-linear (and thus not
+necessarily invertible) changes of coordinates, between elliptic
+curves are called \emph{isogenies}.
+
+\begin{definition}
+  Let $E,E'$ be two elliptic curves. %
+  An isogeny $\phi:E→E'$ is a non-constant algebraic map of projective
+  varieties sending the point at infinity of $E$ onto the point at
+  infinity of $E'$.
+\end{definition}
+
+Somewhat surprisingly, being algebraic and preserving the point at
+infinity is sufficient to make them group morphisms.
 
 \begin{theorem}
-  Let $E,E'$ be two elliptic curves, and let $\phi:E→E'$ be a map between
-  them. %
-  The following conditions are equivalent:
-  \begin{enumerate}
-  \item $\phi$ is a surjective group morphism,
-  \item $\phi$ is a group morphism with finite kernel,
-  \item $\phi$ is a non-constant algebraic map of projective varieties
-    sending the point at infinity of $E$ onto the point at infinity of
-    $E'$.
-  \end{enumerate}
+  Let $E,E'$ be elliptic curves defined over a field $k$ and let
+  $\phi:E→E'$ be an isogeny between them. %
+  Then:
+  \begin{itemize}
+  \item $\phi$ is a group morphism;
+  \item $\phi$ has finite kernel;
+  \item If $k$ is algebraically closed, $\phi$ is surjective.
+  \end{itemize}
 \end{theorem}
 \begin{proof}
   See~\cite[III, Th.~4.8]{silverman:elliptic}.
@@ -409,13 +446,14 @@ Isogenies from a curve to itself are called \emph{endomorphisms}. %
 The prototypical endomorphism is the multiplication-by-$m$
 endomorphism defined by
 \[[m]\;:\; P \mapsto [m]P.\] %
-Its kernel is exactly the $m$-th torsion subgroup $E[m]$. %
+Its kernel is, by definition, the $m$-th torsion subgroup $E[m]$. %
 
 Since they are algebraic group morphisms, we can define addition of
 isogenies by $(ϕ+ψ)(P) = ϕ(P)+ψ(P)$, and the resulting map is still an
 isogeny. %
-Thus, by including the constant map that sends every point to the
-point at infinity, the set of isogenies $E\to E'$ forms a group. %
+Adding to the set of isogenies $E\to E'$ the constant map that sends
+every point of $E$ to the point at infinity of $E'$, we thus obtain a
+group. %
 Additionally, endomorphisms $E\to E$ support composition, distributing
 over addition, hence the set of all endomorphisms forms a ring,
 denoted by $\End(E)$.%
@@ -485,7 +523,7 @@ moment now to specialize them to the complex numbers.
 \end{definition}
 
 Explicitly, a complex lattice is generated by a \emph{basis}
-$(ω_1,ω_2)$, such that $ω_1≠λω_2$ for any $λ∈ℝ$, as
+$(ω_1,ω_2)$, such that $ω_1≠λω_2$ for all $λ∈ℝ$, as
 \[Λ = ω_1ℤ + ω_2ℤ.\] %
 Up to exchanging $ω_1$ and $ω_2$, we can assume that $\im(ω_1/ω_2)>0$;
 we then say that the basis has \emph{positive orientation}. %
@@ -667,17 +705,18 @@ The converse is also true.
 Using the correspondence between elliptic curves and complex tori, we
 now have a new perspective on their group structure. %
 Looking at complex tori, it becomes immediately evident why the
-torsion part has rank $2$, i.e. why $E[m]≃(ℤ/mℤ)^2$. %
-This is illustrated in Figure~\ref{fig:torsion}; in the picture we
-see two lattices $Λ$ and $Λ'$, generated respectively by the black and
-the red dots. %
-The multiplication-by-$m$ map corresponds then to
+torsion part has rank $2$, i.e.\ why $E[m]≃(ℤ/mℤ)^2$. %
+This is illustrated in Figure~\ref{fig:torsion}; in the picture we see
+two lattices $Λ$ and $Λ'$, generated respectively by the black and the
+red dots. %
+We already defined the multiplication-by-$m$ map of $Λ$ as
+$[m]:z \mapsto mz \bmod Λ$. %
+This map is the same as reducing
 \begin{align*}
-  [m] : ℂ/Λ &\to ℂ/Λ',\\
-  z &\mapsto z \bmod Λ';
+  ℂ/Λ &\to ℂ/Λ',\\
+  z &\mapsto z \bmod Λ'
 \end{align*}
-or equivalently $[m]:z \mapsto mz \bmod Λ$, after applying the
-homothety $mΛ'=Λ$, as expected.
+first, and then composing with the homothety $Λ = mΛ'$.
 
 \begin{figure}
 
@@ -701,6 +740,8 @@ homothety $mΛ'=Λ$, as expected.
         \draw[blue] (0.8,0.5) node[fill,circle,inner sep=1pt] {}
         node[yshift=0.2cm] {\scriptsize $z$}
         (2/15,1/6) node[fill,circle,inner sep=1pt] {}
+        node[anchor=west,xshift=-0.2cm,yshift=0.2cm] {\scriptsize $z \bmod aℤ+bℤ$}
+        (0.4,0.5) node[fill,circle,inner sep=1pt] {}
         node[yshift=0.2cm] {\scriptsize $3z$};
       \end{scope}
     \end{tikzpicture}  
@@ -757,7 +798,7 @@ map
   z &\mapsto αz \bmod Λ'
 \end{align*}
 that is holomorphic and also a group morphism. %
-One example of such maps is given in Figure~\ref{fig:torsion}: there,
+One example of such maps is given in Figure~\ref{fig:isogeny}: there,
 $α=1$ and the red lattice strictly contains the black one; the map is
 simply defined as reduction modulo $Λ'$. %
 It turns out that these maps are exactly the isogenies of the
@@ -773,7 +814,7 @@ corresponding elliptic curves.
   See~\cite[VI, Th.~4.1]{silverman:elliptic}.
 \end{proof}
 
-Looking again at Figure~\ref{fig:torsion}, we see that there is a
+Looking again at Figure~\ref{fig:isogeny}, we see that there is a
 second isogeny $\hat{ϕ}$ from $Λ'$ to $Λ/3$, whose kernel is generated
 by $b∈Λ'$. %
 The composition $\hat{ϕ}∘ϕ$ is an endomorphism of $ℂ/Λ$, up to the
@@ -902,7 +943,7 @@ We start with some basic definitions.
 \end{proof}
 
 In practice, most of the time we will be considering separable
-isogenies, and we can take $\deg ϕ ≡ \#\ker ϕ$ as the definition of
+isogenies, and we can take $\deg ϕ := \#\ker ϕ$ as the definition of
 the degree. %
 Notice that in this case $\deg ϕ$ is the size of any fiber of $ϕ$. %
 
@@ -994,8 +1035,8 @@ Notice that in this case $\deg ϕ$ is the size of any fiber of $ϕ$. %
   on. %
 \end{example}
 
-The most unique property of separable isogenies is that they are 
-entirely determined by their kernel. %
+The defining property of separable isogenies is that they are entirely
+determined by their kernel. %
 
 \begin{proposition}
   \label{prop:isoker}
@@ -1064,7 +1105,7 @@ given by Vélu's much celebrated formulas. %
   The separable isogeny $ϕ:E→ E/G$, of kernel $G$, can be written as
   \begin{equation*}
     ϕ(P) = \left(
-      x(P) + \sum_{Q∈G\setminus\{\O\}}x(P+Q)-x(Q),\\
+      x(P) + \sum_{Q∈G\setminus\{\O\}}x(P+Q)-x(Q),\quad
       y(P) + \sum_{Q∈G\setminus\{\O\}}y(P+Q)-y(Q)
     \right);
   \end{equation*} %
@@ -1080,7 +1121,7 @@ given by Vélu's much celebrated formulas. %
 \section{Complex multiplication}
 \label{sec:compl-mult}
 
-We conclude with one of the most power tools for the study of isogeny
+We conclude with one of the most powerful tools for the study of isogeny
 graphs: the theory of \emph{complex multiplication}. %
 Our goal is to characterize elliptic curves with endomorphism rings
 larger than $ℤ$; to do so, we start from elliptic curves defined over
@@ -1171,7 +1212,7 @@ It is clear that $\O_Λ$ is a ring, and it is easy to show that it is
 an order of $K$, and thus that $Λ$ is a fractional $\O_Λ$-ideal. %
 Using Theorem~\ref{th:weierstrass-p} we associate to $Λ$ a complex
 elliptic curve $E_Λ$; but then, by definition, $\O_Λ≃\End(E_Λ)$. %
-Said otherwise, $E_Λ$ \emph{complex multiplication} by $\O_Λ$.
+Said otherwise, $E_Λ$ has \emph{complex multiplication} by $\O_Λ$.
 
 We have thus found a way to construct elliptic curves over the complex
 numbers with complex multiplication by a specified order. %
@@ -1302,7 +1343,7 @@ non-trivial endomorphisms of $\bar{E}$. %
 \end{proof}
 
 Note that $p>2$ splits in $K$ if and only if the fundamental
-discriminant $Δ_K$ of $K$ is is a square modulo $p$. %
+discriminant $Δ_K$ of $K$ is a square modulo $p$. %
 To include the case $p=2$, we may use the Kronecker symbol
 $\left(\frac{Δ_K}{p}\right)$, which is equal to $1$ if and only if $p$
 splits. %
@@ -3406,7 +3447,7 @@ finding attack.%~\cite{todo}.
 \clearpage
 \addcontentsline{toc}{part}{References}
 \bibliographystyle{plain}
-\bibliography{refs,isogenies_bib/isogenies}
+\bibliography{refs,isogenies_bib/isogenies,cryptobib/abbrev3,cryptobib/crypto}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
