@@ -8,6 +8,7 @@
 \usepackage{subcaption}
 \usepackage[type={CC},modifier={by-nc},imagemodifier={-eu},version={4.0},imagewidth=5em]{doclicense}
 \usepackage{fancyhdr}
+\usepackage{comment}
 
 \usepackage{algorithmic}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -126,19 +127,40 @@ the summer school
 
 This third revision was written in the summer of 2022 for the school
 \href{https://cryptabit.bit.uni-bonn.de/2022}{crypt@b-it} in Bonn,
-Germany.
+Germany. %
+It fixes several mistakes, adds extra material, and, obviously,
+moves on from SIDH.
 
 Over the course of these 5 years, isogeny based cryptography has
 evolved from a niche topic into a respectable subfield of public-key
 cryptography, going through phases of excitement and of existential
-doubt~\cite{}. %
+doubt~\cite{EPRINT:CasDec22,EPRINT:MaiMar22,EPRINT:Robert22}. %
 Today isogeny based cryptography is too vast to be taught in a single
 week of lectures, hence these notes do not attempt at drawing a
 complete picture. %
 Instead, they are meant to give the bases to enter the field and,
 hopefully, start doing exciting research.
 
+\paragraph{Acknowledgments.}
+These notes wouldn't have existed if not for the summer schools
+mentioned above. %
+For having organized such wonderful events and supported my lectures,
+I would like to thank CIMPA, the Écoles Mathématiques Africaines, the
+École Polytechnique de Thiès, and their personnel. %
+Jörn Steuding, Katja Mönius, Pascal Stumpf, Steffen Reith, Michael
+Meyer, the RheinMain University of Applied Sciences and the University
+of Würzburg. %
+Michael Nüsken, the b-it (Bonn-Aachen International Center for
+Information Technology), CASA (Cyber Security in the Age of
+Large-Scale Adversaries) and the smashHit project.
 
+Many students have contributed by pointing out mistakes and helping
+fixing them. %
+I would like to thank, in particular, Simon Masson, Marcel Müller,
+Martin Strand and Vadym Fedyukovych, and apologize to all those
+students whose name I've forgot.
+
+\clearpage
 {
   \hypersetup{linkcolor=black}
   \setcounter{tocdepth}{1}
@@ -349,6 +371,13 @@ The torsion part is easily characterized.
   See~\cite[Coro.~6.4]{silverman:elliptic}. For the characteristic $0$
   case see also Section~\ref{sec:elliptic-curves-over}.
 \end{proof}
+
+When $k$ is not algebraically closed, it is customary to write $E[m]$
+for the $m$-torsion subgroup of $E(\bar{k})$, i.e.\ the torsion points
+in the algebraic closure. %
+$E[m]$ may or may not be fully contained in $E(k)$, it is easy to see,
+however, that it will always be contained in an extension of $k$ of
+finite degree.
 
 For curves defined over a field of positive characteristic $p$, the
 case $E[p]≃ℤ/pℤ$ is called \emph{ordinary}, while the case
@@ -1117,6 +1146,103 @@ given by Vélu's much celebrated formulas. %
 \end{proposition}
 
 
+\section{The Weil pairing}
+\label{sec:weil-pairing}
+
+The definition below is given for free modules over a ring. %
+If you feel uncomfortable with rings and modules, just think of vector
+spaces over a field.
+
+\begin{definition}
+  Let $M_1, M_2$ be free modules over a commutative ring $R$. %
+  A bilinear form is a mapping $e:M_1\times M_2\to R$ such that:
+  \begin{itemize}
+  \item $e(aP,Q) = e(P,aQ) = a\cdot e(P,Q)$,
+  \item $e(P+P', Q) = e(P,Q) + e(P',Q)$,
+  \item $e(P, Q+Q') = e(P,Q) + e(P,Q')$,
+  \end{itemize}
+  for all $a\in R$, all $P,P'\in M_1$ and all $Q,Q'\in M_2$.
+
+  A bilinear form is said to be \emph{non-degenerate} if:
+  \begin{itemize}
+  \item $e(P,Q)=0$ for all $P$ implies $Q=0$, and
+  \item $e(P,Q)=0$ for all $Q$ implies $Q=0$.
+  \end{itemize}
+
+  A bilinear form is said to be \emph{alternating} if $M_1=M_2$ and
+  $e(P,P)=0$ for all $P$.
+\end{definition}
+
+If instead of taking values in $R$, we define a map
+$M_1\times M_2\to M_3$, with the same properties as above, but taking
+values in an $R$-module $M_3$, we talk of a bilinear map, or
+\emph{pairing}. %
+
+Let $E/k$ be an elliptic curve defined over a field $k$, and let $m$
+be a positive integer prime to the characteristic of $k$. %
+We know that (in a sufficiently large finite extension of $k$) the
+torsion subgroup $E[m]$ is isomorphic to $(ℤ/mℤ)^2$, and is thus a
+free $ℤ/mℤ$-module of rank two. %
+$E[m]$ comes equipped with a non-degenerate alternating pairing
+$e_m:E[m]\times E[m]\to \mu_m$, where $\mu_m\subset\bar{k}$ is the
+subgroup of $m$-th roots of unity of (the algebraic closure of) $k$,
+called the \emph{Weil pairing}.
+
+But since $\mu_m$ is isomorphic to $ℤ/mℤ$ as $ℤ/mℤ$-module, the Weil
+pairing is just a bilinear form in disguise. %
+And not just any bilinear form! %
+Indeed, under the constraint of being non-degenerate and alternating,
+the Weil pairing is, essentially, the $2×2$ determinant form.
+
+\begin{proposition}
+  \label{prop:weil-det}
+  Let $M$ be a $ℤ/mℤ$ module of rank 2, and let $(P,Q)$ be a pair of
+  generators. %
+  Let $e$ be an alternating pairing on $M×M$ taking values in a
+  multiplicative group $G$ of order $m$, and let $\zeta = e(P,Q)$. %
+  Then
+  \[e([a]P + [b]Q, [c]P + [d]Q) =
+    \zeta^{\det\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)}.\]
+
+  In particular $e$ is non-degenerate if and only if $\zeta$ generates $G$.
+\end{proposition}
+
+We skip here details on how the Weil pairing can be computed (see,
+e.g.,~\cite{galbraith2012mathematics}).  %
+Suffice to say that there is an efficient algorithm (with running time
+polynomial in $\log(m)$). %
+Other pairings are also defined for elliptic curves, however they are
+all related to the Weil pairing, and they will not make a difference
+for our purposes, thus we will ignore them. %
+For a review of known elliptic pairings, addressed to non-specialists,
+see~\cite{10.1016/j.dam.2007.12.010}.
+
+It is remarkable that the Weil pairings of isogenous curves are
+``compatible'' in a precise sense. %
+Indeed, it turns out that the dual isogeny is the ``transpose'' in the
+sense of bilinear forms.
+
+\begin{theorem}
+  Let $E,E'$ be elliptic curves, let $\phi:E\to E'$ be an isogeny,
+  $\hat\phi:E'\to E$ its dual, let $m$ be a positive integer. %
+  For any $P\in E[m]$ and $Q\in E'[m]$
+  \begin{equation}
+    \label{eq:pairing-isog}
+    e_m'\bigl(\phi(P), Q\bigr) = e_m\bigl(P, \hat\phi(Q)\bigr).
+  \end{equation}
+  where $e_m$ and $e_m'$ denote the Weil pairing of $E$ and $E'$
+  respectively.
+\end{theorem}
+\begin{proof}
+  See~\cite[III.8.2]{silverman:elliptic}.
+\end{proof}
+
+\begin{corollary}
+  \label{coro:iso-pairing}
+  Let $\phi:E\to E'$ be an isogeny of degree $d$. For any
+  $m,P,Q$
+  \[e_m'\bigl(\phi(P),\phi(Q)\bigr) = e_m(P,Q)^d.\]
+\end{corollary}
 
 \section{Complex multiplication}
 \label{sec:compl-mult}
@@ -1407,7 +1533,15 @@ previous one, as a famous theorem shows.
 \end{exercise}
 
 \begin{exercise}
-  Prove Corollary~\ref{coro:isog-basic}
+  Prove Corollary~\ref{coro:isog-basic}.
+\end{exercise}
+
+\begin{exercise}
+  Prove Proposition~\ref{prop:weil-det}.
+\end{exercise}
+
+\begin{exercise}
+  Prove Corollary~\ref{coro:iso-pairing}.
 \end{exercise}
 
 \begin{exercise}
@@ -1430,7 +1564,7 @@ previous one, as a famous theorem shows.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\begin{comment}
 \clearpage
 \part{Isogeny graphs}
 
@@ -3442,6 +3576,8 @@ For this reason, $p$ is typically chosen so that $\log p\sim 6n$ for a
 quantum security of $2^n$ gates, although it is debated whether Tani's
 algorithm actually presents an advantage over the classical claw
 finding attack.%~\cite{todo}.
+
+\end{comment}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
