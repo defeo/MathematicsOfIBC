@@ -1622,6 +1622,7 @@ An easy consequence for the finite field is case is the following.
   Two elliptic curves $E,E'$ defined over a finite field $k$ are
   isogenous over $k$ if and only if $\#E(k)=\#E'(k)$.
 \end{corollary}
+% todo: check whether rationality really follows from Serre-Tate
 
 At this stage, we are only interested in elliptic curves up to
 isomorphism, i.e., $j$-invariants. %
@@ -2487,9 +2488,9 @@ to a Cayley graph. %
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{comment}
+
 \clearpage
-\part{Key exchange}
+\part{Cryptographic group actions}
 
 In this part we introduce our first isogeny based cryptographic
 protocols. %
@@ -2507,16 +2508,16 @@ We conclude with a brief discussion on the security of these protocols.
 
 Elliptic curves are largely present in modern technology thanks to
 their applications in cryptography. %
-The simplest of these application is the \emph{Diffie-Hellman key
+The simplest of these applications is the \emph{Diffie-Hellman key
   exchange}, a cryptographic protocol by which two parties
 communicating over a public channel can agree on a common secret
 string unknown to any other party listening on the same channel.
 
 The original protocol was invented in the 1970s by Whitfield Diffie
-and Martin Hellman~\cite{dh}, and constitutes the first practical
+and Martin Hellman~\cite{DifHel76}, and constitutes the first practical
 example of \emph{public key cryptography}. %
 The two communicating parties are customarily called \emph{Alice} and
-\emph{Bob}, and the listening third party is represented by the
+\emph{Bob}, and the snooping third party is represented by the
 character \emph{Eve} (for \emph{eavesdropper}). %
 To set up the protocol, Alice and Bob agree on a set of public
 parameters:
@@ -2564,7 +2565,7 @@ We know algorithms to compute discrete logarithms in a \emph{generic}
 group $G$ that require $O(\sqrt{q})$ computational steps
 (see~\cite{joux2009algorithmic}), where $q$ is the largest prime
 divisor of $\#G$; we also know that these algorithms are \emph{optimal
-  for abstract cyclic groups}. %
+  for abstract cyclic groups}~\cite{EC:Shoup97}. %
 For this reason, $G$ is usually chosen so that the largest prime
 divisor $q$ has size at least $\log_2 q ≈ 256$. %
 However, the proof of optimality does not exclude the existence of
@@ -2577,10 +2578,11 @@ cryptographic strength.
 On the contrary, no algorithms better than the generic ones are known
 when $G$ is a subgroup of $E(k)$, where $E$ is an elliptic curve
 defined over a finite field $k$. %
-This has led Miller~\cite{miller86} and Koblitz~\cite{koblitz87} to
-suggest, in the 1980s, to replace $(ℤ/pℤ)^{×}$ in the Diffie-Helman
-protocol by the group of rational points of an elliptic curve of
-(almost) prime order over a finite field. %
+This led Miller~\cite{C:Miller85} and
+Koblitz~\cite{koblitz87,JC:Koblitz89} to suggest, in the 1980s, to
+replace $(ℤ/pℤ)^{×}$ in the Diffie-Helman protocol by the group of
+rational points of an elliptic curve of (almost) prime order over a
+finite field. %
 The resulting protocol is summarized in Figure~\ref{fig:dh}.
 
 \begin{figure}
@@ -2606,11 +2608,15 @@ The resulting protocol is summarized in Figure~\ref{fig:dh}.
 The Elliptic Curve Diffie--Hellman protocol (ECDH) is today a widely
 adopted standard, used for example to establish secure TLS connection,
 the encrypted layer of Internet. %
+Other protocols built on top of the difficulty of solving the elliptic
+curve discrete logarithm problem, such as the ECDSA signing algorithm,
+are also widely in use today.
+
 In recent years, however, the case has been made that cryptographic
 standards must be amended, in view of the potential threat of general
 purpose \emph{quantum computers} becoming available. %
 It is well known, indeed, that Shor's
-algorithm~\cite{shor1994algorithms} would solve the factorization and
+algorithm~\cite{FOCS:Shor94} would solve the factorization and
 the discrete logarithm problems in polynomial time on a quantum
 computer, thus sealing the fate of RSA, ECDH, and any other protocol
 based on them. %
@@ -2618,35 +2624,197 @@ based on them. %
 For this reason, the cryptographic community is actively seeking
 cryptographic primitives that would not break in polynomial time on
 quantum computers. %
-In the next sections we shall present two key exchange protocols based
-on pseudo-random walks in certain isogeny graphs, which are
-conjectured to be resistant to attacks by quantum computers.
+In the next sections we shall present \emph{cryptographic group
+  actions}, a generalization of discrete logarithm groups that is
+believed to be, in general, resistant to attacks by quantum
+computers. %
+The only examples of quantum-resistant cryptographic group actions
+currently known are based on the theory of complex multiplication.
 
 
-\section{Isogeny graphs and discrete logarithms}
-\label{sec:isog-graphs-crypt}
+\section{Cryptographic group actions}
+\label{sec:crypt-group-acti}
 
-Before moving to post-quantum cryptography, we quickly review one of
-the first applications of isogeny graphs in cryptography: hardness of
-discrete logarithms in families of elliptic curves. %
-One can state several computational problems related to isogenies,
-both \emph{easy} and \emph{hard} ones. %
-Here are some examples.
+In his seminal unpublished work~\cite{EPRINT:Couveignes06}, Couveignes
+defined a generalization of discrete logarithm groups called
+\emph{hard homogeneous spaces}, a fancy name for a group action with
+some associated hard computational problem. %
+Group actions had previously been considered by Brassard and
+Yung~\cite{C:BraYun90}, although their focus differs slightly from
+Couveignes'. %
+We shall follow here the more modern treatment of~\cite{AC:ADMP20},
+where these are called \emph{cryptographic group actions}.
 
-\begin{problem}[Isogeny computation]
-  Given an elliptic curve $E$ with Frobenius endomorphism $π$, and a
-  subgroup $G⊂E$ such that $π(G)=G$, compute the rational fractions
-  and the image curve of the separable isogeny $ϕ$ of kernel $G$.
+Below we write $(G,X,·)$ for the action of a group $G$ on a set
+$X$, denoted by $x' = g·x$.
+
+\begin{definition}[Effective Group Action]
+  A group action $(G,X,·)$ is \emph{effective} if the following
+  properties are satisfied:
+  \begin{enumerate}
+  \item The group $G$ is finite and there exist efficient algorithms
+    for:
+    \begin{enumerate}
+    \item \emph{Membership testing}, i.e., to decide if a given bit string
+      represents a valid group element in $G$.
+    \item \emph{Equality testing}, i.e., to decide if two bit strings
+      represent the same group element in $G$.
+    \item \emph{Sampling}, i.e., to sample an element $g$ from a
+      distribution on $G$ statistically close to uniform.
+    \item \emph{Operation}, i.e., to compute $gh$ for any $g,h\in G$.
+    \item \emph{Inversion}, i.e., to compute $g^{-1}$ for any
+      $g\in G$.
+    \end{enumerate}
+  \item The set $X$ is finite and there exist efficient algorithms for:
+    \begin{enumerate}
+    \item \emph{Membership testing}, i.e., to decide if a bit string
+      represents a valid set element.
+    \item \emph{Unique representation}, i.e., given any arbitrary set element $x\in X$, compute a string $\hat{x}$ that canonically represents $x$.
+    \end{enumerate}
+  \item There exists a distinguished element $x_0\in X$, called the
+    \emph{origin}, such that its bit-string representation is
+    known.\footnote{Like a group generator, the origin does not
+      necessarily have a distinguishing mathematical property, and can
+      be taken arbitrarily.}
+  \item There exists an efficient algorithm that given (some
+    bit-string representations of) any $g\in G$ and any $x\in X$,
+    outputs $g · x$.
+  \end{enumerate}
+\end{definition}
+
+In practice, we will mostly deal with regular group actions, i.e.\
+such that for any $x, x' ∈ X$ there is a unique $g ∈ G$ such that
+$g · x = x$. %
+Then, $\#G = \#X$. %
+Additionally, we will only consider Abelian group actions.
+
+\begin{definition}
+  Let $(G,X,·)$ be an effective group action. %
+  Define the functions
+  \begin{equation*}
+    \begin{aligned}
+      f_x : G &\to X,\\
+      g &\mapsto g·x,
+    \end{aligned}
+    \qquad\qquad
+    \begin{aligned}
+      \pi_g : X &\to X,\\
+      x &\mapsto g·x.
+    \end{aligned}
+  \end{equation*}
+  The group action is said to be:
+  \begin{enumerate}
+  \item \emph{One-way} if the family of functions $f_x$ is one-way.
+  \item \emph{Weakly unpredictable} if the family of permutations
+    $\pi_g$ is weakly unpredictable, i.e., if given a list of random
+    pairs $(x,\pi_g(x))$ it is hard to guess $\pi_g(x^*)$ for a random
+    $x^*$ not in the list.
+  \item \emph{Weakly pseudorandom} if the family of permutations
+    $\pi_g$ is weakly pseudorandom, i.e., if it is hard to distinguish
+    between a list of random pairs $(x,\pi_g(x))$ and one of random
+    pairs $(x,\pi(x))$, where $\pi$ is a uniformly drawn permutation
+    of $X$.
+  \end{enumerate}
+\end{definition}
+
+Discrete logarithm groups are special cases of cryptographic group
+actions. %
+Indeed, if $H$ is a group of order $n$, we let $X⊂H$ be the subset of
+elements of order $n$, and we let $G = (ℤ/nℤ)^\times$. %
+Then $G$ acts regularly on $X$, and it is easy to check that
+one-wayness, weak unpredictability and weak pseudorandomness
+correspond to the difficulty of, respectively, discrete logarithm, DDH
+and CDH.
+
+Likewise, we can generalize the Diffie--Hellman key exchange to
+cryptographic (Abelian) group actions. %
+The system parameters are the effective group action $(G,X,·)$ with
+its origin $x_0∈X$. %
+A secret key is a random element $g∈G$, and the associated public key
+is $g·x_0$. %
+If Alice and Bob have keypairs $(g_A,x_A)$ and $(g_B,x_B)$,
+respectively, the shared secret is derived as
+\begin{equation*}
+  g_A·x_B = g_Ag_B· x_0 = g_Bg_A·x_0 = g_B·x_A.
+\end{equation*}
+
+Of course, we want to instantiate this protocol with group actions
+that are not just a discrete logarithm group in disguise. %
+For example, for the group action of complex multiplication, the three
+hardness properties correspond to the following three problems.
+
+\begin{problem}[Group action inverse problem, Vectorization]
+  Given two elliptic curves $E,E'$ with complex multiplication by an
+  order $\O$, find an ideal (class) $\frak a⊂\O$ such that
+  $E'=\frak a · E$.
 \end{problem}
 
-V\'elu's formulas (Proposition~\ref{th:velu}) give a solution to this
-problem in $\tildO(\#G)$ operations over the field of definition of
-$E$. %
-This is nearly optimal, given that the output has size $O(\#G)$.
-  
-However in some special instances, e.g., when $ϕ$ is a composition of
-many small degree isogenies, the rational fractions may be represented
-more compactly, and the cost may become only logarithmic in $\#G$.
+\begin{problem}[Parallelization]
+  Let $E,E'$ be elliptic curves with complex multiplication by $\O$. %
+  Let $\frak a ∈ \Cl(\O)$. %
+  Given $(E, \frak a·E, E')$, compute $\frak a·E'$.
+\end{problem}
+
+\begin{problem}
+  Let $E,E'$ be elliptic curves with complex multiplication by $\O$. %
+  Let $\frak a ∈ \Cl(\O)$. %
+  Given a tuple $(E,\frak a·E,E',E'')$, decide whether
+  $E''=\frak a·E'$.
+\end{problem}
+
+Each of these problems appears to be legitimately hard, when the
+isogeny class is large enough. %
+We haven't show yet that the complex multiplication group action is an
+effective one. %
+We'll soon see there is a catch.
+
+\section{Computational isogeny problems}
+\label{sec:isog-graphs-crypt}
+
+Since we stated some hard computational problems related to complex
+multiplication, and thus to isogenies, let us state some more
+\emph{easy} and \emph{hard} isogeny problems.
+
+\begin{problem}[Isogeny computation]
+  Let $E$ be an elliptic curve defined over some field $k$. %
+  Given a description (e.g.\ a list of generators) of a subgroup
+  $G⊂E(k)$ of order $ℓ$, compute the rational fractions and the image
+  curve of the unique separable isogeny of kernel $G$.
+\end{problem}
+
+Vélu's formulas (Proposition~\ref{th:velu}) give a solution to this
+problem, in $\tildO(ℓ)$ operations over $k$. %
+This is nearly optimal, given that the output has size $O(ℓ)$. %
+More generally the group $G$ may live in a finite extension of $k$,
+however as long as the isogeny is $k$-rational it is still possible to
+represent $G$ so that Vélu's formulas take $\tildO(ℓ)$ operations over
+$k$~\cite{kohel}.
+
+In some special instances, e.g.\ when the isogeny can be decomposed as
+many isogenies of smaller degree (e.g.\ when $\ell = 2^n$), the
+rational fractions may be represented more compactly, and the cost may
+become only logarithmic in $ℓ$.
+
+A slight variation on this problem asks to output, instead of the full
+rational fractions representing the isogeny, simply its evaluation at
+a point.
+
+\begin{problem}[Isogeny evaluation]
+  Let $E$ be an elliptic curve defined over some field $k$. %
+  Given a description of a subgroup $G⊂E(k)$ of order $ℓ$, given a
+  point $P∈E$, letting $ϕ$ be the unique separable isogeny of kernel
+  $G$, compute $ϕ(P)$.
+\end{problem}
+
+Surprisingly, this problem can be solved more efficiently than the
+isogeny computation problem, in $\tildO(\sqrt{ℓ})$ time and
+space~\cite{bernstein2020faster}. %
+This algorithm is at the heart of essentially any isogeny based
+scheme.
+
+The following problems are less central to isogeny based
+cryptosystems, but appear, e.g., when counting points of elliptic
+curves.
 
 \begin{problem}[Explicit isogeny problem]
   \label{prob:expl-isog}
@@ -2658,15 +2826,13 @@ A slightly modified version of the same problem is often found in the
 literature.
 
 \begin{problem}
-  Given two elliptic curves $E,E'$ over a finite field, isogenous of
-  known degree $ℓ$, find an isogeny $ϕ:E\to E'$ of degree $ℓ$.
+  Given two elliptic curves $E,E'$, isogenous of known degree $ℓ$,
+  find an isogeny $ϕ:E\to E'$ of degree $ℓ$.
 \end{problem}
 
-Remark that, up to automorphisms, the isogeny $ϕ$ in the latter
-problem is typically unique. %
 Elkies was the first to formulate these two problems and give an
 algorithm~\cite{elkies92,elkies98} that solves both with complexity
-$O(d^3)$ in
+$O(\ell^3)$ in
 general~\cite{bostan+morain+salvy+schost08,lercier+sirvent08}. %
 Alternate algorithms, with similar complexity, are due to Couveignes
 and
@@ -2679,17 +2845,16 @@ The next problem is the blueprint for all "hard" isogeny problems used in
 isogeny based cryptography. %
 
 \begin{problem}[Isogeny path]
-  Given two elliptic curves $E,E'$ over a finite field $k$, such that
+  Given two elliptic curves $E,E'$ over a finite field $\F_q$, such that
   $\#E=\#E'$, find an isogeny $ϕ:E\to E'$ of smooth degree.
 \end{problem}
 
-The difficulty of this problem depends on the set which $E$ and $E'$
-are drown from, but it is in general a very difficult one, for which
-only algorithms exponential in $\log(\#E)$ are known. %
-Remark that, in general, $\degϕ$ will be exponential in $\log(\#E)$,
-thus the "smooth degree" constraint, which allows the output to be
-represented using polynomial space as a composition of small degree
-isogenies.
+The difficulty of this problem depends on the distributions $E$ and
+$E'$ are drown from, but it is in general a very difficult one, for
+which only algorithms exponential in $\log(q)$ are known. %
+Remark that, in general, $\degϕ$ will be exponential in $\log(q)$,
+hence the "smooth degree" constraint, which lets us represent the
+output as a composition of small degree isogenies.
 
 A general strategy to tackle the problem is by a \emph{meet in the
   middle} random walk~\cite{Gal}: choose an expander graph $G$
@@ -2701,7 +2866,7 @@ composition of the walks yields the desired isogeny.
 
 The meet in the middle strategy was notoriously used to extend the
 power of the GHS attack on elliptic curves defined over extension
-fields of composite degree~\cite{gaudry+hess+smart02,GHS}. %
+fields of composite degree~\cite{JC:GauHesSma02,EC:GalHesSma02}. %
 Without going into the details of the GHS attacks, one of its
 remarkable properties is that only a small fraction of a given isogeny
 class is vulnerable to it. %
@@ -2737,67 +2902,40 @@ The attack is pictured in Figure~\ref{fig:ghs}.
 \end{figure}
 
 Similar ideas have been used to construct \emph{key escrow
-  systems}~\cite{teske06}, and to prove random reducibility of
-discrete logarithms inside some isogeny classes~\cite{jao+miller+venkatesan09}.
+  systems}~\cite{JC:Teske06}, and to prove random reducibility of
+discrete logarithms inside some isogeny
+classes~\cite{jao+miller+venkatesan09}.
 
+\section{Evaluating the CM group action}
 
-\section{Key exchange from CM graphs}
+At the same time as he introduced the formalism of cryptographic group
+actions, Couveignes also indicated the complex multiplication group
+action as a candidate. %
+His ideas were independently rediscovered by Rostovtsev and
+Stolbunov~\cite{EPRINT:RosSto06,Stol}, who were the first to point out
+that the schemes thus obtained are plausibly post-quantum. %
 
-The first isogeny-based protocol was introduced by Couveignes during a
-talk at the École Normale Superieure in 1997, although it was only
-published ten years later in~\cite{cryptoeprint:2006:291};
-independently, Rostovtsev and Stolbunov proposed similar protocols
-in~\cite{rostovtsev+stolbunov06,Stol}. %
-Couveignes' key exchange protocol was presented in a more general
-setting, applying to any principal homogeneous space satisfying some
-cryptographic properties.
-
-Recall that a principal homogeneous space (PHS) for a group $G$ is a
-set $X$ with an action of $G$ on $X$ such that for any $x,x'\in X$,
-there is a unique $g\in G$ such that $g\cdot x = x'$. %
-Equivalently, the map $φ_x: g\mapsto g\cdot x$ is a bijection between
-$G$ and $X$ for any $x\in X$. %
-Couveignes defines a \emph{hard homogeneous space} (HHS) to be a PHS
-where the action of $G$ on $X$ is efficiently computable, but
-inverting the isomorphism $φ_x$ is computationally hard for any~$x$.
-
-Any HHS $X$ for an abelian group $G$ can be used to construct a key
-exchange based on the hardness of inverting $\varphi_x$: the system
-parameters are a HHS $(G,X)$, and a starting point $x_0∈X$; a secret
-key is a random element $g∈G$, and the associated public key is
-$g·x_0$. %
-If Alice and Bob have keypairs $(g_A,x_A)$ and $(g_B,x_B)$,
-respectively, then the commutativity of $G$ lets them derive a shared
-secret
-\begin{equation*}
-  g_A·x_B = g_A·g_B· x_0 = g_B·g_A·x_0 = g_B·x_A.
-\end{equation*}
-The analogy with classic group-based Diffie--Hellman is evident.
-
-Couveignes suggested to use $\Ell_q(\O)$ as an instance of a HHS: the
-system parameters are a starting curve $E/\F_q$, and the associated
-class group $\Cl(\O)$; the secret keys are random elements of
-$\Cl(\O)$, and public keys are $j$-invariants of curves in
-$\Ell_q(\O)$. %
-However, given a generic element of $\Cl(\O)$, the best
-algorithm~\cite{jao+soukharev10} to evaluate its action on
-$\Ell_q(\O)$ has subexponential complexity in $q$, making the protocol
-infeasible. %
-
+However, in order to fulfill the definition of an effective group
+action, we need to be able to take an arbitrary element
+$\frak a∈\Cl(\O)$, an arbitrary curve $E ∈ \Ell_q(\O)$, and to
+evaluate $\frak a · E$. %
+The best algorithm for doing so has subexponential complexity in
+$q$~\cite{jao+soukharev10}, which is not exactly ``efficient''. %
 Instead, following Rostovtsev and
-Stolbunov~\cite{rostovtsev+stolbunov06}, we may define a variant of
-Couveignes' HHS key exchange based on walks in a Cayley graph for
-$G$. %
-As an example, let $G=〈g〉$ be a cyclic group of order $p$, let
+Stolbunov~\cite{EPRINT:RosSto06}, we may define a variant of
+the key exchange based on walks in a Cayley graph of $\Cl(\O)$.
+
+As an example, let us consider again the action of exponentiation on a
+discrete logarithm group. %
+Let $H=〈g〉$ be a cyclic group of order $p$, let
 $D=\{s_1,\dots,s_n\}⊂(ℤ/pℤ)^{×}$ be a generating set such that $σ∈D$
 implies $σ^{-1}∉D$, and let $S = D∪D^{-1}$ so that $S$ is symmetric as
 defined in~\ref{def:cayley}. %
-Then, $G$ minus the identity is a PHS for $(ℤ/pℤ)^{×}$ under the
-action
+Then, $(ℤ/pℤ)^{×}$ acts on  $H$ minus the identity by
 \[e·g_0 = g_0^e\qquad\text{for $e∈(ℤ/pℤ)^×$ and
-    $g_0∈G\setminus\{1\}$}.\] %
+    $g_0∈H\setminus\{1\}$}.\] %
 We may thus define the Schreier graph of
-$((ℤ/pℤ)^{×}, S, G\setminus\{1\})$, which is isomorphic to the Cayley
+$((ℤ/pℤ)^{×}, S, H\setminus\{1\})$, which is isomorphic to the Cayley
 graph $((ℤ/pℤ)^×,S)$; an example for $p=13$ is given in
 Figure~\ref{fig:schreier}.
 
@@ -2873,11 +3011,11 @@ The protocol is summarized in Figure~\ref{fig:walk-dh}.
 
 Because $g_a = a·g = g^a$, it is evident that this protocol is closely
 related to the Diffie--Hellman protocol on the group $G$, the only
-difference being that the secret exponents $a,b$ are drawn from a not
-necessarily uniform distribution. %
+difference being that the secret exponents $a,b$ are drawn from an
+unusual distribution. %
 While this example instance is of no practical interest, its
-instantiation using a Schreier graph of the HHS $\Ell_q(\O)$ yields a
-usable variant of Couveignes' key exchange. %
+instantiation using a Schreier graph of the complex multiplication
+group action yields a usable variant of Couveignes' key exchange. %
 We fix a set $S$ of small norm representatives of ideal classes of
 $\Cl(\O)$, corresponding to small degree isogenies between curves in
 $\Ell_q(\O)$. %
@@ -2998,8 +3136,8 @@ It is no surprise then that evaluating one $\Cl(\O)$-action takes
 several minutes. %
 
 Is it possible to do better? %
-A first is to use Vélu's formulas instead of Elikes' or Couveignes'
-algorithm, as first proposed in~\cite{10.1007/978-3-030-03332-3_14}. %
+A first idea is to use Vélu's formulas instead of Elikes' or
+Couveignes' algorithm, as first proposed in~\cite{AC:DeFKieSmi18}. %
 Suppose, for example, that $π|E[ℓ]$ acts like $\mat{1&0\\0&μ}$, with
 $μ≠1$. %
 In this case, there is an easily recognizable direction associated to
@@ -3037,16 +3175,16 @@ $\#E$, until a suitable one is found. %
 However, if we enforce the constraint for enough primes $ℓ$ (it is
 enough that $\prod ℓ>2\sqrt{q}$), then we effectively force $t$ to be
 $0$, and thus $E$ to be supersingular. %
-This was the main insight that recently lead to the key exchange
-protocol CSIDH~\cite{10.1007/978-3-030-03332-3_15}, which is an
-efficient variant of the Couveignes--Rostovtsev--Stolbunov system in a
-supersingular CM graph. %
+This was the main insight that lead to the key exchange protocol
+CSIDH~\cite{AC:CLMPR18}, which is an efficient variant of the
+Couveignes--Rostovtsev--Stolbunov system in a supersingular CM
+graph. %
 
 CSIDH uses a prime $p$ of the form $4·\prod_iℓ_i-1$, and a
 supersingular curve $E/\F_p$ as starting point, so that
 $π|E[ℓ_i]=\mat{1&0\\0&-1}$ for all $ℓ_i$. %
 By cleverly optimizing computations, CSIDH achieves a key-exchange at
-the 128 bits security level in only 0.1 seconds. %
+the 128 (classical) bits security level in fractions of a second. %
 The scheme is summarized in Figure~\ref{fig:csidh}.
 
 \begin{figure}
@@ -3071,15 +3209,9 @@ The scheme is summarized in Figure~\ref{fig:csidh}.
   \label{fig:csidh}
 \end{figure}
 
-In Section~\ref{sec:sidh} we are going to present a different key
-exchange protocol, named SIDH, based on supersingular isogeny
-graphs. %
-The graph structure will be radically different, but Vélu's formulas
-will still play a crucial role for its performance.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\begin{comment}
 \section{Hash functions from Ramanujan graphs}
 
 Before presenting SIDH, we introduce a distant ancestor: a
@@ -3361,33 +3493,36 @@ schematized in Figure~\ref{fig:sidh}.
     Alice are drawn in blue, quantities only known to Bob in red.}
   \label{fig:sidh}
 \end{figure}
-
+\end{comment}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Security and quantum computers}
 
-We end this part with a quick review of the security of the key
-exchange protocols presented so far. %
-The problem that is often cited as the cornerstone of isogeny based
-cryptography is the isogeny path problem: given isogenous curves $E$,
-$E'$, find an isogeny of smooth degree between them; however, each
-cryptosystem depends on a specific variant of the problem.
+We end this part with a quick review of the security of protocols
+based on complex multiplication. %
+The cornerstone of isogeny based cryptography is the isogeny path
+problem: given isogenous curves $E$, $E'$, find an isogeny of smooth
+degree between them. %
+CM based protocols are no exception: find an isogeny walk between $E$
+and $E'$, and the group action inverse problem is solved. %
 Naturally, the first parameter to look at is the size of the isogeny
 class of $E,E'$: too small, and we can find the isogeny by brute
 force. %
 
-\paragraph{Security of CM constructions.}
-In the CM case, using the theory of isogeny volcanoes, we can easily
-find ascending paths from $E$ and $E'$ to two curves
-$\hat{E},\hat{E}'$ with complex multiplication by the maximal order;
-then, we are left with the problem of finding a horizontal isogeny
+We may assume that $E$ and $E'$ have complex multiplication by a
+maximal order. %
+Indeed, if this is not the case, we may use the theory of isogeny
+volcanoes to find ascending paths from $E$ and $E'$ to two curves
+$\hat{E},\hat{E}'$ with complex multiplication by the maximal order. %
+Then, we are left with the problem of finding a horizontal isogeny
 between $\hat{E}$ and $\hat{E'}$. %
 Since the horizontal isogeny class of $\O_K$ is the smallest among all
 horizontal isogeny classes of curves with complex multiplication by
-some $\O⊂\O_K$, it makes sense to reduce to this case, as first noted
-by Galbraith, Hess and Smart~\cite{GHS,galbraith+stolbunov11}. %
+some $\O⊂\O_K$, this is an easier problem to solve, as first noted by
+Galbraith, Hess and
+Smart~\cite{EC:GalHesSma02,galbraith+stolbunov11}.%
 
 \begin{problem}[Horizontal isogeny path problem]
   \label{prob:hiwp}
@@ -3408,7 +3543,7 @@ Its average complexity is $O(\sqrt{h(\O_K)})$, thus $O(q^{1/4})$ for a
 typical isogeny class. %
 This justifies choosing a prime $q$ of $4n$ bits, for a security level
 of $2^n$, and this is indeed and what CSIDH
-does~\cite{10.1007/978-3-030-03332-3_15}.
+does~\cite{AC:CLMPR18}.
 
 However, we must also ensure that the key space covers the whole
 $\Ell_q(\O_K)$, possibly approaching the uniform distribution. %
@@ -3423,71 +3558,7 @@ however it will not go unnoticed that this choice is insufficient to
 apply Theorem~\ref{th:ord-exp}. %
 We may as well live with it, changing our security assumptions to take
 into account the biased distributions given by random walks in graphs
-that are not known to be expanders, as it is done
-in~\cite{10.1007/978-3-030-03332-3_14}. %
-
-\paragraph{Security of SIDH.}
-Things are quite different in SIDH. %
-We know that the supersingular isogeny graph over $\F_{p^2}$ has
-$≈p/12$ vertices, thus in general we can find a smooth isogeny between
-two supersingular curves in $O(\sqrt{p})$ operations using the same
-kind of random walk algorithm. %
-
-However, this is not the best attack against SIDH. %
-To understand why, we need to look at the key space. %
-Recall that the prime in SIDH is chosen of the form
-$p±1=ℓ_A^{e_A}ℓ_B^{e_B}f$. %
-Alice's secrets are uniformly random cyclic subgroups of
-$E[ℓ_A^{e_A}]$; Alice's key space contains thus at most
-$(ℓ_A+1)ℓ^{e_A-1}$ elements. %
-Similarly, Bob's keyspace contains at most $(ℓ_B+1)ℓ^{e_B-1}$
-elements. %
-To balance out the size of the two key spaces, we need
-$ℓ_A^{e_A}≈ℓ_B^{e_B}≈\sqrt{p}$. %
-Thus, Alice's and Bob's key spaces only cover a tiny fraction of the
-whole supersingular graph, much less they satisfy the conditions to
-Theorem~\ref{th:ss-exp}. %
-An isogeny path in any of the two subgraphs can be found by a
-meet-in-the middle strategy (also called a \emph{claw finding}
-algorithm) in only $O(p^{1/4})$ steps.%
-\footnote{A Pollard-rho style of algorithm is not possible in this
-  case, since its complexity would depend on the size of the whole
-  graph. %
-  The claw finding algorithm is very memory hungry, and some argue
-  that the RAM model is not appropriate to study its complexity. %
-  In a constant memory model, the currently best attack against SIDH
-  is estimated to take $O(p^{3/8})$
-  steps~\cite{cryptoeprint:2018:313}.} %
-
-Hence, like in the CM setting, we need to take $\log p\sim 4n$ for a
-security of $2^n$ operations. %
-However SIDH $j$-invariants are elements of $\F_{p^2}$, thus they will
-typically be twice as big as $j$-invariants in CSIDH. %
-Adding to that the fact that SIDH public keys contain more than a
-$j$-invariant (see Figure~\ref{fig:sidh}), we see that CSIDH consumes
-considerably less bandwidth than SIDH. %
-This is offset by the fact that SIDH is an order of magnitude faster
-than CSIDH, owing to the smaller isogeny degrees. %
-
-However, we just highlighted a very important point on SIDH: it
-transmits more information than what we would normally feel
-comfortable sharing. %
-Indeed, SIDH transmits not only the image curve $E/〈A〉$, but also
-the image of the basis points $P_B,Q_B$. %
-This would be enough information to recover the secret isogeny by
-interpolation techniques, however we do not know how to exploit the
-fact that the isogeny has smooth degree, and in fact we do not know
-any algorithm that takes advantage of this auxiliary information.%
-\footnote{See~\cite{10.1007/978-3-319-70697-9_12} for a distant cousin
-  of SIDH for which it is possible to extract useful information out
-  of the auxiliary data.} %
-
-At any rate, the security of SIDH cannot be founded on the isogeny
-path problem. %
-Instead, it is necessary to make \emph{ad hoc} assumptions taking into
-account the information communicated by the protocol, that go under
-the names of CSSI, SSCDH, SSDDH
-(see~\cite{jao+defeo2011,defeo+jao+plut12} or SIDH~\cite{SIKE}).
+that are not proven to be expanders. %
 
 \paragraph{Quantum security.}
 The discussion on security would not be complete without surveying
@@ -3495,14 +3566,13 @@ quantum attacks. %
 Indeed, the main selling point of isogeny-based key exchange protocols
 is their (conjectured) resistance to quantum algorithms. %
 
-Let's start with CM constructions. %
 Couveignes' Hard Homogeneous Spaces setting is scarily similar to the
 Diffie--Hellman key exchange, which is indeed a special case of it. %
-Shor's algorithm~\cite{shor1994algorithms} solves the discrete
-logarithm problem in polynomial time on a quantum computer, and thus
-breaks the Diffie--Hellman protocol. %
-But is there a variant of Shor's algorithm that also breaks generic
-HHS constructions? %
+Shor's algorithm~\cite{FOCS:Shor94} solves the discrete logarithm
+problem in polynomial time on a quantum computer, and thus breaks the
+Diffie--Hellman protocol. %
+But is there a variant of Shor's algorithm that also breaks group
+actions? %
 
 \begin{definition}[Hidden Subgroup Problem (HSP)]
   Let $f:G→X$ be a function from a group $G$ to a set $X$. %
@@ -3539,36 +3609,25 @@ Kuperberg~\cite{Kup,Kuperberg2013} and Regev~\cite{regev04}, solves
 the HShP in subexponential quantum time $\exp(\sqrt{\log\#G})$. %
 
 As first noted in~\cite{childs2014constructing} and then improved
-in~\cite{cryptoeprint:2018:537,BIJ18,Jao-etal-kuperberg-2018}, Kuperberg's algorithm
-can be used to solve the \nameref{prob:hiwp} as follows: let $E,E'$ be
-the two curves with complex multiplication by $\O_K$, define two
-functions $f_0,f_1:\Cl(\O_K)\to\Ell_q(\O_K)$ as $f_0(\a)=\a·E$ and
-$f_1(\a)=\a·E'$, then the hidden shift defines a horizontal isogeny
-between $E$ and $E'$. %
+in~\cite{BIJ18,Jao-etal-kuperberg-2018,EC:BonSch20,EC:Peikert20},
+Kuperberg's algorithm can be used to solve the \nameref{prob:hiwp} as
+follows: let $E,E'$ be the two curves with complex multiplication by
+$\O_K$, define two functions $f_0,f_1:\Cl(\O_K)\to\Ell_q(\O_K)$ as
+$f_0(\a)=\a·E$ and $f_1(\a)=\a·E'$, then the hidden shift defines a
+horizontal isogeny between $E$ and $E'$. %
 
 Kuperberg's algorithm is a game changer for protocols based on complex
 multiplication: indeed, to ensure $2^n$ quantum security we need to
 take $\log q=O(n^2)$. %
 The actual constant depends on the variant of Kuperberg's algorithm,
 and various parameters such as available quantum memory; its exact
-value is currently debated, but it appears that taking $\log q$
-somewhere between $512$ and $1024$ bits grants a security of $2^{64}$
-quantum gates~\cite{10.1007/978-3-030-03332-3_15,10.1007/978-3-030-03332-3_14,cryptoeprint:2018:537,cryptoeprint:2018:1059}.
+value is still
+debated~\cite{EC:BLMP19,EC:Peikert20,cryptoeprint:2020:1520}.
 
-For SIDH, on the other hand, there is no group structure%
-\footnote{Outside of the subgraph of $\F_p$-rational curves, but the
-  algorithm in~\cite{biasse2014quantum} does not impact the security
-  of SIDH.} %
-that can be exploited by Kuperberg's algorithm. %
-Currently, the best quantum attack against SIDH is a Grover-like claw
-finding algorithm due to Tani~\cite{tani2009claw}, requiring
-$O(p^{1/6})$ quantum gates (and as many qubits!). %
-For this reason, $p$ is typically chosen so that $\log p\sim 6n$ for a
-quantum security of $2^n$ gates, although it is debated whether Tani's
-algorithm actually presents an advantage over the classical claw
-finding attack.%~\cite{todo}.
+\section{Beyond key exchange}
+\label{sec:beyond-key-exchange}
 
-\end{comment}
+TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
