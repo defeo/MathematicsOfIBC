@@ -187,9 +187,9 @@ Loebenberger, Jonathan Lennartz, the b-it (Bonn-Aachen International
 Center for Information Technology), CASA (Cyber Security in the Age of
 Large-Scale Adversaries), the Fachgruppe KRYPTO and the smashHit
 project. %
-Valerio Talamanca, Marusia Rebolledo, Carlos Alberto Trujillo Solarte
-and the Universidad del Cauca. %
-Damien Stehlé, El Mamoun Souidi and the University of Rabbat.
+Marusia Rebolledo, Valerio Talamanca, Carlos Trujillo Solarte and the
+Universidad del Cauca. %
+Souidi El Mamoun, Damien Stehlé and the University of Rabbat.
 
 Many students have contributed by pointing out mistakes and helping
 fixing them. %
@@ -242,7 +242,7 @@ lines in affine space passing through the origin.
   equivalence relation
   \[(x_0,\dots,x_n) \sim (y_0,\dots,y_n)\] %
   if and only if there exists $λ\in\bar{k}$ such that
-  $x_i=λ_iy_i$ for all $i$.
+  $x_i=λy_i$ for all $i$.
 \end{definition}
 
 The equivalence class of a projective point $(x_0,\dots,x_n)$ is
@@ -348,7 +348,7 @@ at infinity $(0:1:0)$.
   \label{fig:weierstrass}
 \end{figure}
 
-Now, since any elliptic curve is defined by a cubic equation, Bezout's
+Now, since any elliptic curve is defined by a cubic equation, Bézout's
 theorem tells us that any line in $\P^2$ intersects the curve in
 exactly three points, taken with multiplicity. %
 We define a group law by requiring that three co-linear points sum to
@@ -1342,7 +1342,7 @@ The ring of integers $\O_K$ of $K$ fits the bill: it always has
 $(1,δ)$ as \emph{integral basis}, i.e., as a set of $ℤ$-module
 generators. %
 
-A classical example of order is the ring of integers $\O_K$ of a
+A classical example of an order is the ring of integers $\O_K$ of a
 number field $K$. %
 It turns out that $\O_K$ is the \emph{maximal order} of $K$, i.e., it
 contains any other order of $K$. %
@@ -1812,7 +1812,7 @@ in Table~\ref{tab:periodic-table}. %
     $v_ℓ(Δ_π/Δ_K)=0$ & $ℓ\nmid[\O_K:\O]$ & $ℓ\nmid[\O:ℤ[π]]$ & $1+\leg{Δ_K}{ℓ}$& &\\
     \hline
     & $ℓ\nmid[\O_K:\O]$ & $ℓ\mid[\O:ℤ[π]]$ &$1+\leg{Δ_K}{ℓ}$& &$ℓ-\leg{Δ_K}{ℓ}$\\
-    $v_ℓ(Δ_π/Δ_K)>1$ & $ℓ\mid[\O_K:\O]$ & $ℓ\mid[\O:ℤ[π]]$ &  &$1$&$ℓ$\\
+    $v_ℓ(Δ_π/Δ_K)≥1$ & $ℓ\mid[\O_K:\O]$ & $ℓ\mid[\O:ℤ[π]]$ &  &$1$&$ℓ$\\
     & $ℓ\mid[\O_K:\O]$ & $ℓ\nmid[\O:ℤ[π]]$ & &$1$& 
   \end{tabular}
   \caption{Number and types of $ℓ$-isogenies, according to splitting
@@ -2028,7 +2028,7 @@ non-trivial endomorphisms of $\bar{E}$. %
   Let $\frak{p}$ be a place of $L$ over $p$, and assume that $E$
   has non-singular reduction $\bar{E}$ modulo $\frak{p}$. %
   The curve $\bar{E}$ is supersingular if and only if $p$ has only one
-  prime of $K$ above it ($p$ ramifies or remains prime in $k$).
+  prime of $K$ above it ($p$ fully ramifies or remains prime in $k$).
 
   Suppose that $p$ splits completely in $K$. %
   Let $f$ be the conductor of $\O$, and write $f = p^rf_0$, where
@@ -2296,7 +2296,7 @@ Figure~\ref{fig:cayley}.
 \begin{exercise}
   Let $X^2-tX-q$ be the minimal polynomial of $π$, and suppose that it
   splits as $(X-λ)(X-μ)$ in $ℤ_ℓ$ (the ring of $ℓ$-adic integers). %
-  Prove that the volcano of $ℓ$ isogenies has height $v_ℓ(λ-μ)$.
+  Prove that the volcano of $ℓ$-isogenies has height $v_ℓ(λ-μ)$.
 \end{exercise}
 
 \begin{exercise}
@@ -3033,7 +3033,7 @@ The scheme is summarized in Figure~\ref{fig:csidh}.
     \hline
                       & {\bf Alice} & {\bf Bob}\\
     \hline
-    Pick random secret & $ρ_A∈L^*$ & $ρ_B∈L^*$\\
+    Pick random secret & $ρ_A∈L$ & $ρ_B∈L$\\
     Compute public data & $E_A = ρ_A(E)$ & $E_B = ρ_B(E)$\\
     Exchange data &  \hfill $E_A \longrightarrow$ & $\longleftarrow E_B$ \hfill\strut \\
     Compute shared secret & $E_{AB} = ρ_A(E_B)$ & $E_{AB} = ρ_B(E_A)$
@@ -3456,7 +3456,7 @@ set of a supersingular graph. %
 \begin{theorem}
   Let $B_{p,∞}$ be the quaternion algebra ramified at $p$ and
   infinity, and let $\O⊂B_{p,∞}$ be a maximal order. %
-  Let $E_0/F_{p^2}$ be a supersingular elliptic curve with
+  Let $E_0/\F_{p^2}$ be a supersingular elliptic curve with
   $\End(E_0)≃\O$. %
   \begin{enumerate}
   \item The number of isomorphism classes of supersingular elliptic
