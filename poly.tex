@@ -671,6 +671,7 @@ It is customary to set
 when $Λ$ is clear from the context, we simply write $g_2$ and $g_3$.
 
 \begin{theorem}[Modular $j$-invariant]
+  \label{th:modular-j}
   The \emph{modular $j$-invariant} is the function on complex lattices
   defined by
   \[j(Λ) = 1728 \frac{g_2(Λ)^3}{g_2(Λ)^3 - 27g_3(Λ)^2}.\] %
@@ -1650,8 +1651,8 @@ whenever their corresponding curves are.%
   corresponding curves are.}
 
 
-\section{Isogeny graphs}
-\label{sec:isogeny-graphs}
+\section{Graphs}
+\label{sec:graphs}
 
 We recall some basic concepts about graphs and their spectra. %
 For a comprehensive treatment,
@@ -1786,6 +1787,7 @@ Among their properties, they have \emph{short diameter} and
 \emph{rapidly mixing walks}.
 
 \begin{proposition}
+  \label{th:diameter}
   Let $G$ be a $k$-regular one sided $ε$-expander. %
   For any vertex $v$ and any radius $r>0$, let $B(v,r)$ be the
   \emph{ball} of vertices at distance at most $r$ from $v$. %
@@ -1809,6 +1811,7 @@ distribution converges exponentially fast in $m$ to the uniform
 distribution.
 
 \begin{proposition}[Mixing theorem]
+  \label{th:mixing}
   Let $G=(V,E)$ be an undirected $k$-regular multigraph, let $A$ be
   its adjacency matrix, and let $σ₂ = \max(|λ_2|, |λ_n|)$.  %
   Then for every distribution $\mathbf{p}$ on $V$ and every $m>0$, we
@@ -1932,8 +1935,8 @@ pictured in Figure~\ref{fig:infinite-tree}. %
       }
     \end{tikzpicture}
   
-    \caption{Infinite $2$-isogeny graph of elliptic curves without
-      complex multiplication.}
+    \caption{Infinite $2$-isogeny graph of elliptic curves over $ℂ$
+      without complex multiplication.}
   \label{fig:infinite-tree}
 \end{figure}
 
@@ -1944,8 +1947,8 @@ $\F_q$. %
 Fortunately, we have a Swiss-army-knife to address this question: the
 \emph{Frobenius endomorphism} $π$. %
 Formally, an isogeny $ϕ$ is $\F_q$-rational if and only if
-$π(\ker ϕ)=\ker ϕ$, which suggests looking at the restriction of $π$ to
-$E[ℓ]$. %
+$π(\ker ϕ)=\ker ϕ$, which suggests looking at the restriction of $π$
+to $E[ℓ]$. %
 Assume $ℓ≠p$, then $E[ℓ]$ is a group of rank $2$ and $π$ acts on it
 like an element of $\GL_2(\F_ℓ)$, up to conjugation. %
 Clearly, the order of $π$ in $\GL_2(\F_ℓ)$ is the degree of the
@@ -1956,7 +1959,8 @@ between $0$ and $2$ eigenvalues, and the corresponding eigenvectors
 define kernels of rational isogenies. %
 We thus are in one of the following four cases\footnote{In the point
   counting literature, Case~(0) is known as the \emph{Atkin case}, and
-  Case~(2) as the \emph{Elkies case}.}:
+  Case~(2) as the \emph{Elkies case}. See
+  Appendix~\ref{sec:appl-point-count}.}:
 \begin{itemize}
 \item[(0)] $π$ is not diagonalizable in $\F_ℓ$, then $E$ has no
   $ℓ$-isogenies.
@@ -1999,7 +2003,7 @@ Write $\O_K$ for the maximal order of $K$, then we know that
 $ℤ[π] ⊂ \O ⊂ \O_K$. %
 We have already seen that two elliptic curves are isogenous if and
 only if they have the same endomorphism algebra $K$; Kohel refined
-this as follows.
+this statement as follows.
 
 \begin{proposition}[{Kohel~\cite[Prop.~21]{kohel}}]
   Let $E,E'$ be elliptic curves defined over a finite field, and let
@@ -2043,7 +2047,7 @@ in Table~\ref{tab:periodic-table}. %
   \end{enumerate}
 \end{theorem}
 \begin{proof}
-  See~\cite[Prop.~21]{kohel}, or~\cite{defeo-hdr}.
+  See~\cite[Prop.~21]{kohel}, or~\cite[Lecture~23]{sutherland-notes}.
 \end{proof}
 
 \begin{table}
@@ -2136,27 +2140,25 @@ them~\cite{fouquet+morain02}; in the Elkies case, we call
 \emph{crater} the cycle at the surface.
 
 We are left with one last question: how large are these graphs? %
-To address this question, we shall introduce the theory of complex
+To address this question, we shall need the theory of complex
 multiplication.
 
 \section{Complex multiplication}
 \label{sec:compl-mult}
 
-We now introduce one of the most powerful tools for the study of
-isogeny graphs. %
+We now introduce a powerful tool for the study of isogeny graphs. %
 Our goal is to characterize elliptic curves with complex
 multiplication; to do so, we start from elliptic curves defined over
 the complex numbers. %
 
-Let $K$ be a quadratic imaginary field. %
-Let $Λ$ be a complex lattice such that $Λ⊂K$, and define its order
-$\O_Λ$ to be
+Let $K$ be a quadratic imaginary field and let $Λ$ be a complex
+lattice such that $Λ⊂K$. %
+Recall that the order $\O_Λ$ of $Λ$ is the ring
 \begin{equation}
   \label{eq:lattice-order}
-  \O_Λ = \{ α ∈ K \;\mid\; αΛ ⊂ Λ \}.
+  \O_Λ = \{ α ∈ K \;\mid\; αΛ ⊂ Λ \},
 \end{equation}
-It is clear that $\O_Λ$ is a ring, and it is easy to show that it is
-an order of $K$, and thus that $Λ$ is a fractional $\O_Λ$-ideal. %
+i.e.\ $Λ$ is a fractional $\O_Λ$-ideal. %
 Using Theorem~\ref{th:weierstrass-p} we associate to $Λ$ a complex
 elliptic curve $E_Λ$; but then, by definition, $\O_Λ≃\End(E_Λ)$. %
 Said otherwise, $E_Λ$ has \emph{complex multiplication} by $\O_Λ$.
@@ -2220,7 +2222,7 @@ complex multiplication by an order $\O$, up to isomorphism; in
 particular, we now know that $j$-invariants with complex
 multiplication (sometimes called \emph{singular $j$-invariants}) are
 algebraic integers. %
-In the next part, we shall say more on how $\Cl(\O)$ acts on the set
+In the next section, we shall say more on how $\Cl(\O)$ acts on the set
 $\Ell(\O)$.
 
 \begin{example}
@@ -2235,7 +2237,8 @@ $\Ell(\O)$.
   But in our case $Λ=ℤ[i]$, thus $iΛ=Λ$, hence
   \[G_{2k}(Λ) = G_{2k}(iΛ) = i^{-2k}G_{2k}(Λ) = (-1)^kG_{2k}(Λ).\] In
   particular $G_6(Λ) = - G_6(Λ) = 0$, hence, by the definition of the
-  modular $j$-invariant, $j(ℤ[i]) = 1728$.
+  modular $j$-invariant (Theorem~\ref{th:modular-j}),
+  $j(ℤ[i]) = 1728$.
 
   This shows that that the Hilbert class polynomial of $ℤ[i]$ is
   $X-1728$, and that the curve $E\;:\;y^2=x^3+x$ is the only curve
@@ -2290,10 +2293,11 @@ non-trivial endomorphisms of $\bar{E}$. %
 \end{proof}
 
 Note that $p>2$ splits in $K$ if and only if the fundamental
-discriminant $Δ_K$ of $K$ is a square modulo $p$. %
-To include the case $p=2$, we may use the Kronecker symbol
-$\left(\frac{Δ_K}{p}\right)$, which is equal to $1$ if and only if $p$
-splits. %
+discriminant $Δ_K$ of $K$ is a square modulo $p$, i.e.\ if the
+Legendre symbol $\left(\frac{Δ_K}{p}\right)$ is equal to $1$. %
+To cover the case $p=2$ with the same notation, we may use Kronecker's
+extension of Legendre's symbol, which is equal to $1$ if and only if
+$p$ splits. %
 
 \begin{example}
   We have seen that the elliptic curve $E/ℚ$ defined by $y^2=x^3+x$
@@ -2306,7 +2310,8 @@ splits. %
   and thus that the automorphism $(x,y)↦(-x,iy)$ does not descend to
   an $\F_p$-automorphism of $E(p)$. %
   It does, however, descend to an $\F_{p^2}$-automorphism, showing
-  that $\End(E(p))$ is not commutative.
+  that $\End(E(p))$ contains is not commutative, but contains a
+  subring isomorphic to $ℤ[i]$.
 \end{example}
 
 Another approach is to directly construct a curve $E/\F_q$ so that its
@@ -2334,23 +2339,29 @@ previous one, as a famous theorem shows.
 \end{proof}
 
 
-\section{The CM action}
+\section{Isogenies and the CM action}
 \label{sec:compl-mult-2}
 
-We have already seen how the theory of complex multiplication gives a
-correspondence between the class group $\Cl(\O)$ and the set of CM
-elliptic curves $\Ell(\O)$. %
-However, the (omitted) proof of Theorem~\ref{th:compl-mult} provides
-much more than a simple bijection of sets: it constructs an
-\emph{action} of the group $\Cl(\O)$ on the set $\Ell(\O)$. %
-We now complete our study of complex multiplication by defining the
-group action, and then constructing \emph{Cayley graphs} associated to
-it.
+From now on we abbreviate ``complex multiplication'' by CM. %
+We saw in Theorem~\ref{th:compl-mult} that the class group $\Cl(\O)$
+acts on the set $\Ell(\O)$ of CM elliptic curves over $ℂ$ with complex
+multiplication by $\O$. %
+After having identified $\Cl(\O)$ with the Galois group of the Hilbert
+class field, this action is just the Galois action, however we are
+still missing an explicit identification. %
 
-We let $\O$ be an order in a number field $K$, and we assume that
-$\Ell_q(\O)$ is non-empty. %
+Additionally, when working with CM curves over a finite field, it
+becomes clumsy (and even computationally infeasible) to go back to $ℂ$
+in order to identify the curves with the generators of the Hilbert
+class field and then act on them by Galois. %
+Instead, we will now give the action of $\Cl(\O)$ on $\Ell(\O)$
+explicitly, without any mention of class field theory. %
+
+From now on we let $\O$ be an order in a number field $K$, we denote
+by $\Ell_q(\O)$ the set of elliptic curves over $\F_q$ with CM by
+$\O$, and we assume that it is non-empty. %
 Because curves in $\Ell_q(\O)$ are connected exclusively by horizontal
-(cyclic) isogenies, we will call it a \emph{horizontal isogeny class}.
+isogenies, we will also call it a \emph{horizontal isogeny class}.
 
 Let $E∈\Ell_q(\O)$, let $\a$ be an invertible ideal in $\O$, of norm
 coprime to $q$, and define the \emph{${\a}$-torsion} subgroup of $E$
@@ -2429,10 +2440,10 @@ also answers our question on the size of $ℓ$-isogeny volcanoes.
 But we can extract even more information from the group action. %
 Assume that the Frobenius endomorphism splits modulo $ℓ$, i.e., that
 \[π^2 - tπ + q = (π - λ)(π - μ) \mod\ell\] %
-for two distinct eigenvalues $λ,μ$. %
+for two distinct eigenvalues $λ,μ$ of the action of $π$ on $E[ℓ]$. %
 Associate to $λ$ and $μ$ the prime ideals $\a=(π-λ,ℓ)$ and
-$\hat{\a}=(π-μ,ℓ)$, both of norm $ℓ$; then $E[\a]$ is the eigenspace
-of $λ$, and $E[\hat{\a}]$ that of $μ$. %
+$\hat{\a}=(π-μ,ℓ)$, both of norm $ℓ$; then $E[\a]⊂E[ℓ]$ is the
+eigenspace of $λ$, and $E[\hat{\a}]⊂E[ℓ]$ that of $μ$. %
 Because $\a\hat{\a} = \hat{\a}\a = (ℓ)$, the ideal classes $\a$ and
 $\hat{\a}$ are the inverse of one another in $\Cl(\O)$, therefore the
 isogenies $ϕ_{\a}:E→\a·E$ and $ϕ_{\hat{\a}}:\a·E→E$ are dual to one
@@ -2506,16 +2517,43 @@ The graph in Figure~\ref{fig:cycle} is isomorphic to a Cayley graph of
 $\Cl(\O)$ for an edge set $S=\{\a,\hat\a\}$, but, unlike the Cayley
 graph itself, its vertex set is $\Ell_q(\O)$, which is in bijection
 with $\Cl(\O)$ only up to automorphism.%
-\footnote{Said otherwise, any vertex could correspond to $1$, and we
-  do not know which.} %
+\footnote{Said otherwise, any vertex could be mapped to the identity
+  of $\Cl(\O)$, and ``we forgot which one it was''.} %
 This graph is sometimes called the \emph{Schreier graph} of
 $(\Cl(\O),S,\Ell_q(\O))$, to distinguish it from the proper Cayley
 graph.
 
-In the sequel, we shall work with a larger edge set $S$, which will
-amount to ``glue many isogeny craters together'', as shown in
-Figure~\ref{fig:cayley}.
+Is this graph, a cycle when seen as an undirected 2-regular graph, an
+expander? %
+By properly arranging vertices, its adjacency matrix is circulant with
+two non-zero entries per row, hence its eigenvalues are
+$\lambda_t = e^{2iπt/n} + e^{-2iπt/n}$ for $t=0,\dots,n-1$ where
+$n=h(\O)$. %
+In particular $λ_0=2$, and $λ_1→2$ as $n→∞$, proving that cycles are
+not expanders; and indeed, it is obvious that this graph has large
+diameter relative to the number of vertices, contradicting
+Proposition~\ref{th:diameter}.
 
+It turns out that we can obtain expanders in this way by ``gluing many
+isogeny craters together'', as represented in Figure~\ref{fig:cayley},
+by taking just a slightly larger set $S⊂\Cl(\O)$. %
+The following theorem is an instance of a classic technique to
+construct expanders from Cayley graphs
+(see~\cite[Chap.~16]{trevisan-graphs}).
+
+\begin{theorem}[{Jao, Miller, Venkatesan~\cite{jao+miller+venkatesan09}}]
+  \label{th:ord-exp}
+  Let $\O$ be a quadratic imaginary order, and assume that
+  $\Ell_q(\O)$ is non-empty. %
+  Let $δ>0$, and define the graph $G$ on $\Ell_q(\O)$ where two
+  vertices are connected whenever there is a horizontal isogeny
+  between them of prime degree bounded by $O((\log q)^{2+δ})$.
+
+  Then $G$ is a regular graph and, under the generalized Riemann
+  hypothesis for the characters of $\Cl(\O)$, there exists an $ε$
+  independent of $\O$ and $q$ such that $G$ is a two-sided
+  $ε$-expander.
+\end{theorem}
 
 
 \section*{Exercises}
@@ -3429,23 +3467,6 @@ TODO: REGA, signatures
 
 \section{Expander graphs from isogenies}
 
-We just introduced Cayley graphs constructed from isogeny craters in
-Section~\ref{sec:compl-mult-2}, and, unsurprisingly, they turn out to
-be expanders, provided we add enough edges to them.
-
-\begin{theorem}[{Jao, Miller, Venkatesan~\cite{jao+miller+venkatesan09}}]
-  \label{th:ord-exp}
-  Let $\O$ be a quadratic imaginary order, and assume that
-  $\Ell_q(\O)$ is non-empty. %
-  Let $δ>0$, and define the graph $G$ on $\Ell_q(\O)$ where two
-  vertices are connected whenever there is a horizontal isogeny
-  between them of prime degree bounded by $O((\log q)^{2+δ})$.
-
-  Then $G$ is a regular graph and, under the generalized Riemann
-  hypothesis for the characters of $\Cl(\O)$, there exists an $ε$
-  independent of $\O$ and $q$ such that $G$ is a two-sided
-  $ε$-expander.
-\end{theorem}
 
 The theorem is readily generalized to supersingular
 curves and isogenies defined over $\F_p$. %
