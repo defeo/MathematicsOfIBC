@@ -1563,42 +1563,189 @@ whenever their corresponding curves are.%
   corresponding curves are.}
 
 
-\section{Graphs}
+\section{Isogeny graphs}
+\label{sec:isogeny-graphs}
 
-We recall some basic concepts of graph theory. %
-A directed multi-graph $G$ is a pair $(V,E)$ where $V$ is a finite set
-of \emph{vertices} and $E∈ℕ^{V×V}$ is a multi-set of ordered pairs
-called \emph{edges}. %
+We recall some basic concepts about graphs and their spectra. %
+For a comprehensive treatment,
+see~\cite{trevisan-graphs,tao2011expander,Goldreich2011}.
+
+\begin{definition}[Multigraph]
+  A \emph{directed multigraph} (or \emph{multidigraph} or \emph{quiver})
+  $G$ is a pair $(V,E)$ where $V$ is a set of \emph{vertices} and
+  $E∈ℕ^{V×V}$ is a multiset of ordered pairs called \emph{edges}.   
+\end{definition}
+
 When $E$ is a simple set, i.e.\ $E∈\{0,1\}^{V×V}$, we recover the
-usual definition of a graph. %
-Given any edge $(v,v')∈E$, we say that $v'$ is \emph{connected} to
-$v$. %
+usual definition of a directed graph. %
+
 The \emph{neighbors} of a vertex $v$ are the vertices of $V$ connected
 to it by an edge. %
-A \emph{path} between two vertices $v,v'$ is a sequence of vertices
-$v\to v_1\to\cdots\to v'$ such that any two consecutive vertices are
-neighbors. %
+A \emph{path} from a vertex $v$ to another vertex $v'$ is a sequence
+of vertices $v\to v_1\to\cdots\to v'$ such that any two consecutive
+vertices are neighbors. %
+The \emph{distance} from $v$ to $v'$ is the length of the shortest
+path between them; if there is no such path, $v'$ is said to be at
+infinite distance from $v$. %
 The \emph{degree} of a vertex is the number of edges departing from
-it; a graph where every edge has degree $k$ is called
+it; a multigraph where every edge has degree $k$ is called
 \emph{$k$-regular}. %
-The \emph{adjacency matrix} of a graph $G=(V,E)$ is the $|V|×|V|$
-matrix with columns and rows indexed by the vertices,  where the
-$(i,j)$-th entry is the multiplicity of the edge $(v,v')$.
+The \emph{adjacency matrix} of a finite multigraph $G=(V,E)$ is the
+$|V|×|V|$ matrix with columns and rows indexed by the vertices, where
+the $(i,j)$-th entry is the multiplicity of the edge $(v,v')$.
 
-We will call a multi-graph \emph{undirected} if whenever $(v,v')∈E$,
-then $(v',v)∈E$ too; note that we do not ask the multiplicities of
-$(v,v')$ and $(v',v)$ to be the same. %
-The \emph{distance} between two vertices in an undirected multi-graph
-is the length of the shortest path between them; if there is no such
-path, the vertices are said to be at infinite distance. %
-An undirected multi-graph is called \emph{connected} if any two
+\begin{definition}[Undirected multigraph]
+  A multigraph $(V,E)$ is \emph{undirected} if $E(v,v') = E(v',v)$ for
+  any $v,v'∈V$, i.e.\ if there are as many edges from $v$ to $v'$ as
+  there are from $v'$ to $v$.
+\end{definition}
+
+A weakly undirected multigraph is called \emph{connected} if any two
 vertices have a path connecting them; it is called \emph{disconnected}
 otherwise. %
-The \emph{diameter} of a connected multi-graph is the largest of all
+A \emph{connected component} of an undirected multigraph is a maximal
+subgraph (i.e.\ a subset $V'⊂V$ together with the restriction of $E$
+to $V'$) that is connected. %
+The \emph{diameter} of a connected multigraph is the largest of all
 distances between its vertices. %
 
+\begin{definition}[Spectrum]
+  The \emph{spectrum} of a finite multigraph is the multiset of the
+  eigenvalues of its adjacency matrix.
+\end{definition}
+
+When the multigraph is undirected, the adjacency matrix is symmetric,
+thus its spectrum is real. %
+Let $(V,E)$ be $k$-regular and undirected, and let $V'⊂V$ be the set
+of vertices of a connected component. %
+It is easy to see that the vector having $1$'s for the entries
+corresponding to $V'$ and $0$'s elsewhere is an eigenvector with
+eigenvalue $k$. %
+We can in fact prove a stronger statement.
+
+\begin{theorem}
+  Let $G$ be a $k$-regular undirected multigraph and let
+  $λ_1 ≥ λ_2 ≥ \cdots ≥ λ_n$ be its spectrum. %
+  Then $|λ_i| ≤ k$, and the multiplicity of the eigenvalue $k$ equals
+  the number of connected components of $G$.
+\end{theorem}
+\begin{proof}
+  See~\cite[Chap.~3]{trevisan-graphs}.
+\end{proof}
+
+\emph{Expansion} is a way to express how ``well connected'' the nodes
+of a graph are. %
+There are several related definitions of it. %
+We start with the spectral definition, which is simpler to state and
+often easier to prove, but whose implications are less obvious. %
+From now on, whenever we have a multigraph, we denote by
+$λ_1 ≥ λ_2 ≥ \cdots ≥ λ_n$ its spectrum.
+
+\begin{definition}[Expander graph]
+  Let $ε>0$ and $k≥1$. %
+  A $k$-regular undirected multigraph is called a (one-sided)
+  \emph{$ε$-expander} if
+  \[λ_2≤(1-ε)k;\]
+  and a \emph{two-sided $ε$-expander} if it also satisfies
+  \[λ_n≥-(1-ε)k.\] %
+  A sequence $G_i=(V_i,E_i)$ of multigraphs with $\#V_i→∞$ is said to
+  be a one-sided (resp.\ two-sided) \emph{expander family} if there is
+  an $ε>0$ such that $G_i$ is a one-sided (resp.\ two-sided)
+  $ε$-expander for all sufficiently large $i$.
+\end{definition}
+
+Ramanujan proved a bound on how large $ε$ can be in an expander
+family. %
+
+\begin{theorem}[Ramanujan graph]
+  Let $k≥1$, and let $G_i$ be a sequence of $k$-regular undirected
+  multigraphs on $n$ vertices. %
+  Then
+  \[\max(|λ_2|,|λ_n|) ≥ 2\sqrt{k-1} - o(1),\]
+  as $n→∞$. %
+  A multigraph such that $|λ_j|≤2\sqrt{k-1}$ for any $λ_j$ except
+  $λ_1$ is called a \emph{Ramanujan multigraph}.
+\end{theorem}
+
+Another way to characterize expansion is \emph{edge expansion}, which
+quantifies how well subsets of vertices are connected to the whole
+graph, or, said otherwise, how far the graph is from being
+disconnected.
+
+\begin{definition}[Edge expansion]
+  Let $F⊂V$ be a subset of the vertices of $G$. %
+  The \emph{boundary of $F$}, denoted by $∂F⊂E$, is the subset of the
+  edges of $G$ that go from $F$ to $V\setminus F$. %
+  The \emph{edge expansion ratio} of $G$, denoted by $h(G)$ is the
+  quantity
+  \[h(G) = \min_{\substack{F⊂V,\\ \#F≤\#V/2}}\frac{\#∂F}{\#F}.\]
+\end{definition}
+
+Note that $h(G)=0$ if and only if $G$ is disconnected. %
+Edge expansion is strongly tied to spectral expansion, as the
+following theorem shows.
+
+\begin{theorem}[Discrete Cheeger inequality]
+  Let $G$ be a $k$-regular one-sided $ε$-expander, then
+  \[\frac{ε}{2}k≤h(G)≤\sqrt{2ε}k.\]
+\end{theorem}
+
+Expander families of multigraphs have many applications in theoretical
+computer science, thanks to their \emph{pseudo-randomness} properties:
+they are useful to construct \emph{pseudo-random number generators},
+\emph{error-correcting codes}, \emph{probabilistic checkable proofs},
+and, as we shall see, \emph{cryptographic protocols}. %
+Among their properties, they have \emph{short diameter} and
+\emph{rapidly mixing walks}.
+
+\begin{proposition}
+  Let $G$ be a $k$-regular one sided $ε$-expander. %
+  For any vertex $v$ and any radius $r>0$, let $B(v,r)$ be the
+  \emph{ball} of vertices at distance at most $r$ from $v$. %
+  Then, there is a constant $c>0$, depending only on $k$ and $ε$, such
+  that
+  \[\#B(v,r)≥\min((1+c)^r,\#V).\]
+\end{proposition}
+
+In particular, this shows that the diameter of an expander is bounded
+by $O(\log n)$, where the constant depends only on $k$ and $ε$. %
+
+A \emph{random walk} of length $m$ is a path $v_1\to\cdots\to v_m$,
+defined by the random process that selects $v_i$ uniformly at random
+among the neighbors of $v_{i-1}$. %
+If we start from some probability distribution $\mathbf{p}$ on $V$ and
+walk randomly for $m$ steps, the final vertex of the walk will be
+distributed like $(A/k)^m\mathbf{p}$, where $A$ is the adjacency matrix of
+the graph. %
+The following theorem tells us that, for two-sided expanders, this
+distribution converges exponentially fast in $m$ to the uniform
+distribution.
+
+\begin{proposition}[Mixing theorem]
+  Let $G=(V,E)$ be an undirected $k$-regular multigraph, let $A$ be
+  its adjacency matrix, and let $σ₂ = \max(|λ_2|, |λ_n|)$.  %
+  Then for every distribution $\mathbf{p}$ on $V$ and every $m>0$, we
+  have
+  \begin{equation*}
+    \| \mathbf{u} - (A/k)^m \mathbf{p} \|_1 ≤ \sqrt{n} \left(\frac{σ_2}{k}\right)^m,
+  \end{equation*}
+  where $\mathbf{u}$ denotes the uniform distribution on $V$.
+\end{proposition}
+\begin{proof}
+  See~\cite[Chap.~21]{trevisan-graphs}.
+\end{proof}
+
+Random regular graphs typically make good expanders, but only a
+handful of deterministic constructions is known, most of them based on
+Cayley
+graphs~\cite{LubPS,chung1989diameters,Goldreich2011,trevisan-graphs}. %
+In this part we will encounter a construction based on isogenies which
+is essentially a Cayley graph. %
+In Part~\ref{part:ssingular} we will introduce a different
+construction which achieves Ramanujan's bound.
+
 \begin{definition}[Isogeny graph]
-  An \emph{isogeny graph} is a multi-graph whose vertices are
+  An \emph{isogeny graph} is a multigraph whose vertices are
   isomorphism classes of isogenous curves, and whose edges are
   isogenies between them.
 \end{definition}
@@ -1635,11 +1782,21 @@ distances between its vertices. %
   \label{fig:volcano}
 \end{figure}
 
-The dual isogeny theorem guarantees that for every isogeny $E\to E'$
-there is a corresponding isogeny $E'\to E$ of the same degree. %
-For this reason, isogeny graphs are usually undirected. %
+Whenever we include an isogeny in an isogeny graph we will always
+include its dual too, thus we will usually draw the (multi)graphs as
+undirected. %
 Figure~\ref{fig:volcano} shows a typical example of isogeny graph over
-a finite field, where we restrict to isogenies of degree $3$.
+a finite field, where we restrict to isogenies of degree $3$. %
+
+Note, however that there is an asymmetry in this definition: because
+we take isogenies up to composition with isomorphisms on the right,
+several distinct isogenies may have the same dual.%
+\footnote{This can only happen when the automorphism groups of two
+  connected vertices have different sizes, and can thus only happen at
+  a finite number of vertices.} %
+This means that isogeny graphs are not undirected in the sense
+previously defined, however they will behave as such for most
+practical purposes. %
 
 
 \section{Isogeny volcanoes}
@@ -3183,125 +3340,8 @@ TODO: REGA, signatures
 \part{The full supersingular isogeny graph}
 \label{part:ssingular}
 
-\section{Spectral properties of graphs}
-\label{sec:spectr-prop-graphs}
-
-TODO
-
 \section{Expander graphs from isogenies}
 
-We are finally introducing two families of isogeny graphs suitable
-for cryptographic use. %
-We will want them to somehow ``behave like large random graphs'',
-while at the same time having a strong algebraic structure: the first
-is needed for security, the second to produce complex protocols such
-as key exchange. %
-
-Because our graphs are undirected, the adjacency matrix is symmetric,
-thus it has $n$ real eigenvalues
-\[λ_1≥\cdots≥λ_n.\] %
-
-The random-like properties of isogeny graphs are typically expressed
-in terms of \emph{expansion}. %
-An undirected graph on $n$ vertices has $n$ real eigenvalues
-$λ_1≥\cdots≥λ_n$, and, if the graph is $k$-regular, it can be proven
-that $k=λ_1≥λ_n≥-k$. %
-Because of this equality, $λ_1$ is called the \emph{trivial
-  eigenvalue}. %
-An \emph{expander graph} is a $k$-regular graph such that its
-non-trivial eigenvalues are bounded away, in absolute value, from
-$k$. %
-We recall here some basic facts about expanders; for an in depth
-review, see~\cite{Goldreich2011,tao2011expander}.
-
-\begin{definition}[Expander graph]
-  Let $ε>0$ and $k≥1$. A $k$-regular graph is called a (one-sided)
-  \emph{$ε$-expander} if
-  \[λ_2≤(1-ε)k;\]
-  and a \emph{two-sided $ε$-expander} if it also satisfies
-  \[λ_n≥-(1-ε)k.\] %
-  A sequence $G_i=(V_i,E_i)$ of $k$-regular graphs with $\#V_i→∞$ is
-  said to be a one-sided (resp. two-sided) \emph{expander family} if
-  there is an $ε>0$ such that $G_i$ is a one-sided (resp. two-sided)
-  $ε$-expander for all sufficiently large $i$.
-\end{definition}
-
-\begin{theorem}[Ramanujan graph]
-  Let $k≥1$, and let $G_i$ be a sequence of $k$-regular graphs. %
-  Then
-  \[\max(|λ_2|,|λ_n|) ≥ 2\sqrt{k-1} - o(1),\]
-  as $n→∞$. %
-  A graph such that $|λ_j|≤2\sqrt{k-1}$ for any $λ_j$ except $λ_1$ is
-  called a \emph{Ramanujan graph}.
-\end{theorem}
-
-The \emph{spectral} definition of expansion is very practical to work
-with, but gives very little intuition on the topological properties of
-the graph. %
-\emph{Edge expansion} quantifies how well subsets of vertices are
-connected to the whole graph, or, said otherwise, how far the graph is
-from being disconnected.
-
-\begin{definition}[Edge expansion]
-  Let $F⊂V$ be a subset of the vertices of $G$. %
-  The \emph{boundary of $F$}, denoted by $∂F⊂E$, is the subset of the
-  edges of $G$ that go from $F$ to $V\setminus F$. %
-  The \emph{edge expansion ratio} of $G$, denoted by $h(G)$ is the
-  quantity
-  \[h(G) = \min_{\substack{F⊂V,\\ \#F≤\#V/2}}\frac{\#∂F}{\#F}.\]
-\end{definition}
-
-Note that $h(G)=0$ if and only if $G$ is disconnected. %
-Edge expansion is strongly tied to spectral expansion, as the
-following theorem shows.
-
-\begin{theorem}[Discrete Cheeger inequality]
-  Let $G$ be a $k$-regular one-sided $ε$-expander, then
-  \[\frac{ε}{2}k≤h(G)≤\sqrt{2ε}k.\]
-\end{theorem}
-
-Expander families of graphs have many applications in theoretical
-computer science, thanks to their \emph{pseudo-randomness} properties:
-they are useful to construct \emph{pseudo-random number generators},
-\emph{error-correcting codes}, \emph{probabilistic checkable proofs},
-and, most interesting to us, \emph{cryptographic primitives}. %
-Qualitatively, we can describe them as having \emph{short diameter}
-and \emph{rapidly mixing walks}.
-
-\begin{proposition}
-  Let $G$ be a $k$-regular one sided $ε$-expander. %
-  For any vertex $v$ and any radius $r>0$, let $B(v,r)$ be the
-  \emph{ball} of vertices at distance at most $r$ from $v$. %
-  Then, there is a constant $c>0$, depending only on $k$ and $ε$, such
-  that
-  \[\#B(v,r)≥\min((1+c)^r,\#V).\]
-\end{proposition}
-
-In particular, this shows that the diameter of an expander is bounded
-by $O(\log n)$, where the constant depends only on $k$ and $ε$. %
-A \emph{random walk} of length $i$ is a path $v_1\to\cdots\to v_i$,
-defined by the random process that selects $v_i$ uniformly at random
-among the neighbors of $v_{i-1}$. %
-Loosely speaking, the next proposition says that, in an expander
-graph, random walks of length close to its diameter terminate on any
-vertex with probability close to uniform. %
-
-\begin{proposition}[Mixing theorem~(\cite{jao+miller+venkatesan09})]
-  Let $G=(V,E)$ be a $k$-regular two-sided $ε$-expander. %
-  Let $F⊂V$ be any subset of the vertices of $G$, and let $v$ be any
-  vertex in $V$. %
-  Then a random walk of length at least
-  \[\frac{\log(\#F^{1/2}/(2\#V))}{\log(1-ε)}\] %
-  starting from $v$ will land in $F$ with probability at least
-  $\#F/(2\#V)$.
-\end{proposition}
-
-The walk length in the mixing theorem is also called the \emph{mixing
-  length} of the expander graph. %
-
-Random regular graphs typically make good expanders, but only a
-handful of deterministic constructions is known, most of them based on
-Cayley graphs~\cite{LubPS,chung1989diameters,Goldreich2011}. %
 We just introduced Cayley graphs constructed from isogeny craters in
 Section~\ref{sec:compl-mult-2}, and, unsurprisingly, they turn out to
 be expanders, provided we add enough edges to them.
@@ -3514,7 +3554,7 @@ TODO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \addcontentsline{toc}{part}{References}
-\bibliographystyle{plain}
+\bibliographystyle{plainurl}
 \bibliography{refs,isogenies_bib/isogenies,cryptobib/abbrev3,cryptobib/crypto}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
