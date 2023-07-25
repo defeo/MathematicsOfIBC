@@ -63,16 +63,19 @@
 \newtheorem{problem}{Problem}
 \newtheorem{exercise}{Exercise}[part]
 
-\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Aut}{Aut} % automorphism group
 \DeclareMathOperator{\End}{End} % endomorphism ring
-\DeclareMathOperator{\Hom}{Hom} % endomorphism ring
+\DeclareMathOperator{\Hom}{Hom} % homset
 \DeclareMathOperator{\Tr}{Tr} % finite field trace
 \DeclareMathOperator{\Gal}{Gal} % Galois group
 \DeclareMathOperator{\ord}{ord} % order of an element
 \DeclareMathOperator{\lcm}{lcm} % least common multiple
 \DeclareMathOperator{\norm}{N} % norm
+\DeclareMathOperator{\nrd}{nrd} % reduced norm
+\DeclareMathOperator{\discrd}{discrd} % reduced discriminant
 \DeclareMathOperator{\loglog}{loglog}
-\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\im}{Im} % imaginary part
+\DeclareMathOperator{\re}{Re} % real part
 \DeclareMathOperator{\GL}{GL}
 \DeclareMathOperator{\SL}{SL}
 \DeclareMathOperator{\Cl}{Cl}
@@ -81,6 +84,8 @@
 \def\A{\ensuremath{\mathbb{A}}}
 \def\P{\ensuremath{\mathbb{P}}}
 \def\F{\ensuremath{\mathbb{F}}}
+\def\Q{\ensuremath{\mathbb{Q}}}
+\def\Z{\ensuremath{\mathbb{Z}}}
 \def\O{\ensuremath{\mathcal{O}}}
 \def\tildO{\ensuremath{\tilde{O}}}
 \def\euler{\ensuremath{\varphi}}
@@ -1308,26 +1313,6 @@ For example, $ℤ[i]$ is the ring of integers of $ℚ(i)$; more generally,
 if $Δ$ is a fundamental discriminant, the ring of integers of
 $ℚ(\sqrt{Δ})$ is $ℤ[δ]$, where $δ=(Δ+\sqrt{Δ})/2$. %
 
-
-\paragraph{Quaternion algebras} %
-are a 4-dimensional generalization of quadratic number fields: like in
-number fields, any element satisfies a quadratic equation; unlike
-them, they are not fields.
-
-\begin{definition}[Quaternion algebra]
-  A \emph{quaternion algebra} is an algebra of the form
-  \[K = ℚ + αℚ + βℚ + αβℚ,\]
-  where the generators satisfy the relations
-  \[α^2,β^2∈ℚ, \quad α^2<0, \quad β^2 < 0, \quad βα=-αβ.\]
-\end{definition}
-
-
-TODO: ramification, division algebra...
-
-\paragraph{Lattices and ideals} TODO: index
-
-\paragraph{Orders} TODO
-
 \begin{definition}[Order]
   \label{def:order}
   Let $K$ be a finitely generated $ℚ$-algebra. %
@@ -1398,6 +1383,108 @@ $\O_Λ$ to be
 \end{equation}
 It is clear that $\O_Λ$ is a ring, and it is easy to show that it is
 an order of $K$, and thus that $Λ$ is a fractional $\O_Λ$-ideal. %
+
+\paragraph{Quaternion algebras} %
+are a 4-dimensional generalization of quadratic number fields: like in
+number fields, any element satisfies a quadratic equation; unlike
+them, they are not fields. The theory about quaternion algebras is very rich,
+and they have deep connections to many objects in number theory, such as
+quadratic forms, modular forms, and elliptic curves~\cite{Lam,Voight2018}
+
+\begin{definition}[Quaternion algebra]
+  A \emph{quaternion algebra over $\Q$} is an algebra of the form
+  \[K = ℚ + iℚ + jℚ + kℚ,\]
+  where the generators satisfy the relations
+  \[0\neq i^2\in\Q, \quad 0\neq j^2∈ℚ, \quad k=ij=-ji.\]
+  If $i^2 = a$ and $j^2 = b$, we denote such an algebra by
+  $\left(\frac{a,b}{\Q}\right)$.
+\end{definition}
+
+An arbitrary element of a quaternion algebra can be written as
+$\alpha = t + xi  + yj + zk$, where $t,x,y,z\in\Q$.
+The \emph{real part}  of such an element is $\re(\alpha) = t$,
+the \emph{imaginary part} is $\im(\alpha) = xi + yj + zk$.
+The \emph{conjugate} $\overline{\alpha}$ is obtained
+by flipping the sign of the imaginary part;
+$\overline{\alpha} = t - xi - yj - zk$.
+The (reduced) \emph{norm} and \emph{trace} are defined as
+\begin{equation*}
+N(\alpha) := \alpha\overline{\alpha} = t^2 - ax^2 - by^2 +abz^2, \qquad
+\Tr(\alpha) := \alpha + \overline{\alpha} = 2t
+\end{equation*}
+respectively.\footnote{Although the adjective \emph{reduced} is technically
+necessary from a purely mathematical point of view, the terms
+\emph{reduced norm} and \emph{norm}, and similarly for the trace,
+are often used interchangably in the context of quaternions.}
+This motivates the following definition.
+
+\begin{definition}
+The \emph{norm form} associated to the quaternion algebra $\left(\frac{a,b}{\Q}\right)$ is $t^2 - ax^2 - by^2 + abz^2$. 
+\end{definition}
+
+Let $p$ be a prime number and let $K$ be a quaternion algebra over $\Q$.
+We say that $K$ is \emph{split} at $p$ if $K\otimes\Q_p\cong M_2(\Q_p)$.
+This is equivalent to the norm form having a nontrivial zero over $\Q_p$.
+Otherwise, we say that the quaternion algebra is \emph{ramified} at $p$.
+
+We say $K$ is \emph{ramified} at $\infty$
+if the norm form has no non-trivial zero over $\mathbb{R}$.
+This is equivalent to $a,b$ being both negative.
+
+The \emph{reduced discriminant} of a quaternion algebra
+is the product of the primes at which it ramifies.
+For every prime number $p$, there is, up to isomorphism,
+a unique quaternion algebra with discriminant $p$, which we denote
+$B_{p,\infty}$. It ramifies exactly at $p$ and $\infty$.
+
+\begin{proposition}
+Let $p$ be a prime number, then we can choose the following representations
+for the quaternion algebra $B_{p,\infty}$.
+\begin{enumerate}
+\item $B_{p,\infty} \cong \left(\frac{-1,-1}{\Q}\right)$
+if $p=2$;
+\item $B_{p,\infty} \cong \left(\frac{-1,-p}{\Q}\right)$
+if $p\equiv 3\pmod{4}$;
+\item $B_{p,\infty} \cong \left(\frac{-1,-p}{\Q}\right)$
+if $p\equiv 5\pmod{8}$;
+\item $B_{p,\infty} \cong \left(\frac{-r,-p}{\Q}\right)$
+if $p\equiv 1\pmod{8}$, where $r\equiv 3\pmod{4}$ is a prime number
+that is not a square modulo $p$.
+\end{enumerate}
+\end{proposition}
+
+From now onward, our main quaternion algebra of concern will be $B_{p,\infty}$;
+it turns out to be the most interesting one in the context of elliptic curves,
+because it contains all endomorphism rings of supersingular elliptic curves
+over fields of characteristic $p$. However, many of the definitions and results
+that follow are equally valid for arbitrary quaternion algebras.
+
+\paragraph{Fractional ideals} in $B_{p,\infty}$ are $\Z$-lattices
+$I\subset B_{p,\infty}$ of rank $4$.
+The (reduced) \emph{norm} of an ideal is defined as the
+$\gcd$ of the (reduced) norms of its elements;
+$N(I) = \nrd(I) := \gcd\{N(\alpha)\mid\alpha\in I\}$.
+If $I\subset J$ are two fractional ideals, then the index $[J:I]$ as
+an abelian group equals $\left(N(I)/N(J)\right)^2$.
+If $\alpha_1,\alpha_2,\alpha_3,\alpha_4$ is a $\Z$-basis for $I$, then
+we define the \emph{reduced discriminant} of $I$ as $\discrd(I) :=
+|\det(\Tr(\alpha_i\overline{\alpha_j}))_{1\leq i,j\leq 4}|^{1/2}$;
+it is independent of the chosen basis.
+
+\paragraph{Orders} in $B_{p,\infty}$ are fractional ideals that are also
+subrings. We say an order $\O\subset B_{p,\infty}$ is \emph{maximal} if
+it is not strictly contained in any other order. An order is maximal
+if and only if its reduced discriminant is $p$.
+Given a fractional ideal $I\subset B_{p,\infty}$,
+we denote by $\O_L(I):=\{\alpha\in B_{p,\infty}\mid \alpha I\subset I\}$
+its \emph{left order},
+and by $\O_R(I):=\{\alpha\in B_{p,\infty}\mid I\alpha\subset I\}$
+its \emph{right order}.
+We say that $I$ is a fractional left (respectively right) $\O$-ideal if
+$\O\subset\O_L(I)$ (respectively $\O\subset\O_R(I)$).
+A (left or right) $\O$-ideal $I$ is called \emph{integral} if $I\subset\O$.
+
+
 
 \paragraph{The endomorphism ring.}
 We finally have all the necessary language to classify endomorphism
