@@ -80,6 +80,7 @@
 \DeclareMathOperator{\SL}{SL}
 \DeclareMathOperator{\Cl}{Cl}
 \DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\Pic}{Pic} %Picard group
 
 \def\A{\ensuremath{\mathbb{A}}}
 \def\P{\ensuremath{\mathbb{P}}}
@@ -3706,14 +3707,13 @@ As a consequence of Proposition \ref{prop:idealclasscurve},
 we have the following ``coarser'' version of Theorem \ref{thm:deuring1},
 which is what most people refer to as the Deuring Correspondence.
 
-\begin{theorem}[Deuring correspondence II] Let $E/\F_q$ be a supersingular
-elliptic curve with endomorphisms ring $\End(E)\cong\O\subset B_{p,\infty}$.
+\begin{theorem}[Deuring correspondence II]
 The bijection in Theorem \ref{thm:deuring1} induces a one-to-one
 correspondence
     \begin{equation*}
         \left\{
             \begin{tabular}{@{} c @{}}
-                \emph{supersingular elliptic curves over $\F_q$}\\
+                \emph{supersingular elliptic curves over $\F_{p^2}$}\\
                 \emph{up to isomorphism}
             \end{tabular}
         \right\}
@@ -3735,7 +3735,7 @@ Thanks to the Eichler mass formula, which counts the size of the
 left ideal class set, we obtain the exact size of the
 isogeny class. %
 
-\begin{corollary}
+\begin{corollary}\label{cor:eichlermass}
   The number of isomorphism classes of supersingular elliptic curves
   is equal to
   \begin{equation*}
@@ -3760,17 +3760,16 @@ isogeny class. %
     Given an isogeny $\varphi:E_1\to E_2$, the pullback map
     $\Hom(E_2,E_1)\to\End(E_1), \psi\mapsto \psi\circ\varphi$
     is an injective morphism of left $\End(E_1)$-modules.
-    In particular, it is an isomorphism onto the image $I(E[\varphi])$.
+    In particular, it is an isomorphism onto the image $I(E_1[\varphi])$.
 \end{lemma}
 
 \begin{theorem}[Deuring correspondence III] 
-    Let $E/\F_q$ be a supersingular elliptic curve.
     The contravariant functor $\Hom(-,E)$
     defines an equivalence of categories
     \begin{equation*}
         \left\{
             \begin{tabular}{@{} c @{}}
-                \emph{supersingular elliptic curves over $\F_q$}, \\
+                \emph{supersingular elliptic curves over $\F_{p^2}$}, \\
                 \emph{with isogenies}
             \end{tabular}
         \right\}
@@ -3787,6 +3786,70 @@ isogeny class. %
     \end{equation*}
 \end{theorem}
 
+Using the Deuring correspondence, we were able to count the
+number of isomorphism classes of supersingular elliptic curves.
+Each such supersingular elliptic curve has an endomorphism ring
+isomorphic to some maximal order in $B_{p,\infty}$.
+One may wonder how many of these maximal orders, up to isomorphism,
+there really are. In other words,
+what is the number of isomorphism classes of \emph{endomorphism rings}
+of supersingular elliptic curves?
+We say two maximal orders $\O,\O'\subset B_{p,\infty}$
+are \emph{conjugate} if there exists a $\beta\in B_{p,\infty}$ such
+that $\O = \beta\O\beta^{-1}$. This is equivalent to $\O$ and $\O'$
+being isomorphic as rings.
+If $I$ is an integral left $\O$-ideal, then by the Deuring
+correspondence we obtain an isogeny $\varphi_I : E\to E'$
+with kernel $E[I]$.
+One can then show that $\O_L(I)=\O\cong\End(E)$
+and $\O_R(I)=\O'\cong\End(E')$.
+Such an ideal $I$ is called a \emph{connecting ideal}
+for the orders $\O$ and $\O'$. 
+Note that, since $\O_R(I\beta)=\beta^{-1}\O'\beta$ for every
+$\beta\in B_{p,\infty}$, ideals equivalent to $I$ indeed
+have conjugate (hence isomorphic) right orders.
+Now suppose that $\O$ and $\O'$ are isomorphic. By taking a different
+representative for the same fractional ideal class,
+we then may assume that $I$ is such that $\O=\O'$.
+In other words, $I$ is a \emph{two-sided}
+$\O$-ideal. Just like in the imaginary quadratic case, the
+two-sided fractional ideals form a group, and by considering them up to
+equivalence, we obtain the \emph{(two-sided) ideal class group}
+$\Pic(\O)$ of $\O$.
+We have the following result about its structure.
+\begin{theorem}
+There is a unique two-sided fractional $\O$-ideal of norm $p$.
+It generates the two-sided ideal class group $\Pic(\O)$ of $\O$.
+Moreover, as an element of this group it has order at most $2$.
+\end{theorem}
+Under the Deuring correspondence, this special two-sided fractional
+$\O$-ideal corresponds to the Frobenius $E\to E^{(p)}$.
+In particular, the group $\Pic(\O)$ is trivial if and only if $E$ is
+defined over $\F_p$, and it is isomorphic to $\Z/2\Z$ if and only if
+$E$ is not defined over $\F_p$ (recall that $E$, being supersingular,
+is automatically defined over $\F_{p^2}$).
+We can summarize as follows:
+\begin{theorem}
+There is a one-to-one correspondence:
+    \begin{equation*}
+        \left\{
+            \begin{tabular}{@{} c @{}}
+                \emph{supersingular $j$-invariants}, \\
+                \emph{up to the action of Frobenius}
+            \end{tabular}
+        \right\}
+        \begin{gathered}
+            \overset{}{\xrightarrow{\hspace*{2cm}}} \\[-2ex]
+            \underset{}{\xleftarrow{\hspace*{2cm}}}
+        \end{gathered}
+        \left\{
+            \begin{tabular}{@{} c @{}}
+                \emph{maximal orders $\O\subset B_{p,\infty}$}, \\
+                \emph{up to conjugacy}
+            \end{tabular}
+        \right\}
+    \end{equation*}
+\end{theorem}
 
 
 \section{Signatures based on the Deuring correspondence}
