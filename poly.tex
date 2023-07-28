@@ -1345,8 +1345,27 @@ $ℚ(\sqrt{Δ})$ is $ℤ[δ]$, where $δ=(Δ+\sqrt{Δ})/2$. %
 
 It is clear that $I$ is an $\O_I$-module, and when it is integral we
 recover the usual definition of an ideal of $\O_I$. %
-In this case, we will omit qualifiers and simply call $I$ an
+In this case, we will omit ``fractional'' and simply call $I$ an
 \emph{ideal} of $\O_I$. %
+Clearly $I$ is also an $\O$-module for any $\O⊂\O_I$, and we thus say
+it is a (fractional) $\O$-ideal. %
+
+We now generalize the concept of norm to an ideal. %
+We need a technical definition first.
+
+\begin{definition}[$\gcd$ of rational numbers]
+  For two rational numbers $a=m/n,b=r/s$, written such that
+  $\gcd(m,n)=1=\gcd(r,s)$, we define their greatest common divisor as
+  $\gcd(a,b) := \gcd(m,r)/\lcm(n,s)$.  By extension, we can also
+  define the $\gcd$ of an arbitrary subset of $\Q$, as long as the
+  least common multiple of the denominators of its elements is finite.
+\end{definition}
+
+\begin{proposition}[Ideal norm]
+  Let $I$ be a fractional ideal. %
+  Its \emph{norm} $N(I)$ is the gcd of the norms of its elements. %
+  An ideal is integral if and only if its norm is an integer.
+\end{proposition}
 
 By these definitions, the ring of integers $\O_K$ is an order of $K$:
 indeed it has $(1,δ)$ as a \emph{basis}, i.e., as a set of $ℤ$-module
@@ -1356,13 +1375,14 @@ any other order of $K$. %
 A more precise statement is the following.
 
 \begin{proposition}
-  Let $K$ be a quadratic number field, and let $\O_K$ be its ring of
-  integers. %
-  Any order $\O⊂K$ can be written as $\O=ℤ+f\O_K$ for an integer $f$,
-  called the \emph{conductor} of $\O$. %
-  If $Δ_K$ is the discriminant of $K$, the \emph{discriminant} of $\O$
-  is $f^2Δ_K$.
-
+  Let $K$ be a quadratic number field, let $\O_K$ be its ring of
+  integers, and let $\O ⊂ \O_K$ be an arbitrary order. %
+  The index $f=[\O_K:\O]$ as abelian groups is called the
+  \emph{conductor of $\O$}. %
+  Then, $\O$ can be written as $\O=ℤ+f\O_K$. %
+  
+  If $Δ_K$ is the discriminant of $\O_K$, the \emph{discriminant} of $\O$
+  is $f^2Δ_K$. %
   If $\O,\O'$ are two orders of discriminants $Δ,Δ'$, then $\O⊂\O'$ if
   and only if $Δ'|Δ$.
 \end{proposition}
@@ -1371,9 +1391,8 @@ Because $\O_K$ is the ``most obvious'' order of $K$, (fractional)
 $\O_K$-ideals are often simply called (fractional) ideals of $K$. %
 
 \begin{proposition}
-  All fractional ideals of the ring of integers are invertible.
+  Any fractional $\O_K$-ideal is invertible.
 \end{proposition}
-
 
 
 \paragraph{Quaternion algebras} %
@@ -1451,19 +1470,6 @@ because it contains all endomorphism rings of supersingular elliptic curves
 over fields of characteristic $p$. However, many of the definitions and results
 that follow are equally valid for arbitrary quaternion algebras.
 
-For technical reasons,
-we will require the following slight generalization of the notion of
-greatest common divisor.
-\begin{definition}[$\gcd$ of rational numbers]
-For two rational numbers $a=m/n,b=r/s$,
-written such that $\gcd(m,n)=1=\gcd(r,s)$,
-we define their greatest common divisor as
-$\gcd(a,b) := \gcd(m,r)/\lcm(n,s)$.
-By extension, we can also define
-the $\gcd$ of an arbitrary subset of $\Q$,
-as long as the least common multiple of the denominators of its
-elements is finite.
-\end{definition}
 
 \paragraph{Fractional ideals} in $B_{p,\infty}$ are $\Z$-lattices
 $I\subset B_{p,\infty}$ of rank $4$.
@@ -1496,7 +1502,7 @@ A (left or right) $\O$-ideal $I$ is called \emph{integral} if $I\subset\O$.
 
 \paragraph{The endomorphism ring.}
 We finally have all the necessary language to classify endomorphism
-rings of elliptic curves: they all turn out to be algebraic orders of
+rings of elliptic curves: they all turn out to be lattices of
 rank $1$, $2$ or $4$. A more precise statement is the following.
 
 \begin{theorem}[Deuring]
@@ -1505,11 +1511,12 @@ rank $1$, $2$ or $4$. A more precise statement is the following.
   The ring $\End(E)$ is isomorphic to one of the following:
   \begin{itemize}
   \item $ℤ$; this can happen only if $p=0$;
-  \item An order $\O$ in a quadratic imaginary field (a number field
-    of the form $ℚ(\sqrt{-D})$ for some $D>0$); in this case we say
-    that $E$ has \emph{complex multiplication} by $\O$;
-  \item Only if $p>0$, a maximal order in $B_{p,\infty}$;
-  this happens if and only if $E$ is supersingular.
+  \item An order $\O$ in a quadratic imaginary field; in this case we
+    say that $E$ has \emph{complex multiplication} by $\O$;
+  \item Only if $p>0$, a maximal order $\O$ in $B_{p,\infty}$; in this
+    case we say that $E$ has \emph{quaternionic multiplication} by
+    $\O$. %
+    This happens if and only if $E$ is supersingular.
   \end{itemize}
 \end{theorem}
 \begin{proof}
@@ -1518,7 +1525,7 @@ rank $1$, $2$ or $4$. A more precise statement is the following.
 \end{proof}
 
 The smallest $ℚ$-algebra containing $\End(E)$, i.e.\ $\End(E)⊗ℚ$, is
-often called the \emph{endomorphism algebra} of $E$. %
+called the \emph{endomorphism algebra} of $E$. %
 For curves over finite fields, this is entirely determined by the
 Frobenius endomorphism, which we recall satisfies a quadratic equation
 $π^2 - tπ + q = 0$. %
@@ -1543,9 +1550,9 @@ Sections~\ref{sec:ell-isogeny-graphs} and~\ref{sec:sqisign}.
   $π=\sqrt{-p}$, and it is not maximal in $ℚ(\sqrt{-p})$.
 
   The automorphism $ι:(x,y)↦(-x,iy)$ is only defined over $\F_{p^2}$,
-  and does not commute with $π$. %
-  The full endomorphism ring is isomorphic to the order generated by
-  $π$ and $ι$ inside the quaternion algebra $B_{p,∞}$.
+  and anti-commutes with $π$. %
+  The full endomorphism ring is isomorphic to the maximal order inside
+  $B_{p,∞}$ containing both $π$ and $ι$.
 \end{example}
 
 \section*{Exercises}
