@@ -1450,11 +1450,27 @@ because it contains all endomorphism rings of supersingular elliptic curves
 over fields of characteristic $p$. However, many of the definitions and results
 that follow are equally valid for arbitrary quaternion algebras.
 
+For technical reasons,
+we will require the following slight generalization of the notion of
+greatest common divisor.
+\begin{definition}[$\gcd$ of rational numbers]
+For two rational numbers $a=m/n,b=r/s$,
+written such that $\gcd(m,n)=1=\gcd(r,s)$,
+we define their greatest common divisor as
+$\gcd(a,b) := \gcd(m,r)/\lcm(n,s)$.
+By extension, we can also define
+the $\gcd$ of an arbitrary subset of $\Q$,
+as long as the least common multiple of the denominators of its
+elements is finite.
+\end{definition}
+
 \paragraph{Fractional ideals} in $B_{p,\infty}$ are $\Z$-lattices
 $I\subset B_{p,\infty}$ of rank $4$.
 The (reduced) \emph{norm} of an ideal is defined as the
 $\gcd$ of the (reduced) norms of its elements;
 $N(I) = \nrd(I) := \gcd\{N(\alpha)\mid\alpha\in I\}$.
+%Exercise: show that this is well-defined (i.e. indeed, the lcms
+%of the denominators of the norms is bounded.
 If $I\subset J$ are two fractional ideals, then the index $[J:I]$ as
 an abelian group equals $\left(N(I)/N(J)\right)^2$.
 If $\alpha_1,\alpha_2,\alpha_3,\alpha_4$ is a $\Z$-basis for $I$, then
@@ -3785,6 +3801,7 @@ isogeny class. %
     \end{equation*}
 \end{theorem}
 
+\paragraph{Endomorphism rings.}
 Using the Deuring correspondence, we were able to count the
 number of isomorphism classes of supersingular elliptic curves.
 Each such supersingular elliptic curve has an endomorphism ring
@@ -3819,7 +3836,7 @@ We have the following result about its structure.
 \begin{theorem}
 There is a unique two-sided fractional $\O$-ideal of norm $p$.
 It generates the two-sided ideal class group $\Pic(\O)$ of $\O$.
-Moreover, as an element of this group it has order at most $2$.
+As an element of this group it has order at most $2$.
 \end{theorem}
 Under the Deuring correspondence, this special two-sided fractional
 $\O$-ideal corresponds to the Frobenius $E\to E^{(p)}$.
