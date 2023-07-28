@@ -695,7 +695,7 @@ Indeed, we can prove that the two are in one-to-one correspondence.
 
 \begin{theorem}
   \label{th:weierstrass-p}
-  The Weierestrass function $℘(z;Λ)$ has the following properties:
+  The Weierstrass function $℘(z;Λ)$ has the following properties:
   \begin{enumerate}
   \item It is an \emph{elliptic function} for $Λ$, i.e.
     $℘(z) = ℘(z+ω)$ for all $z∈ℂ$ and $ω∈Λ$.
@@ -1317,7 +1317,8 @@ The elements with integer trace and norm can be seen as a
 generalization of the ring $ℤ$ of integers inside $ℚ$.
 
 \begin{definition}[Ring of integers]
-  Let $K$ be a number field, an \emph{algebraic integer} of $K$ is an
+  Let $K$ be a quadratic number field,
+  an \emph{algebraic integer} of $K$ is an
   element $α∈K$ that is a root of an irreducible monic polynomial with
   integer coefficients. %
   The algebraic integers of $K$ form a ring, called the \emph{ring of
@@ -1533,7 +1534,7 @@ Appendix~\ref{sec:appl-point-count}), and thus the endomorphism
 algebra can be determined with the same complexity.
 Determining the exact order isomorphic to $\End(E)$ is (in general)
 much more complicated and we shall come back to it in
-Sections~\ref{sec:ell-isogeny-graphs} and~\ref{}.
+Sections~\ref{sec:ell-isogeny-graphs} and~\ref{sec:sqisign}.
 
 \begin{example}
   The elliptic curve $y^2=x^3+x$ has supersingular reduction at all
@@ -3599,7 +3600,7 @@ endomorphism ring.
 Before we dive into the exact relationship between ideals and isogenies
 that the Deuring correspondence provides, we first need a slightly more
 precise relationship between isogenies and subgroups.
-Recall from Proposition \ref{prop:isoker} that separable isogenies
+Recall from Proposition~\ref{prop:isoker} that separable isogenies
 with domain $E$ correspond to finite subgroups of $E$ (namely their kernels).
 The same description can be used to treat general isogenies, not only
 separable ones, as long as we keep track of the inseparable degree.
@@ -3614,7 +3615,7 @@ $\deg(\varphi) = \deg_s(\varphi) \cdot \deg_i(\varphi)$.
 
 The (in)separable degree of an isogeny equals that of 
 the corresponding extension of function fields
-(see Definition \ref{def:degsep}).
+(see Definition~\ref{def:degsep}).
 In particular, the inseparable degree is always a power of $p$.
 The inseparable degree of a separable isogeny is $1$,
 and the inseparable degree of a purely inseparable isogeny is equal
@@ -3655,7 +3656,7 @@ denoted $E[\varphi]$, is $(\ker\varphi,\deg_i\varphi)$.
 
 Conversely, to every finite subgroup scheme $H\leq E$
 one can associate an isogeny whose scheme-theoretic kernel is $H$;
-similar to Proposition \ref{prop:isoker}, the codomain $E/H$
+similar to Proposition~\ref{prop:isoker}, the codomain $E/H$
 of this isogeny is unique up to isomorphism.
 
 In terms of subgroup schemes, we have the following ``factorization theorem''
@@ -3669,7 +3670,7 @@ $\lambda:E_2\to E_3$ such that $\psi = \lambda\circ\varphi$.
 %Exercise: proof.
 
 Now we are ready to formulate the Deuring correspondence (compare to
-Section \ref{sec:compl-mult-2}).
+Section~\ref{sec:compl-mult-2}).
 
 \begin{definition}
 For an integral left $\O$-ideal $I$, we define
@@ -3718,12 +3719,12 @@ Every fractional left $\O$-ideal is equivalent to an integral one.
 
 %Exercise: proof (with hints)
 
-As a consequence of Proposition \ref{prop:idealclasscurve},
-we have the following ``coarser'' version of Theorem \ref{thm:deuring1},
+As a consequence of Proposition~\ref{prop:idealclasscurve},
+we have the following ``coarser'' version of Theorem~\ref{thm:deuring1},
 which is what most people refer to as the Deuring Correspondence.
 
 \begin{theorem}[Deuring correspondence II]
-The bijection in Theorem \ref{thm:deuring1} induces a one-to-one
+The bijection in Theorem~\ref{thm:deuring1} induces a one-to-one
 correspondence
     \begin{equation*}
         \left\{
@@ -3839,7 +3840,8 @@ It generates the two-sided ideal class group $\Pic(\O)$ of $\O$.
 As an element of this group it has order at most $2$.
 \end{theorem}
 Under the Deuring correspondence, this special two-sided fractional
-$\O$-ideal corresponds to the Frobenius $E\to E^{(p)}$.
+$\O$-ideal of norm $p$
+corresponds to the Frobenius $E\to E^{(p)}$.
 In particular, the group $\Pic(\O)$ is trivial if and only if $E$ is
 defined over $\F_p$, and it is isomorphic to $\Z/2\Z$ if and only if
 $E$ is not defined over $\F_p$ (recall that $E$, being supersingular,
