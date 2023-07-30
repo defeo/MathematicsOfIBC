@@ -2215,7 +2215,8 @@ This justifies looking at fractional ideals modulo principal ideals.
 When $\O$ is the maximal order, $\Cl(\O)$ is also called the class
 group of $K$. %
 The class group is a fundamental object in \emph{class field theory}:
-when $\O$ is the maximal order, it is isomorphic to the Galois group
+when $\O$ is the maximal order of an imaginary quadratic number field
+$K$, it is isomorphic to the Galois group
 of the maximal unramified Abelian extension of $K$, also called the
 \emph{Hilbert class field} of $K$; more generally, non-maximal orders
 are connected to ramified Abelian extensions of $K$. %
@@ -2225,7 +2226,8 @@ complex multiplication by $\O$.
 
 \begin{theorem}
   \label{th:compl-mult}
-  Let $\O$ be an order of a number field $K$, and let
+  Let $\O$ be an order of an imaginary quadratic
+  number field $K$, and let
   $\a_1,\dots,\a_{h(\O)}$ be representatives of $\Cl(\O)$. %
   Then:
   \begin{itemize}
@@ -2827,7 +2829,7 @@ $X$, denoted by $x' = g·x$.
 
 In practice, we will mostly deal with regular group actions, i.e.\
 such that for any $x, x' ∈ X$ there is a unique $g ∈ G$ such that
-$g · x = x$. %
+$g · x = x'$. %
 Then, $\#G = \#X$. %
 Additionally, we will only consider Abelian group actions.
 
@@ -2866,8 +2868,8 @@ Indeed, if $H$ is a group of order $n$, we let $X⊂H$ be the subset of
 elements of order $n$, and we let $G = (ℤ/nℤ)^\times$. %
 Then $G$ acts regularly on $X$, and it is easy to check that
 one-wayness, weak unpredictability and weak pseudorandomness
-correspond to the difficulty of, respectively, discrete logarithm, DDH
-and CDH.
+correspond to the difficulty of, respectively, discrete logarithm, CDH
+and DDH.
 
 Likewise, we can generalize the Diffie--Hellman key exchange to
 cryptographic (Abelian) group actions. %
@@ -2993,7 +2995,7 @@ isogeny based cryptography. %
 \end{problem}
 
 The difficulty of this problem depends on the distributions $E$ and
-$E'$ are drown from, but it is in general a very difficult one, for
+$E'$ are drawn from, but it is in general a very difficult one, for
 which only algorithms exponential in $\log(q)$ are known. %
 Remark that, in general, $\degϕ$ will be exponential in $\log(q)$,
 hence the "smooth degree" constraint, which lets us represent the
@@ -3073,7 +3075,7 @@ discrete logarithm group. %
 Let $H=〈g〉$ be a cyclic group of order $p$, let
 $D=\{s_1,\dots,s_n\}⊂(ℤ/pℤ)^{×}$ be a generating set such that $σ∈D$
 implies $σ^{-1}∉D$, and let $S = D∪D^{-1}$ so that $S$ is symmetric as
-defined in~\ref{def:cayley}. %
+in Definition~\ref{def:cayley}. %
 Then, $(ℤ/pℤ)^{×}$ acts on  $H$ minus the identity by
 \[e·g_0 = g_0^e\qquad\text{for $e∈(ℤ/pℤ)^×$ and
     $g_0∈H\setminus\{1\}$}.\] %
