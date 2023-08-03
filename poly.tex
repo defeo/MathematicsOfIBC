@@ -80,6 +80,7 @@
 \DeclareMathOperator{\SL}{SL}
 \DeclareMathOperator{\Cl}{Cl}
 \DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\rk}{rk} % rank
 \DeclareMathOperator{\Pic}{Pic} %Picard group
 
 \def\A{\ensuremath{\mathbb{A}}}
@@ -1393,7 +1394,7 @@ We generalize the notion of discriminant to any order.
   It is independent of the choice of a basis.
 \end{definition}
 
-\begin{prposition}
+\begin{proposition}
   Let $\O$ be an order, let $Δ$ be its discriminant and let $f$ be its
   conductor. %
   Let $Δ_K$ the discriminant of the maximal order, then
@@ -3670,6 +3671,7 @@ now we will use the following terminology.
 \begin{definition}[subgroup scheme]
 A \emph{subgroup scheme} is a pair $(H,p^r)$
 where $H\subset E$ is a subgroup and $r\in\Z_{\geq 0}$.
+The \emph{rank} is defined as $\rk(H,p^r) := \# H \cdot p^r$.
 Given two such subgroup schemes, the \emph{scheme-theoretic intersection}
 $(H_1,p^r)\cap (H_2,p^s)$ is defined as $(H_1\cap H_2, p^{\min(r,s)})$.
 We write $(H_1,p^r)\leq (H_2,p^s)$ if $H_1\subset H_2$ and $r\leq s$.
@@ -3682,6 +3684,7 @@ Conversely, to every finite subgroup scheme $H\leq E$
 one can associate an isogeny whose scheme-theoretic kernel is $H$;
 similar to Proposition~\ref{prop:isoker}, the codomain $E/H$
 of this isogeny is unique up to isomorphism.
+The degree of this isogeny equals $\rk H$.
 
 In terms of subgroup schemes, we have the following ``factorization theorem''
 for isogenies.
@@ -3707,6 +3710,15 @@ we associate the integral left $\O$-ideal
     I(H) := \{\alpha\in\O\mid H\leq E[\alpha]\}.
 \end{equation*}
 \end{definition}
+
+To an integral left $\O$-ideal $I$, we associate the isogeny $\varphi_I$
+with kernel $E[I]$ (which is unique up to post-composition by an
+isomorphism).
+
+\begin{proposition}
+We have $\rk(E[I]) = N(I)$. In other words,
+the isogeny $\varphi_I$ has degree $N(I)$.
+\end{proposition}
 
 \begin{theorem}[Deuring Correspondence I]\label{thm:deuring1}
     The maps defined above induce a bijection
