@@ -126,8 +126,8 @@
 \begin{center}
   \begin{tabular}{r @{~--~} l}
     \color{gray}v1 & \color{gray}May 2017, Thi\`es, Senegal\\
-    \color{gray}v2 & \color{gray}August 2019, Wurzb\"urg, Germany\\
-    v3 & July 2023, Popayan, Colombia
+    \color{gray}v2 & \color{gray}August 2019, W\"urzburg, Germany\\
+    v3 & October 2023, Popayan, Colombia \& Rabat, Morocco
   \end{tabular}
 \end{center}
 
@@ -203,8 +203,8 @@ Rabbat.
 Many students have contributed by pointing out mistakes and helping
 fixing them. %
 We would like to thank, in particular, Simon Masson, Marcel Müller,
-Martin Strand, Vadym Fedyukovych and Tomáš Novotny, and apologize
-to all those students whose name we've forgot.
+Martin Strand, Vadym Fedyukovych and Tomáš Novotny, Sina Schaeffler,
+and apologize to all those students whose name we've forgot.
 
 \clearpage
 {
@@ -254,8 +254,8 @@ lines in affine space passing through the origin.
   $x_i=λy_i$ for all $i$.
 \end{definition}
 
-The equivalence class of a projective point $(x_0,\dots,x_n)$ is
-customarily denoted by $(x_0:\cdots:x_n)$. %
+The equivalence class of $(x_0,\dots,x_n)$ is customarily denoted by
+$(x_0:\cdots:x_n)$ and called a \emph{projective point}. %
 The set of the \emph{$k$-rational points}, denoted by $\P^n(k)$, is
 defined as
 \[\P^n(k) = \left\{(x_0:\cdots:x_n)∈\P^n\;\middle|\; x_i ∈ k \text{ for all $i$}\right\}.\] %
@@ -450,7 +450,7 @@ the object of the
 
 \section{Maps between elliptic curves}
 
-Finally, we focus on maps between elliptic curves. %
+We now focus on maps between elliptic curves. %
 We are mostly interested in maps that preserve both facets of elliptic
 curves: as projective varieties, and as groups. %
 
@@ -476,7 +476,7 @@ origins can be traced back to complex analysis.
 \end{proposition}
 
 Note that if two curves defined over $k$ are isomorphic over
-$\bar{k}$, they are so over an extension of $k$ of degree dividing
+$\bar{k}$, they are so over an extension of $k$ of degree at most
 $6$. %
 An isomorphism between two elliptic curves defined over $k$, that is
 itself not defined over $k$ is called a \emph{twist}. %
@@ -877,12 +877,17 @@ study this case in Sections~\ref{sec:end(E)} and~\ref{sec:compl-mult}.
 \label{sec:ec-over-ff}
 
 In this section we shift our attention to elliptic curves defined over
-a finite field $k$ with $q$ elements, which are the main objects
-manipulated in cryptography. %
-Obviously, the group of $k$-rational points is finite, thus the
-algebraic group $E(\bar{k})$ only contains torsion elements, and we
-have already characterized precisely the structure of the torsion part
-of $E$.
+a finite field, which are the main objects manipulated in
+cryptography. %
+From now on we will use $q$ to denote a power of a prime $p$, and
+$\F_q$ do denote a finite field with $q$ elements.
+
+Obviously, the group of rational points of a curve defined over a
+finite field is finite. %
+Because every element of $\bar{\F}_q$ is defined over a finite
+extension of $\F_q$, the algebraic group $E(\bar{\F}_q)$ only contains
+torsion elements, and we have already characterized precisely the
+structure of the torsion part of $E$.
 
 For curves over finite fields, the Frobenius endomorphism plays a very
 special role, and governs much of their structure.
@@ -904,6 +909,7 @@ special role, and governs much of their structure.
 \end{proposition}
 
 \begin{theorem}[Hasse]
+  \label{th:hasse}
   Let $E$ be an elliptic curve defined over a finite field with $q$
   elements. %
   Its Frobenius endomorphism $π$ satisfies a quadratic equation
@@ -2885,7 +2891,7 @@ one-wayness, weak unpredictability and weak pseudorandomness
 correspond to the difficulty of, respectively, discrete logarithm, CDH
 and DDH%
 \footnote{DDH is the \emph{decisional} variant of CDH: distinguish
-  $(g,h,g^a,h^a)$ from a random tuple $(g,h,j,k)$ of group elements}.
+  $(g,h,g^a,h^a)$ from a random tuple $(g,h,g^a,h^b)$ of group elements}.
 
 Likewise, we can generalize the Diffie--Hellman key exchange to
 cryptographic (Abelian) group actions. %
@@ -3117,13 +3123,13 @@ The protocol is illustrated in Figure~\ref{fig:dh-walk-pict}. %
 \end{figure}
 
 
-\section{CSIDH and orientated  supersingular curves}
+\section{CSIDH and oriented  supersingular curves}
 \label{sec:csidh}
 
 Even with the adjustments of the previous section, the protocol is far
-from practical: Stolbunov managed to run a 108 bit secure
+from practical: in 2012 Stolbunov managed to run a 108 bit secure
 implementation in around 5 minutes~\cite{Stolbunov2012}. %
-To understand why, let's see recap how the CM group action is
+To understand why, let's recap how the CM group action is
 computed. %
 We have a list of primes splitting in $\O$, which are the norms of the
 ideals in $S$. %
@@ -3187,6 +3193,8 @@ $E(\F_q)$, and multiplying it by $\#E/ℓ$: there is a $(ℓ-1)/ℓ$ chance
 that the result is not zero, and can thus be used to compute the
 $ℓ$-isogeny of direction $π-1$ using Vélu's formulas. %
 
+%% TODO: use an algorithm box
+
 We can do even better. %
 Suppose that $π|E[ℓ]$ acts like $\mat{1&0\\0&-1}$, then both
 directions are recognizable: $π-1$ is obtained like before, while
@@ -3209,7 +3217,7 @@ The second one is much harder, because it essentially requires to find
 a curve $E/\F_q$ with a specific trace $t$. %
 For $E$ an ordinary curve, the best technique at our disposal
 consists, essentially, in taking random curves $E/\F_q$ and computing
-$\#E$, until a suitable one is found. %
+$\#E$, until a suitable one is found~\cite{AC:DeFKieSmi18}.
 
 On the other hand, if we enforce the constraint for enough primes $ℓ$
 (it is enough that $\prod ℓ>2\sqrt{q}$), then we effectively force $t$
@@ -3286,11 +3294,17 @@ Naturally, the first parameter to look at is the size of the isogeny
 class of $E,E'$: too small, and we can find the isogeny by brute
 force. %
 
-We may assume that $E$ and $E'$ have complex multiplication by a
-maximal order. %
+For simplicity we assume that $E$ and $E'$ have complex multiplication
+by a maximal order. %
 Indeed, if this is not the case, we may use the theory of isogeny
 volcanoes to find ascending paths from $E$ and $E'$ to two curves
-$\hat{E},\hat{E}'$ with complex multiplication by the maximal order. %
+$\hat{E},\hat{E}'$ with complex multiplication by the maximal order.%
+\footnote{Ascending an $\ell$-volcano can be done efficiently as long
+  as $\ell$ is polynomially sized. %
+  However SCALLOP~\cite{PKC:DFKLMPW23} uses supersingular curves
+  oriented by a non-maximal quadratic order of large prime conductor,
+  a case where it is not currently known how to efficiently walk to
+  the maximal order.} %
 Then, we are left with the problem of finding a horizontal isogeny
 between $\hat{E}$ and $\hat{E'}$. %
 Since the horizontal isogeny class of $\O_K$ is the smallest among all
@@ -3333,7 +3347,8 @@ however it will not go unnoticed that this choice is insufficient to
 apply Theorem~\ref{th:ord-exp}. %
 We may as well live with it, changing our security assumptions to take
 into account the biased distributions given by random walks in graphs
-that are not proven to be expanders. %
+that are not provably expander families, but behave in practice as
+such. %
 
 \paragraph{Quantum security.}
 The discussion on security would not be complete without surveying
@@ -3402,7 +3417,18 @@ debated~\cite{EC:BLMP19,EC:Peikert20,cryptoeprint:2020:1520}.
 \section{Beyond key exchange}
 \label{sec:beyond-key-exchange}
 
-TODO: REGA, signatures
+The isogeny group action framework can be used to construct many other
+interesting cryptographic protocols than key exchange. %
+Signature schemes were first sketched by
+Couveignes~\cite{EPRINT:Couveignes06} and
+Stolbunov~\cite{Stolbunov2012}, and then refined
+in~\cite{EC:DeFGal19,AC:BeuKleVer19}.
+
+\textcolor{red}{ TODO: this section will be finished at a later
+  time. In the meantime, you can find a survey on isogeny based
+  signature schemes here~\cite{todo}}
+
+%% TODO: REGA, signatures
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -3410,27 +3436,89 @@ TODO: REGA, signatures
 \part{The full supersingular isogeny graph}
 \label{part:ssingular}
 
+All isogeny graphs we have seen so far were governed by the theory of
+complex multiplication, and these are essentially the only interesting
+graphs of ordinary curves. %
+Supersingular curves, however, have richer structure and give rise to
+other interesting graphs than those used in CSIDH. %
+In this part we study \emph{full supersingular $ℓ$-isogeny graphs} and
+the theory of \emph{quaternionic multiplication} which governs them.
+
 \section{Expander graphs from isogenies}
 
+In Section~\ref{sec:ell-isogeny-graphs} we saw how the action of the
+Frobenius endomorphism on $E[ℓ]$ controls the number of
+$\F_q$-rational isogenies, and thus the structure of the volcano. %
+By \hyperref[th:hasse]{Hasse's theorem}, supersingular curves over a
+prime field $\F_p$ necessarily have trace $t=0$ and thus Frobenius
+acts like a square root of $-p$, giving an embedding
+$ℤ[\sqrt{-p}] \hookrightarrow \End(E)$ an the CM action used in CSIDH.
 
-The theorem is readily generalized to supersingular
-curves and isogenies defined over $\F_p$. %
+But for supersingular curves over $\F_{p^2}$ the most
+common\footnote{The only ones, in fact, except if $j=0,1728$.} cases
+are $t = \pm 2p$, and thus Frobenius acts like $\pm p$, fixing any
+cyclic subgroup of $E[ℓ]$. %
+Said otherwise, all isogenies of a supersingular curve are
+$\F_{p^2}$-rational.
 
-A radically different construction of expander graphs is given by
-graphs of supersingular curves \emph{defined over $\F_{p^2}$} with
-$ℓ$-isogenies, for a \emph{single} prime $ℓ≠p$. %
+\begin{theorem}
+  Let $E$ be a supersingular curve defined over a field of
+  characteristic $p$. %
+  Then
+  \begin{proposition}
+  \item $j(E) \in \F_{p^2}$;
+  \item There exist an isomorphism (not necessarily
+    $\F_{p^2}$-rational) from $E$ to a curve $E'/\F_{p^2}$ with trace
+    of Frobenius equal to $-2p$;
+  \item $E'(\F_{p^2}) ≃ (ℤ/(p+1)ℤ)^2$;
+  \item All isogenies and endomorphisms of $E'$ are
+    $\F_{p^2}$-rational.
+  \end{proposition}
+\end{theorem}
+\begin{proof}
+  See~\cite[Lectures~13--14]{sutherland-notes}
+  and~\cite[\S~4]{waterhouse69}.
+\end{proof}
+
+\begin{definition}[Supersingular $\ell$-isogeny graph]
+  Fix a prime $\ell ≠ p$, the \emph{(full) supersingular $ℓ$-isogeny
+    graph} is the graph of $\bar{\F}_p$-isomorphism classes of
+  supersingular curves with $ℓ$-isogenies between them.
+\end{definition}
+
+By the proposition above, this graph is isomorphic to the graph of
+$\F_{p^2}$-isomorphism classes of curves with trace $-2p$, and every
+vertex has out-degree $\ell+1$. %
+Mapping every isomorphism class to its quadratic twist, we see that it
+is also isomorphic to the graph of curves with trace $2p$. %
 Two examples of such graphs are shown in
 Figure~\ref{fig:sup-97-2-3}. %
-This construction is related to LPS
-graphs~\cite{LubPS,Lub,cryptoeprint:2018:593}, but is not isomorphic
-to a Cayley graph. %
 
-\begin{theorem}[{Mestre~\cite{mestre86}, Pizer~\cite{pizer1,pizer2}}, Kohel\cite{kohel}]
+Although the graph contains all isogenies with their duals, it is not
+necessarily undirected. %
+Indeed the vertices $j=0$ and $j=1728$ have larger automorphism groups
+(respectively of order 4 and 6, assuming $p > 3$) than any other
+curve, and thus have more outgoing than incoming edges. %
+Taking $p = 1 \mod 12$ ensures neither curve is supersingular and
+sidesteps the problem. %
+But even when $p ≠ 1 \mod 12$, we can prove that the adjacency matrix
+of the graph has real eigenvalues and apply all the definitions of
+Section~\ref{sec:graphs}, obtaining a very powerful result.
+
+\begin{theorem}[Mestre~\cite{mestre86}, Pizer~\cite{pizer1,pizer2}, Kohel~\cite{kohel}]
   \label{th:ss-exp}
-  Let $\ell≠p$ be two primes. %
-  The $ℓ$-isogeny graph of supersingular curves in $\bar\F_p$, is
-  connected, $(ℓ+1)$-regular, and has the Ramanujan property.
+  The supersingular $ℓ$-isogeny graph is connected, has real spectrum,
+  its largest eigenvalue is $\ell+1$ and every other eigenvalue is
+  smaller than $2\sqrt{ℓ}$ in absolute value, i.e.\ it is a Ramanujan
+  graph.
 \end{theorem}
+
+The standard proof of this result involves Hecke operators acting on
+modular forms and is beyond the scope of these lecture notes. %
+As pointed out in~\cite{EPRINT:CFLMP18}, these graphs are distant
+cousins of Lubotzky--Phillips--Sarnak (LPS) graphs~\cite{LubPS,Lub},
+however, unlike those, do not enjoy the structure of a Cayley graph. %
+
 
 \begin{figure}
   \centering
@@ -3476,7 +3564,6 @@ to a Cayley graph. %
     (right, red) on $\F_{97^2}$.}
   \label{fig:sup-97-2-3}
 \end{figure}
-
 
 \section{Quaternionic multiplication aka the Deuring correspondence}
 
@@ -3960,7 +4047,6 @@ classes~\cite{jao+miller+venkatesan09}.
 \label{sec:sidh-poks}
 
 TODO
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
