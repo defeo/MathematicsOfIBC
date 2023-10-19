@@ -1381,7 +1381,7 @@ We need a technical definition first.
 By these definitions, the ring of integers $\O_K$ is an order of $K$:
 indeed it has $(1,δ)$ as a \emph{basis}, i.e., as a set of $ℤ$-module
 generators. %
-It is, in fact, is the \emph{maximal order} of $K$, i.e.\ it contains
+It is, in fact, the \emph{maximal order} of $K$, i.e.\ it contains
 any other order of $K$. %
 A more precise statement is the following.
 
@@ -1530,6 +1530,7 @@ rings of elliptic curves: they all turn out to be lattices of
 rank $1$, $2$ or $4$. A more precise statement is the following.
 
 \begin{theorem}[Deuring]
+  \label{th:endring}
   Let $E$ be an elliptic curve defined over a field $k$ of
   characteristic $p$. %
   The ring $\End(E)$ is isomorphic to one of the following:
@@ -1622,6 +1623,7 @@ Sections~\ref{sec:ell-isogeny-graphs} and~\ref{sec:sqisign}.
 
 \clearpage
 \part{Isogeny graphs}
+\label{part:isogeny-graphs}
 
 We now look at isogeny graphs: graphs with isomorphisms classes of
 elliptic curves for vertices, and isogenies for edges. %
@@ -2320,6 +2322,7 @@ singular reductions), non-trivial endomorphisms of $E$ will descend to
 non-trivial endomorphisms of $\bar{E}$. %
 
 \begin{theorem}[Deuring]
+  \label{th:deuring-red}
   Let $E$ be an elliptic curve over a number field $L$, with complex
   multiplication by an order $\O⊂K$. %
   Let $\frak{p}$ be a place of $L$ over $p$, and assume that $E$
@@ -2376,6 +2379,7 @@ It turns out that these approach is essentially equivalent to the
 previous one, as a famous theorem shows.
 
 \begin{theorem}[Deuring's lifting theorem]
+  \label{th:deuring-lift}
   Let $E_0$ be an elliptic curve in characteristic $p$, with an
   endomorphism $ω_o$ which is not trivial. %
   Then there exists an elliptic curve $E$ defined over a number field
@@ -2426,7 +2430,8 @@ $\phi_{\a}:E→E/E[\a]$; it can be proven that $\phi_{\a}$ is
 horizontal, and that its degree is the \emph{norm} of $\a$. %
 By composing with an appropriate purely inseparable isogeny, the
 definition of $ϕ_\a$ is easily extended to invertible ideals of any
-norm.
+norm.%
+\footnote{A more formal treatment encompassing inseparable isogenies will be given in Section~\ref{sec:quat-mult-aka}.}
 
 Writing $\a·E$ for the isomorphism class of the image of $ϕ_\a$, we
 get an action $·:\mathcal{I}(\O)×\Ell_q(\O)→\Ell_q(\O)$ of the group
@@ -2439,6 +2444,7 @@ The main theorem of complex multiplication states that this action is
 \emph{simply transitive}. %
 
 \begin{theorem}[Complex multiplication]
+  \label{th:compl-mul}
   Let $\F_q$ be a finite field, $\O⊂ℚ(\sqrt{-D})$ an order in a
   quadratic imaginary field, and $\Ell_q(\O)$ the set of
   $\bar{\F}_q$-isomorphism classes of curves with complex
@@ -2658,6 +2664,7 @@ construct expanders from Cayley graphs
 
 \clearpage
 \part{Cryptographic group actions}
+\label{part:crypt-group-acti}
 
 In this part we introduce our first isogeny based cryptographic
 protocols. %
@@ -3439,12 +3446,48 @@ in~\cite{EC:DeFGal19,AC:BeuKleVer19}.
 All isogeny graphs we have seen so far were governed by the theory of
 complex multiplication, and these are essentially the only interesting
 graphs of ordinary curves. %
-Supersingular curves, however, have richer structure and give rise to
-other interesting graphs than those used in CSIDH. %
-In this part we study \emph{full supersingular $ℓ$-isogeny graphs} and
-the theory of \emph{quaternionic multiplication} which governs them.
+We saw two ways of constructing them: as isogeny graphs of CM curves
+in characteristic 0, or as graphs of ordinary curves over finite
+fields. %
+Deuring's theorems (Theorems~\ref{th:deuring-red}
+and~\ref{th:deuring-lift}) showed that these two points of view are
+essentially the same, while the correspondence between ideals and
+isogenies presented in Section~\ref{sec:compl-mult-2} gave us an
+algebraic way to realize the action independently of the base field.
+
+Although we encounter again the same theory in the context of
+supersingular curves, for example in the CSIDH group action
+(Section~\ref{sec:csidh}), the general theory of these curves is more
+complicated. %
+As we stated in Theorem~\ref{th:endring}, endomorphism rings of
+supersingular curves are 4-dimensional objects, the maximal orders of
+a quaternion algebra. %
+We have no hope of lifting these to endomorphism rings of curves in
+characteristic 0, but \hyperref[th:deuring-lift]{Deuring's lifting
+  theorem} gives us a partial result: for every endomorphism
+$ω∈\End(E)$, we can find a curve $\bar{E}/ℂ$ and an endomorphism
+$\bar{ω}∈\End(\bar{E})$ above it. %
+Hence the CM theory of $ℤ[ω]$ still applies to the isogeny class of
+$E$, but only describes a small part it.
+
+Said otherwise, while isogeny graphs of ordinary curves are completely
+understood as the reduction modulo $p$ of isogeny graphs of CM curves,
+supersingular isogeny graphs arise from the simultaneous reduction and
+``collision'' of several CM graphs of unrelated quadratic orders. %
+This part is devoted to these graphs, and to the theory of
+\emph{quaternionic multiplication} that governs them.
+
 
 \section{Expander graphs from isogenies}
+
+The main object in the study of supersingular isogeny graphs is the
+following.
+
+\begin{definition}[Supersingular $\ell$-isogeny graph]
+  Fix a prime $\ell ≠ p$, the \emph{(full) supersingular $ℓ$-isogeny
+    graph} is the graph of $\bar{\F}_p$-isomorphism classes of
+  supersingular curves with $ℓ$-isogenies between them.
+\end{definition}
 
 In Section~\ref{sec:ell-isogeny-graphs} we saw how the action of the
 Frobenius endomorphism on $E[ℓ]$ controls the number of
@@ -3461,34 +3504,28 @@ cyclic subgroup of $E[ℓ]$. %
 Said otherwise, all isogenies of a supersingular curve are
 $\F_{p^2}$-rational.
 
-\begin{theorem}
+\begin{proposition}
   Let $E$ be a supersingular curve defined over a field of
   characteristic $p$. %
   Then
-  \begin{proposition}
+  \begin{itemize}
   \item $j(E) \in \F_{p^2}$;
-  \item There exist an isomorphism (not necessarily
+  \item There exists an isomorphism (not necessarily
     $\F_{p^2}$-rational) from $E$ to a curve $E'/\F_{p^2}$ with trace
     of Frobenius equal to $-2p$;
   \item $E'(\F_{p^2}) ≃ (ℤ/(p+1)ℤ)^2$;
   \item All isogenies and endomorphisms of $E'$ are
     $\F_{p^2}$-rational.
-  \end{proposition}
-\end{theorem}
+  \end{itemize}
+\end{proposition}
 \begin{proof}
   See~\cite[Lectures~13--14]{sutherland-notes}
   and~\cite[\S~4]{waterhouse69}.
 \end{proof}
 
-\begin{definition}[Supersingular $\ell$-isogeny graph]
-  Fix a prime $\ell ≠ p$, the \emph{(full) supersingular $ℓ$-isogeny
-    graph} is the graph of $\bar{\F}_p$-isomorphism classes of
-  supersingular curves with $ℓ$-isogenies between them.
-\end{definition}
-
-By the proposition above, this graph is isomorphic to the graph of
-$\F_{p^2}$-isomorphism classes of curves with trace $-2p$, and every
-vertex has out-degree $\ell+1$. %
+By the proposition above, the supersingular $ℓ$-isogeny graph is
+isomorphic to the graph of $\F_{p^2}$-isomorphism classes of curves
+with trace $-2p$, and every vertex has out-degree $\ell+1$. %
 Mapping every isomorphism class to its quadratic twist, we see that it
 is also isomorphic to the graph of curves with trace $2p$. %
 Two examples of such graphs are shown in
@@ -3499,8 +3536,8 @@ necessarily undirected. %
 Indeed the vertices $j=0$ and $j=1728$ have larger automorphism groups
 (respectively of order 4 and 6, assuming $p > 3$) than any other
 curve, and thus have more outgoing than incoming edges. %
-Taking $p = 1 \mod 12$ ensures neither curve is supersingular and
-sidesteps the problem. %
+Taking $p = 1 \mod 12$ (like in Figure~\ref{fig:sup-97-2-3}) ensures
+neither curve is supersingular and sidesteps the problem. %
 But even when $p ≠ 1 \mod 12$, we can prove that the adjacency matrix
 of the graph has real eigenvalues and apply all the definitions of
 Section~\ref{sec:graphs}, obtaining a very powerful result.
@@ -3515,7 +3552,7 @@ Section~\ref{sec:graphs}, obtaining a very powerful result.
 
 The standard proof of this result involves Hecke operators acting on
 modular forms and is beyond the scope of these lecture notes. %
-As pointed out in~\cite{EPRINT:CFLMP18}, these graphs are distant
+As explained in~\cite{EPRINT:CFLMP18}, these graphs are distant
 cousins of Lubotzky--Phillips--Sarnak (LPS) graphs~\cite{LubPS,Lub},
 however, unlike those, do not enjoy the structure of a Cayley graph. %
 
@@ -3565,28 +3602,111 @@ however, unlike those, do not enjoy the structure of a Cayley graph. %
   \label{fig:sup-97-2-3}
 \end{figure}
 
+
+\paragraph{The CGL cryptographic hash function.}
+The mixing properties of expander graphs have long been used in
+computer science to produce pseudo-random behavior. %
+In~\cite{JC:ChaLauGor09}, Charles, Goren and Lauter (CGL) used
+expander graphs to define cryptographic hash functions. %
+
+Their construction assumes a $k$-regular expander graph is given, with
+vertices and edges described by arbitrary unique labels. %
+As a first attempt, the graph could be seen as a state machine: for
+each vertex $j$, label its outgoing edges from $1$ to $k$ (e.g., by
+ordering them alphabetically). %
+Then, to hash a $k$-ary string, start from an arbitrary vertex
+$j_0$. %
+Read the symbols in the string one-by-one, advancing from the current
+vertex $j$ to the next vertex $j'$ reached by the edge corresponding
+to the read symbol. %
+This process defines a pseudo-random walk in the expander graph. %
+The hash is the label of the final vertex of the walk.
+
+The only difference between this description and the actual CGL
+proposal is that they forbid \emph{backtracking walks}. %
+I.e., they use a $(k+1)$-regular graph instead, and only label from
+$1$ to $k$ the outgoing edges of the current vertex, excluding the
+edge the walk came from (for the first step, an arbitrary forbidden
+edge can be chosen). %
+This has the advantage of mixing considerably faster than backtracking
+walks. %
+An example with $k=2$ is pictured in Figure~\ref{fig:hash}.
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \coordinate (last) at (0,0);
+    \draw (last) node[anchor=east] {$j_0$};
+    \foreach \i in {1,...,6} {
+      \pgfmathparse{(-1)^\i}
+      \let\sign\pgfmathresult
+      \pgfmathparse{int(mod(\i+1,2))}
+      \let\bit\pgfmathresult
+      \pgfmathparse{int(mod(\i,2))}
+      \let\nbit\pgfmathresult
+      \draw[->] (last) -- (\i,\sign*0.1) node[blue,pos=0.5,yshift=\sign*0.2cm]{\small$\bit$};
+      \draw[dashed,->] (last) -- (\i,-\sign*0.5) node[gray,pos=0.5,yshift=-\sign*0.2cm]{\small$\nbit$};
+      \coordinate (last) at (\i,\sign*0.1);
+    }
+    \draw (last) node[anchor=west] {$j_i=H(010101)$};
+  \end{tikzpicture}
+  \caption{Hashing the string $010101$ using an expander graph}
+  \label{fig:hash}
+\end{figure}
+
+For the process to be a good pseudo-random function, the walks need to
+be substantially longer than the diameter of the graph. %
+However this is not enough to guarantee a \emph{cryptographically
+  strong} hash function. %
+Indeed the two main properties of cryptographic hash functions,
+translate in this setting as the following computational problems.
+
+\begin{problem}[Preimage resistance]
+  Given a vertex $j$ in the graph, find a path from the start vertex
+  $j_0$ to $j$.
+\end{problem}
+
+\begin{problem}[Collision resistance]
+  Find a non-trivial loop (i.e., one that does not track backwards)
+  from $j_0$ to itself.
+\end{problem}
+
+Charles, Goren and Lauter suggested two possible instantiations for
+the expander graph in the construction above. %
+The first was based on LPS Cayley graphs, and was broken shortly after
+it was introduced~\cite{EC:TilZem08,SCN:PetLauQui08,SAC:PetQui10}. %
+
+The second was the supersingular $2$-isogeny graph of a large prime. %
+Although collision resistance of this proposal has been broken in many
+instances~\cite{EC:EHLMP18}, the general problem of computing paths
+and cycles in a supersingular isogeny graph remains hard and is the
+basis of most of isogeny based cryptography. %
+We shall come back to it in Section~\ref{sec:security}.
+
+
+
 \section{Quaternionic multiplication aka the Deuring correspondence}
+\label{sec:quat-mult-aka}
 
-We saw that in some cases the class group of orders in imaginary quadratic
-number fields acts on elliptic curves whose endomorphism ring
-contains that order. For supersingular elliptic curves $E$, the full
-endomorphism ring is isomorphic to 
-a maximal order $\O$ in $B_{p,\infty}$ (the quaternion algebra
-over $\Q$ ramified exactly at $p$ and $\infty$).
-One may wonder whether there exists a similar theory that links
-ideals of $\O$ to isogenies between supersingular curves.
-The answer is yes, and this is provided by something called the
-\emph{Deuring correspondence}.
+In Part~\ref{part:isogeny-graphs} we could fully explain the structure
+of isogeny volcanoes using the theory of complex multiplication. %
+Quaternionic multiplication, also known as the \emph{Deuring
+  correspondence}, will help us understand the structure of
+supersingular graphs. %
 
-The situation turns out to be similar to the imaginary quadratic case,
+For supersingular elliptic curves $E$, the full endomorphism ring is
+isomorphic to a maximal order $\O$ in $B_{p,\infty}$ (the quaternion
+algebra over $\Q$ ramified exactly at $p$ and $\infty$). %
+We find a correspondence similar to the imaginary quadratic case,
 in the sense that (left) ideals of $\O$ correspond to isogenies
 with domain $E$, and fractional (left) ideal classes of $\O$
 correspond to isomorphism classes of elliptic curves isogenous to $E$.
 A major difference is that this no longer provides a group action
 on the set of all curves, since the set of fractional ideal classes
 no longer admits a group structure.
-Also, the (full) endomorphism rings of isogenous supersingular
-curves are typically not isomorphic. %refer to exact theorem later?
+Also, unlike in the CM case, it is very rare for supersingular
+curves to have isomorphic endomorphism rings.
 
 Throughout the text, we have seen several characterizations
 of supersingularity, so let us recall:
@@ -3604,16 +3724,12 @@ Then the following are equivalent:
 \end{enumerate}
 \end{theorem}
 
-These properties imply that $j(E)\in\F_{p^2}$, %exercise
-so all supersingular elliptic curves in positive characteristic
-are isomorphic to one defined over $\F_{p^2}$.
-
-For the rest of the section, we denote by $E$ be a supersingular
-curve over $\F_{p^2}$, and by $\End(E)=\O\subset B_{p,\infty}$ its
+For the rest of the section, we denote by $E$ a supersingular curve
+defined over $\F_{p^2}$, and by $\End(E)=\O\subset B_{p,\infty}$ its
 endomorphism ring.
 
 Before we dive into the exact relationship between ideals and isogenies
-that the Deuring correspondence provides, we first need a slightly more
+that the Deuring correspondence provides, we need a slightly more
 precise relationship between isogenies and subgroups.
 Recall from Proposition~\ref{prop:isoker} that separable isogenies
 with domain $E$ correspond to finite subgroups of $E$ (namely their kernels).
@@ -3745,9 +3861,11 @@ Every fractional left $\O$-ideal is equivalent to an integral one.
 
 %Exercise: proof (with hints)
 
-As a consequence of Proposition~\ref{prop:idealclasscurve},
-we have the following ``coarser'' version of Theorem~\ref{thm:deuring1},
-which is what most people refer to as the Deuring Correspondence.
+This proposition is reminiscent of the \hyperref[th:compl-mul]{main
+  theorem of complex multiplication}. %
+As a consequence, we have the following ``coarser'' version of
+Theorem~\ref{thm:deuring1}, which is what most people refer to as the
+Deuring correspondence. %
 
 \begin{theorem}[Deuring correspondence II]
 The bijection in Theorem~\ref{thm:deuring1} induces a one-to-one
@@ -3772,10 +3890,11 @@ correspondence
     \end{equation*}
 \end{theorem}
 
-
-Thanks to the Eichler mass formula, which counts the size of the
-left ideal class set, we obtain the exact size of the
-isogeny class. %
+Unlike the case of complex multiplication, left $\O$-ideal classes do
+not form a group. %
+Nevertheless, thanks to Eichler's mass formula, we obtain the exact
+size of the left ideal class set and thus of the supersingular isogeny
+class. %
 
 \begin{corollary}\label{cor:eichlermass}
   The number of isomorphism classes of supersingular elliptic curves
@@ -3790,13 +3909,8 @@ isogeny class. %
   \end{equation*}
 \end{corollary}
 
-% We thus have a bound on the size of a supersingular isogeny graph over
-% $\F_{p^2}$.
-% Since the Frobenius acts like a scalar, all isogenies are defined over
-% $\F_{p^2}$, hence supersingular $ℓ$-isogeny graphs are necessarily
-% $(ℓ+1)$-regular.
-% In the next section we will learn that the supersingular $ℓ$-isogeny
-% graph has a unique connected component.
+There exists also a more precise, categorical statement of the Deuring
+correspondence, which we give here for completeness.
 
 \begin{lemma}
     Given an isogeny $\varphi:E_1\to E_2$, the pullback map
@@ -3829,14 +3943,16 @@ isogeny class. %
 \end{theorem}
 
 \paragraph{Endomorphism rings.}
-Using the Deuring correspondence, we were able to count the
-number of isomorphism classes of supersingular elliptic curves.
+Using the Deuring correspondence, we were able to count the number of
+isomorphism classes of supersingular elliptic curves.  %
 Each such supersingular elliptic curve has an endomorphism ring
-isomorphic to some maximal order in $B_{p,\infty}$.
-One may wonder how many of these maximal orders, up to isomorphism,
-there really are. In other words,
-what is the number of isomorphism classes of \emph{endomorphism rings}
-of supersingular elliptic curves?
+isomorphic to some maximal order in $B_{p,\infty}$. %
+We saw that quadratic number fields have a unique maximal order, so it
+is natural to ask whether something similar happens in quaternion
+algebras. %
+In other words, what is the number of isomorphism classes of
+\emph{endomorphism rings} of supersingular elliptic curves?
+
 We say two maximal orders $\O,\O'\subset B_{p,\infty}$
 are \emph{conjugate} if there exists a $\beta\in B_{p,\infty}$ such
 that $\O' = \beta\O\beta^{-1}$. This is equivalent to $\O$ and $\O'$
@@ -3850,7 +3966,8 @@ Such an ideal $I$ is called a \emph{connecting ideal}
 for the orders $\O$ and $\O'$. 
 Note that, since $\O_R(I\beta)=\beta^{-1}\O'\beta$ for every
 $\beta\in B_{p,\infty}$, ideals equivalent to $I$ indeed
-have conjugate (hence isomorphic) right orders.
+have conjugate (hence isomorphic) right orders. %
+
 Now suppose that $\O$ and $\O'$ are isomorphic. By taking a different
 representative for the same fractional ideal class,
 we then may assume that $I$ is such that $\O=\O'$.
@@ -3894,6 +4011,22 @@ There is a one-to-one correspondence:
         \right\}
     \end{equation*}
 \end{theorem}
+
+
+\section{The effective Deuring correspondence}
+\label{sec:eff-deuring}
+
+The correspondence between ideals classes and isogenies let us
+efficiently evaluate the CM action and construct isogeny-based
+cryptographic schemes, as described in
+Part~\ref{part:crypt-group-acti}. %
+It is natural to ask whether the same could be done with the Deuring
+correspondence.
+
+We already know how to efficiently compute isogenies (in polynomial
+time in their degree). %
+The next question is how to represent and compute with quaternions,
+ideals and orders. %
 
 
 \section{Signatures based on the Deuring correspondence}
@@ -4444,93 +4577,6 @@ TODO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{comment}
 \section{Hash functions from Ramanujan graphs}
-
-Before presenting SIDH, we introduce a distant ancestor: a
-cryptographic hash function based on the Ramanujan $2$-isogeny graph
-of supersingular elliptic curves. %
-The mixing properties of expander graphs make them very good
-pseudo-random generators. %
-For the very same reason, they can also be used to define \emph{hash
-  functions}. %
-The Charles-Goren-Lauter (CGL)
-construction~\cite{charles+lauter+goren09} chooses an arbitrary start
-vertex $j_0$ in an expander graph, then takes a non-backtracking
-random walk according to the string to be hashed, and outputs the
-arrival vertex. %
-To fix notation, let's assume that the graph is $3$-regular, then the
-value to be hashed is encoded as a binary string. %
-At each step one bit is read from the string, and its value is used to
-choose an edge from the current vertex to the next one, avoiding the
-one edge that goes back. %
-The way an edge is chosen according to the read bit need only be
-deterministic, but can be otherwise arbitrary (e.g., determined by
-some lexicographic ordering). %
-The process is pictured in Figure~\ref{fig:hash}.
-
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    \coordinate (last) at (0,0);
-    \draw (last) node[anchor=east] {$j_0$};
-    \foreach \i in {1,...,6} {
-      \pgfmathparse{(-1)^\i}
-      \let\sign\pgfmathresult
-      \pgfmathparse{int(mod(\i+1,2))}
-      \let\bit\pgfmathresult
-      \pgfmathparse{int(mod(\i,2))}
-      \let\nbit\pgfmathresult
-      \draw[->] (last) -- (\i,\sign*0.1) node[blue,pos=0.5,yshift=\sign*0.2cm]{\small$\bit$};
-      \draw[dashed,->] (last) -- (\i,-\sign*0.5) node[gray,pos=0.5,yshift=-\sign*0.2cm]{\small$\nbit$};
-      \coordinate (last) at (\i,\sign*0.1);
-    }
-    \draw (last) node[anchor=west] {$j_i=H(010101)$};
-  \end{tikzpicture}
-  \caption{Hashing the string $010101$ using an expander graph}
-  \label{fig:hash}
-\end{figure}
-
-For the process to be a good pseudo-random function, the walks need to
-be longer than the mixing length of the graph. %
-However this is not enough to guarantee a \emph{cryptographically
-  strong} hash function. %
-Indeed the two main properties of cryptographic hash functions,
-translate in this setting as the following computational problems.
-
-\begin{problem}[Preimage resistance]
-  Given a vertex $j$ in the graph, find a path from the start vertex
-  $j_0$ to $j$.
-\end{problem}
-
-\begin{problem}[Collision resistance]
-  Find a non-trivial loop (i.e., one that does not track backwards)
-  from $j_0$ to itself.
-\end{problem}
-
-Charles, Goren and Lauter suggested two types of expander graphs to be
-used in their constructions. %
-One is based on LPS Cayley graphs, and was broken shortly
-afterwards~\cite{tillich2008collisions,quis}. %
-The second one is based on graphs of supersingular curves. %
-In this context, the preimage finding problem is an instance of the
-isogeny path problem, while the collision finding problem is
-equivalent to computing a non-trivial endomorphism of the start curve
-$j_0$. %
-In this sense, the CGL hash function on expander graphs has
-\emph{provable security}, meaning that its cryptographic strength can
-be provably reduced to well defined mathematical problems thought to
-be hard.
-
-Nevertheless, the CGL hash function has failed to attract the interest
-of practitioners. %
-For one, it is considerably slower than popular hash functions such as
-those standardized by NIST. %
-More concerning is the fact that, while no preimage attack is known,
-there is no known choice for the starting vertex that does not lead to
-a collision
-attack~\cite{kohel2014quaternion,cryptoeprint:2017:962,10.1007/978-3-319-78372-7_11}. %
-Nevertheless, the CGL hash function is a fundamental building block in
-isogeny basic cryptography.
 
 
 \section{Key exchange from supersingular graphs}
