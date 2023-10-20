@@ -3180,7 +3180,7 @@ isogenies? %
 We have a curve $E/\F_q$, a prime $ℓ$ and a \emph{direction} $π-λ$. %
 Without further assumptions, we need to find a field extension
 $\F_{q^n}$ such that $E[ℓ] ⊂ E(\F_{q^n})$, then find the null subspace
-of $π-λ$, and finally apply Vélu's formulas. %
+of $π-λ$, and finally apply \hyperref[th:velu]{Vélu's formulas}. %
 With the degree $n$ generally growing as $O(\ell)$, it is no surprise
 that evaluating one $\Cl(\O)$-action takes several minutes. %
 Better algorithms exist, but they still require $O(ℓ^3)$ operations to
@@ -3190,27 +3190,48 @@ Is it possible to do better? %
 By choosing parameters carefully, we may hope to limit the degrees of
 the extensions where the $E[ℓ]$ live, as first proposed
 in~\cite{AC:DeFKieSmi18}. %
-Suppose, for example, that $π|E[ℓ]$ acts like $\mat{1&0\\0&μ}$, with
-$μ≠1$. %
+Suppose, for example, that $π|E[ℓ]$ acts like $\mat{1&0\\0&q}$, with
+$q≠1 \mod ℓ$. %
 In this case, there is an easily recognizable direction associated to
-the eigenvalue $1$: the corresponding eigenspace is the cyclic group
-of $\F_q$-rational $ℓ$-torsion points. %
+the eigenvalue $1$: the corresponding eigenspace is the unique cyclic
+group of $\F_q$-rational $ℓ$-torsion points. %
 A point in this eigenspace can be computed by taking a random point in
 $E(\F_q)$, and multiplying it by $\#E/ℓ$: there is a $(ℓ-1)/ℓ$ chance
 that the result is not zero, and can thus be used to compute the
 $ℓ$-isogeny of direction $π-1$ using Vélu's formulas. %
+This algorithm is illustrated in Figure~\ref{fig:CM-eval}.
 
-%% TODO: use an algorithm box
+\begin{figure}
+  \centering
+  \begin{algorithmic}[1]
+    \REQUIRE A curve $E$, its order $N = \#E(\F_q)$,\\
+    a prime $ℓ$ such that $(π - 1)(π - q) = 0 \mod ℓ$ with $q≠1 \mod ℓ$.
+    \ENSURE The curve $(π-1,ℓ)·E$.
+    \REPEAT
+    \STATE Pick a random point $P$ on $E$;
+    \STATE Set $K = [N/ℓ]P$;
+    \UNTIL{$K$ is not the point at infinity;}
+    \STATE Compute the isogeny $ϕ : E → E/〈K〉$ using Velu's formulas;
+    \RETURN $E/〈K〉$.
+  \end{algorithmic}
+  
+  \caption{Evaluation of the CM group action using a special prime.}
+  \label{fig:CM-eval}
+\end{figure}
 
 We can do even better. %
 Suppose that $π|E[ℓ]$ acts like $\mat{1&0\\0&-1}$, then both
 directions are recognizable: $π-1$ is obtained like before, while
 $π+1$ corresponds to those points such that $π(x,y) = (x,-y)$, i.e.\
 the points whose $x$-coordinate is in $\F_q$ and whose $y$-coordinate
-is in $\F_{q^2}$.%
-\footnote{Another interpretation is that $E[(ℓ,π+1)]$ is the image of
-  $\tilde{E}[(ℓ,π-1)]$, where $\tilde{E}$ is a quadratic twist of
-  $E$.} %
+is in $\F_{q^2}$. %
+A simple modification to the algorithm in Figure~\ref{fig:CM-eval}
+lets us handle both cases at once.%
+\footnote{Alternatively, we may note that $E[(π+1,ℓ)]$ is the image of
+  $\tilde{E}[(π-1,ℓ)]$, where $\tilde{E}$ is a quadratic twist of
+  $E$. %
+  Then, acting by $(π-1,ℓ)$ on $\tilde{E}$ and then computing a twist
+  has the same effect as acting by $(π+1,ℓ)$ on $E$.} %
 This constraint on $π$ forces two conditions:
 \begin{enumerate}
 \item $N(π) = q=-1 \mod ℓ$,
@@ -3226,9 +3247,10 @@ For $E$ an ordinary curve, the best technique at our disposal
 consists, essentially, in taking random curves $E/\F_q$ and computing
 $\#E$, until a suitable one is found~\cite{AC:DeFKieSmi18}.
 
-On the other hand, if we enforce the constraint for enough primes $ℓ$
-(it is enough that $\prod ℓ>2\sqrt{q}$), then we effectively force $t$
-to be $0$, and thus $E$ to be supersingular. %
+\paragraph{CSIDH.}
+On the other hand, if we enforce the constraints above for enough
+primes $ℓ$ (it is enough that $\prod ℓ>2\sqrt{q}$), then we
+effectively force $t$ to be $0$, and thus $E$ to be supersingular. %
 We saw that supersingular curves do not have complex multiplication,
 but it turns out there still is a way to define an action of $ℤ[π]$ on
 a set of supersingular elliptic curves.
@@ -3909,8 +3931,9 @@ class. %
   \end{equation*}
 \end{corollary}
 
-There exists also a more precise, categorical statement of the Deuring
-correspondence, which we give here for completeness.
+There also exists a more precise, functorial statement of the Deuring
+correspondence, which we give here for completeness. %
+The reader unfamiliar with categories can safely ignore this version.
 
 \begin{lemma}
     Given an isogeny $\varphi:E_1\to E_2$, the pullback map
@@ -4020,14 +4043,13 @@ The correspondence between ideals classes and isogenies let us
 efficiently evaluate the CM action and construct isogeny-based
 cryptographic schemes, as described in
 Part~\ref{part:crypt-group-acti}. %
-It is natural to ask whether the same could be done with the Deuring
+It is natural to ask whether the same can be done with the Deuring
 correspondence.
 
-We already know how to efficiently compute isogenies (in polynomial
-time in their degree). %
-The next question is how to represent and compute with quaternions,
-ideals and orders. %
+We already know how to efficiently compute with elliptic curves and
+isogenies. %
 
+Figure~\ref{fig:CM-eval}
 
 \section{Signatures based on the Deuring correspondence}
 \label{sec:sqisign}
