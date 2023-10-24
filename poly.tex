@@ -61,6 +61,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{problem}{Problem}
+\newtheorem{remark}[theorem]{Remark}
 \newtheorem{exercise}{Exercise}[part]
 
 \DeclareMathOperator{\Aut}{Aut} % automorphism group
@@ -74,6 +75,8 @@
 \DeclareMathOperator{\nrd}{nrd} % reduced norm
 \DeclareMathOperator{\discrd}{discrd} % reduced discriminant
 \DeclareMathOperator{\loglog}{loglog}
+\DeclareMathOperator{\poly}{poly}
+\DeclareMathOperator{\polylog}{polylog}
 \DeclareMathOperator{\im}{Im} % imaginary part
 \DeclareMathOperator{\re}{Re} % real part
 \DeclareMathOperator{\GL}{GL}
@@ -1150,8 +1153,9 @@ see~\cite[III.6.1]{silverman:elliptic} for a detailed proof).
   \end{enumerate}
 \end{theorem}
 
+\paragraph{Computing isogenies.}
 The computational counterpart to the kernel-isogeny correspondence is
-given by Vélu's much celebrated formulas. %
+given by Vélu's celebrated formulas. %
 
 \begin{proposition}[{Vélu~\cite{velu71}}]
   \label{th:velu}
@@ -1173,6 +1177,51 @@ given by Vélu's much celebrated formulas. %
   \end{align*}
   as a representative for $E/G$.
 \end{proposition}
+
+Using Vélu's formulas, or one of their
+variants~\cite{moody2016analogues,AC:CosHis17,PQCRYPTO:Renes18}, we
+can represent isogenies and evaluate them at arbitrary points using a
+number of field operations polynomial in their degree. %
+In some favorable cases, an isogeny of degree $d$ can even be
+represented in constant space and be evaluated at arbitrary points
+using only $\sqrt{d}\polylog(d)$
+operations~\cite{bernstein2020faster}. %
+
+We extend this representation to chains of isogenies: we represent
+each isogeny in the chain by its kernel, and evaluate it using Vélu's
+formulas. %
+Thanks to Corollary~\ref{coro:isog-basic}, any isogeny of composite
+degree $N$ can thus be evaluated in time polynomial in $\log(N)$ and
+the largest prime factor of $N$.
+
+We would like to abstract the way an isogeny is actually stored and
+evaluated and only focus on the cost of its evaluation. %
+This motivates the following definition, where we restrict to
+isogenies over finite fields to keep things concrete.
+
+\begin{definition}[Isogeny representation]
+  \label{def:isog-repr}
+  Let $E$ be an elliptic curve defined over a finite field $\F_q$. %
+  An \emph{(efficient) isogeny representation} of an isogeny $ϕ:E→E'$
+  is a deterministic algorithm which on input an arbitrary point
+  $P ∈ E(\F_{q^k})$ outputs $ϕ(P)$ using $\poly(k\log(q))$ operations.
+\end{definition}
+
+There is a little ambiguity on what is meant by ``algorithm'' in the
+definition. %
+Any model of computation will be acceptable, as long as it is
+polynomial-time equivalent to another. %
+In this text we will informally describe algorithms, sometimes using
+pseudo-code, without focusing too much on a detailed complexity
+analysis.
+
+\begin{remark}
+  An isogeny representation of $ϕ:E→E'$ is enough to compute an
+  equation for the image curve $E'$. %
+  It is indeed sufficient to evaluate $ϕ$ at all points of order $2$
+  to get the roots of $f(x)$ in the Weierstrass equation $y^2 = f(x)$
+  of $E'$.
+\end{remark}
 
 
 \section{The Weil pairing}
@@ -1473,20 +1522,24 @@ a unique quaternion algebra with discriminant $p$, which we denote
 $B_{p,\infty}$. It ramifies exactly at $p$ and $\infty$.
 
 \begin{proposition}
-Let $p$ be a prime number, then we can choose the following representations
-for the quaternion algebra $B_{p,\infty}$.
-\begin{enumerate}
-\item $B_{p,\infty} \cong \left(\frac{-1,-1}{\Q}\right)$
-if $p=2$;
-\item $B_{p,\infty} \cong \left(\frac{-1,-p}{\Q}\right)$
-if $p\equiv 3\pmod{4}$;
-\item $B_{p,\infty} \cong \left(\frac{-1,-p}{\Q}\right)$
-if $p\equiv 5\pmod{8}$;
-\item $B_{p,\infty} \cong \left(\frac{-r,-p}{\Q}\right)$
-if $p\equiv 1\pmod{8}$, where $r\equiv 3\pmod{4}$ is a prime number
-that is not a square modulo $p$.
-\end{enumerate}
+  \label{th:quat-presentation}
+  Let $p$ be a prime number, then we can choose the following representations
+  for the quaternion algebra $B_{p,\infty}$.
+  \begin{enumerate}
+  \item $B_{p,\infty} \cong \left(\frac{-1,-1}{\Q}\right)$
+    if $p=2$;
+  \item $B_{p,\infty} \cong \left(\frac{-1,-p}{\Q}\right)$
+    if $p\equiv 3\pmod{4}$;
+  \item $B_{p,\infty} \cong \left(\frac{-2,-p}{\Q}\right)$
+    if $p\equiv 5\pmod{8}$;
+  \item $B_{p,\infty} \cong \left(\frac{-r,-p}{\Q}\right)$
+    if $p\equiv 1\pmod{8}$, where $r\equiv 3\pmod{4}$ is a prime number
+    that is not a square modulo $p$.
+  \end{enumerate}
 \end{proposition}
+\begin{proof}
+  See~\cite{pizer1980}.
+\end{proof}
 
 From now onward, our main quaternion algebra of concern will be $B_{p,\infty}$;
 it turns out to be the most interesting one in the context of elliptic curves,
@@ -1522,6 +1575,27 @@ We say that $I$ is a fractional left (respectively right) $\O$-ideal if
 $\O\subset\O_L(I)$ (respectively $\O\subset\O_R(I)$).
 A (left or right) $\O$-ideal $I$ is called \emph{integral} if $I\subset\O$.
 
+
+\begin{proposition}
+  \label{th:quat-max-ord}
+  Let $B_{p,∞}$ be represented like in
+  Proposition~\ref{th:quat-presentation}. %
+  Then
+  \begin{equation*}
+    \O =
+    \begin{cases}
+      \left〈\frac{1 + i + j + ij}{2}, i, j, ij \right〉 & \text{if $p = 2$},\\
+      \left〈1, i, \frac{1+j}{2}, \frac{i+ij}{2} \right〉 & \text{if $p ≡ 3 \pmod 4$,}\\
+      \left〈1, i, \frac{-1+i+j}{2}, \frac{2-i+ij}{4} \right〉 & \text{if $p ≡ 5 \pmod 8$,}\\
+      \left〈\frac{1+i}{2}, \frac{j+ij}{2}, \frac{i+cij}{r}, ij\right〉 & \text{if $p ≡ 1 \pmod 8$, where $c^2p = -1 \pmod r$,}
+    \end{cases}
+  \end{equation*}
+  is a maximal order of $B_{p,∞}$.
+\end{proposition}
+\begin{proof}
+  See~\cite[Lemmas~2--4]{kohel2014quaternion}
+  or~\cite[Lemmas~2.2--3]{FOCS:Wesolowski21}.
+\end{proof}
 
 
 \paragraph{The endomorphism ring.}
@@ -2397,6 +2471,8 @@ previous one, as a famous theorem shows.
 \section{Isogenies and the CM action}
 \label{sec:compl-mult-2}
 
+%% TODO: CM correspondence table
+
 From now on we abbreviate ``complex multiplication'' by CM. %
 We saw in Theorem~\ref{th:compl-mult} that the class group $\Cl(\O)$
 acts on the set $\Ell(\O)$ of CM elliptic curves over $ℂ$ with complex
@@ -2957,11 +3033,18 @@ However, in order to fulfill the definition of an effective group
 action, we need to be able to take an arbitrary element
 $\frak a∈\Cl(\O)$, an arbitrary curve $E ∈ \Ell_q(\O)$, and to
 evaluate $\frak a · E$. %
-The best algorithm for doing so has subexponential complexity in
-$q$~\cite{jao+soukharev10}, which is not exactly ``efficient''. %
-Instead, following Rostovtsev and
-Stolbunov~\cite{EPRINT:RosSto06}, we may define a variant of
-the key exchange based on walks in a Cayley graph of $\Cl(\O)$.
+But, if we do not choose carefully an ideal representative for
+$\frak a$, the norm $N(\frak \a) = \deg ϕ_{\frak a}$ may contain
+arbitrarily large prime factors, and we do not necessarily have an
+efficient representation for it. %
+The best algorithm known for an arbitrary ideal representative has
+subexponential complexity in $\log(q)$~\cite{jao+soukharev10}, which
+overshoots \hyperref[def:isog-repr]{our definition of
+  ``efficient''}. %
+Instead, following Rostovtsev and Stolbunov~\cite{EPRINT:RosSto06}, we
+may define a variant of the key exchange based on walks in a Cayley
+graph of $\Cl(\O)$, which always picks ``efficient'' ideal
+representatives.
 
 As an example, let us consider again the action of exponentiation on a
 discrete logarithm group. %
@@ -3182,8 +3265,8 @@ We have a curve $E/\F_q$, a prime $ℓ$ and a \emph{direction} $π-λ$. %
 Without further assumptions, we need to find a field extension
 $\F_{q^n}$ such that $E[ℓ] ⊂ E(\F_{q^n})$, then find the null subspace
 of $π-λ$, and finally apply \hyperref[th:velu]{Vélu's formulas}. %
-With the degree $n$ generally growing as $O(\ell)$, it is no surprise
-that evaluating one $\Cl(\O)$-action takes several minutes. %
+With the extension degree $n$ generally growing as $O(\ell)$, it is no
+surprise that evaluating one $\Cl(\O)$-action takes several minutes. %
 Better algorithms exist, but they still require $O(ℓ^3)$ operations to
 find the isogeny.
 
@@ -4047,12 +4130,12 @@ Part~\ref{part:crypt-group-acti}. %
 We would like to have an analogous collection of algorithms for the
 Deuring correspondence.
 
-The first step is to establish a correspondence between endomorphisms
-and quaternions. %
-Concretely, we seek a \emph{quaternion representation} of $\End(E)$,
-i.e.\ an integral basis $(1,α,β,γ)$ of an order $\O ≃ \End(E)$,
-together with \emph{efficiently computable} endomorphisms of $E$
-corresponding to $α$, $β$ and $γ$.
+The first step is to establish an \emph{efficient representation} of
+an endomorphism ring. %
+Concretely, for a given curve $E_0$, we seek a basis of $\End(E_0)$
+made of four \hyperref[def:isog-repr]{efficiently represented}
+endomorphisms, together with an explicit injection
+$\End(E_0) \hookrightarrow B_{p,∞}$.
 
 This is easier said than done: ordinary curves have an obvious
 endomorphism generating the endomorphism algebra, the Frobenius
@@ -4064,48 +4147,58 @@ For supersingular curves, on the other hand, it is in general
 difficult to find even a single endomorphism. %
 Luckily, some curves have a natural quaternion representation.
 
-\begin{theorem}
-  Let $p > 2$ and denote by $B_{p,∞}$ the quaternion algebra ramified
-  at $p$ and infinity. %
-  If $p = 3 \mod 4$ set $q = 1$, otherwise set $q$ to the smallest
-  prime congruent to $3 \mod 4$ such that
-  $\left(\frac{-q}{p}\right) = -1$. %
-  Then $B_{p,∞}$ is isomorphic to $\left(\frac{-q,-p}{ℚ}\right)$.
-
-  If $p = 3 \mod 4$ let $\O$ be the order having
-  $\bigl(1,i,(1+j)/2,(i+ij)/2\bigr)$ for integral basis; otherwise let
-  $\O$ have basis $\bigl(1,(i+1)/2,j,(ci+ij)/q\bigr)$ with
-  $c^2 = -p \mod q$. %
-  Then $\O$ is a maximal order of $B_{p,∞}$ and, assuming the
-  generalized Riemann hypothesis (GRH), there exists a supersingular
-  curve $E$ with a quaternion representation of $\End(E)≃\O$.
-\end{theorem}
+\begin{proposition}
+  \label{th:E0}
+  Let $B_{p,∞}$ be represented as in
+  Proposition~\ref{th:quat-presentation} and let $\O_0$ be the maximal
+  order of Proposition~\ref{th:quat-max-ord}. %
+  Assuming the generalized Riemann hypothesis (GRH), there exists a
+  supersingular curve $E_0$ such that $\End(E_0)≃\O_0$ and a basis of
+  $\End(E_0)$ made of efficiently represented endomorphisms.
+\end{proposition}
 \begin{proof}
-  See~\cite[Lemmas~2-4]{kohel2014quaternion} for the fact that $\O$ is
-  a maximal order. %
-  If $p=3 \mod 4$, then $E$ is the curve $y^2 = x^3 + x$ with
-  $j$-invariant 1728 (see Example~\ref{ex:1728}). %
-  Consider the maximal order $\O$ of $ℚ(\sqrt{-q})$: because
-  $q = 3 \mod 4$, its class number must be odd
-  (see~\cite{mordell61}). %
-  By Theorem~\ref{th:deuring-red} all curves over $ℂ$ with CM by $\O$
-  have supersingular reduction modulo $p$, and because they are odd in
-  number at least one of them must be defined over $\F_p$. %
-  Let $E$ be this curve and let $ι$ be one of its endomorphisms such
-  that $ι^2 = -q$, then the quaternion $i$ corresponds to $ι$ and $j$
-  corresponds to the $\F_p$-Frobenius endomorphism.
+  If $p = 2$, then $E_0$ is the curve $y^2 = x^3 + x$ with
+  $j$-invariant 1728, $(1 + i + j + ij)/2$ is one of its automorphisms of order
+  $6$, $i$, $j$ and $k$ are automorphisms of order $4$.
+  
+  For all other cases, we follow~\cite[Proposition~3]{EC:EHLMP18}. %
+  If $p ≡ 3 \bmod 4$, then $E_0$ is again $y^2 = x^3 + x$, with the
+  automorphism $ι:(x,y)↦(-x,\sqrt{-1} y)$ for $i$ and Frobenius for
+  $j$ (see Example~\ref{ex:1728}).
 
-  Assuming GRH, the smallest $q$ satisfying the conditions of the
-  theorem is in $O(\log(p)^2)$. %
-  Then all the computations above can be done in time polynomial in
-  $q$, which fits within our ``efficiently computable'' budget.
+  For $p ≡ 5 \bmod 8$, we choose $E_0 : y^2 = x^3 + x^2 - 3x + 1$ of
+  $j$-invariant $8000$. %
+  This curve has a single cyclic group of order $2$ over $ℚ$, the
+  kernel of an endomorphism of degree $2$, take its reduction for
+  $i$. %
+  The Frobenius endomorphism corresponds to $j$.
+  
+  Finally, for $p ≡ 1 \bmod 8$, consider the maximal order $\O$ of
+  $ℚ(\sqrt{-r})$: because $q = 3 \mod 4$, its class number must be odd
+  (see~\cite{mordell61}). %
+  By hypothesis
+  $\left(\frac{r}{p}\right) = \left(\frac{-r}{p}\right) = -1$, thus by
+  Theorem~\ref{th:deuring-red} all curves over $ℂ$ with CM by $\O$
+  have supersingular reduction modulo $p$. %
+  Because they are odd in number at least one of these reductions must
+  be defined over $\F_p$, let it be $E_0$. %
+  Finally, let $ι$ be one of its endomorphisms such that $ι^2 = -r$,
+  then the quaternion $i$ corresponds to $ι$ and $j$ corresponds to
+  the $\F_p$-Frobenius endomorphism.
+
+  Assuming GRH, the smallest $r$ satisfying the conditions of
+  Proposition~\ref{th:quat-presentation} is in $O(\log(p)^2)$. %
+  Then all the computations above can be done in time $\polylog(p)$,
+  which fits within the budget of Defintion~\ref{def:isog-repr}.
 \end{proof}
 
 From now on we shall call \emph{special} a supersingular curve
-produced by the theorem. %
+produced by the proposition. %
 In practice, virtually all supersingular isogeny based cryptography
 uses $p = 3 \mod 4$ and chooses $y^2 = x^3 + x$ as special curve. %
 We shall thus only focus on this case in the rest of the manuscript.
+
+%%
 
 Now that we have at least one quaternion representation, we can extend
 it to any supersingular curve by walking in the $\ell$-isogeny
@@ -4122,13 +4215,15 @@ Consider the map $\omega = ϕ∘ω∘\hat{ϕ}$, represented by the diagram
 
     \draw[-latex]
     (E0) edge[transform canvas={yshift=1mm}] node[above]{\(ϕ\)} (E)
-    (E)  edge[transform canvas={yshift=-1mm}] node[below]{\(\hat{ϕ}\)} (E0)
-    (E0) edge[loop left,in=135,out=215,looseness=8] node[left]{\(ω\)} (E0);
+    (E)  edge[transform canvas={yshift=-1mm}] node[below]{\(\hat{ϕ}\)} (E0);
+%     edge[loop left,in=135,out=215,looseness=8] node[left]{\(ω\)} (E0);
+    \draw[-latex] (E0.south) arc (330:30:.6);
+    \draw (E0) +(-1.4,0) node {\(ω\)} ;
   \end{tikzpicture}
 \end{equation*}
 It is an endomorphism of $E$ of degree $ℓ^{2n}\deg ω$.
 
-%$
+
 \footnote{The endomorphism $ω$ is sometimes called a ``lollipop'' in
   the cryptographic literature, for obvious reasons.}
 
