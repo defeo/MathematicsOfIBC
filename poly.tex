@@ -207,7 +207,8 @@ Many students have contributed by pointing out mistakes and helping
 fixing them. %
 We would like to thank, in particular, Simon Masson, Marcel Müller,
 Martin Strand, Vadym Fedyukovych and Tomáš Novotny, Sina Schaeffler,
-and apologize to all those students whose name we've forgot.
+Val\'erian Hatey, Mehdi Kermaoui, and apologize to all those students
+whose name we've forgot.
 
 \clearpage
 {
@@ -1105,6 +1106,9 @@ determined by their kernel. %
   Furthermore, $E'$ and $ϕ$ are unique up to composition with an
   isomorphism $E'≃E''$. %
 \end{proposition}
+\begin{proof}
+  See~\cite[Prop.~III.4.12]{silverman:elliptic}
+\end{proof}
 
 Said otherwise, for any finite subgroup $G⊂E$, we have an exact
 sequence of algebraic groups
@@ -1123,6 +1127,10 @@ prove the following useful facts. %
 \begin{corollary}\ 
   \label{coro:isog-basic}
   \begin{enumerate}
+  \item Let $H$ and $G$ be finite subgroups $H ⊂ G ⊂ E$, and
+    $ϕ: E \to E/G$. %
+    Then $ϕ$ factors as $ψ∘χ$, with $χ : E → E/H$ and
+    $ψ : E/H → (E/H)/χ(G)$, up to post-composition by an isomorphism.
   \item Any isogeny of elliptic curves can be decomposed as a product
     of prime degree isogenies.
   \item Let $E$ be defined over an algebraically closed field $k$, let
@@ -2087,8 +2095,8 @@ We thus are in one of the following four cases\footnote{In the point
   Case~(2) as the \emph{Elkies case}. See
   Appendix~\ref{sec:appl-point-count}.}:
 \begin{itemize}
-\item[(0)] $π$ is not diagonalizable in $\F_ℓ$, then $E$ has no
-  $ℓ$-isogenies.
+\item[(0)] $π$ is not triangularizable over $\F_ℓ$, then it has no
+  eigenvalues and $E$ has no $ℓ$-isogenies.
 \item[(1.1)] $π$ has one eigenvalue of (geometric) multiplicity one,
   i.e., it is conjugate to a non-diagonal matrix
   $\mat{λ&*\\0&λ}$; then
@@ -2471,8 +2479,6 @@ previous one, as a famous theorem shows.
 \section{Isogenies and the CM action}
 \label{sec:compl-mult-2}
 
-%% TODO: CM correspondence table
-
 From now on we abbreviate ``complex multiplication'' by CM. %
 We saw in Theorem~\ref{th:compl-mult} that the class group $\Cl(\O)$
 acts on the set $\Ell(\O)$ of CM elliptic curves over $ℂ$ with complex
@@ -2545,8 +2551,27 @@ bijection
 \text{Ideal class of }\a &\longmapsto \text{Isomorphism class of }\a\cdot E.
 \end{aligned}
 \]
-This confirms what we already knew, that $\#\Ell_q(\O)=h(\O)$, but
-also answers our question on the size of $ℓ$-isogeny volcanoes.
+This confirms what we already knew, that $\#\Ell_q(\O)=h(\O)$. %
+We summarize in Table~\ref{tab:cm} the correspondence between ideals
+and isogenies given by complex multiplication. %
+We now have all the necessary element to answer our original question
+on the size of $ℓ$-isogeny volcanoes.
+
+\begin{table}
+  \centering
+  \begin{tabular}{l@{\hspace{5em}}l}
+    \bf Number fields & \bf Elliptic curves\\
+    \hline
+    Order & Endomorphism ring\\
+    Integral invertible ideal & Horizontal isogeny\\
+    Integral principal ideal & Endomorphism\\
+    Conjugate ideal & Dual isogeny\\
+    Ideal norm & Isogeny degree\\
+    Ideal class & $\Hom(E,E')$\\
+  \end{tabular}
+  \caption{Correspondences of complex multiplication.}
+  \label{tab:cm}
+\end{table}
 
 \begin{corollary}
   Let $\O$ be a quadratic imaginary order, and assume that
@@ -3537,9 +3562,9 @@ Couveignes~\cite{EPRINT:Couveignes06} and
 Stolbunov~\cite{Stolbunov2012}, and then refined
 in~\cite{EC:DeFGal19,AC:BeuKleVer19}.
 
-\textcolor{red}{ TODO: this section will be finished at a later
+\textcolor{red}{TODO: this section will be finished at a later
   time. In the meantime, you can find a survey on isogeny based
-  signature schemes here~\cite{todo}}
+  signature schemes here~\cite{isogpoksurvey}}
 
 %% TODO: REGA, signatures
 
@@ -4157,8 +4182,8 @@ Luckily, some curves have a natural quaternion representation.
   $\End(E_0)$ made of efficiently represented endomorphisms.
 \end{proposition}
 \begin{proof}
-  If $p = 2$, then $E_0$ is the curve $y^2 = x^3 + x$ with
-  $j$-invariant 1728, $(1 + i + j + ij)/2$ is one of its automorphisms of order
+  If $p = 2$, then $E_0$ is the curve $y^2 + y = x^3$ with
+  $j$-invariant 0, $(1 + i + j + ij)/2$ is one of its automorphisms of order
   $6$, $i$, $j$ and $k$ are automorphisms of order $4$.
   
   For all other cases, we follow~\cite[Proposition~3]{EC:EHLMP18}. %
@@ -4168,9 +4193,9 @@ Luckily, some curves have a natural quaternion representation.
 
   For $p ≡ 5 \bmod 8$, we choose $E_0 : y^2 = x^3 + x^2 - 3x + 1$ of
   $j$-invariant $8000$. %
-  This curve has a single cyclic group of order $2$ over $ℚ$, the
-  kernel of an endomorphism of degree $2$, take its reduction for
-  $i$. %
+  This curve has a single point of order $2$ defined over $ℚ$,
+  generating the kernel of an endomorphism of degree $2$, take its
+  reduction for $i$. %
   The Frobenius endomorphism corresponds to $j$.
   
   Finally, for $p ≡ 1 \bmod 8$, consider the maximal order $\O$ of
