@@ -137,8 +137,11 @@
 \thispagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0.4pt}
-\cfoot{\doclicenseThis}
-\lfoot{\LaTeX{} source code available at \url{https://github.com/defeo/MathematicsOfIBC/}.}
+\cfoot{}
+\lfoot{Stable version of these notes permanently hosted at
+  \url{https://arxiv.org/abs/1711.04062}.  \LaTeX{} source code
+  available at \url{https://github.com/defeo/MathematicsOfIBC/}.
+  \doclicenseThis}
 
 \section*{Preface}
 
@@ -207,7 +210,7 @@ Many students have contributed by pointing out mistakes and helping
 fixing them. %
 We would like to thank, in particular, Simon Masson, Marcel Müller,
 Martin Strand, Vadym Fedyukovych and Tomáš Novotny, Sina Schaeffler,
-Val\'erian Hatey, Mehdi Kermaoui, and apologize to all those students
+Val\'erien Hatey, Mehdi Kermaoui, and apologize to all those students
 whose name we've forgot.
 
 \clearpage
@@ -428,7 +431,7 @@ $m$-torsion subgroup of $E(\bar{k})$, i.e.\ the torsion points in the
 algebraic closure. %
 $E[m]$ may or may not be fully contained in $E(k)$, it is easy to see,
 however, that it will always be contained in a finite extension of
-$k$.
+$k$ of degree less than $m^2$.
 
 For curves defined over a field of positive characteristic $p$, the
 case $E[p]≃ℤ/pℤ$ is called \emph{ordinary}, while the case
@@ -4021,11 +4024,13 @@ correspondence
     \end{equation*}
 \end{theorem}
 
-Unlike the case of complex multiplication, left $\O$-ideal classes do
-not form a group. %
-Nevertheless, thanks to Eichler's mass formula, we obtain the exact
-size of the left ideal class set and thus of the supersingular isogeny
-class. %
+In summary, the same correspondences between ideals and isogenies
+given in Table~\ref{tab:cm} for complex multiplication also hold for
+the Deuring correspondence. %
+Unlike in the CM case, left $\O$-ideal classes do not form a group,
+though at least we obtain the exact size of the left ideal class set,
+and thus of the supersingular isogeny class, thanks to Eichler's mass
+formula. %
 
 \begin{corollary}\label{cor:eichlermass}
   The number of isomorphism classes of supersingular elliptic curves
@@ -4051,7 +4056,8 @@ The reader unfamiliar with categories can safely ignore this version.
     In particular, it is an isomorphism onto the image $I(E_1[\varphi])$.
 \end{lemma}
 
-\begin{theorem}[Deuring correspondence III] 
+\begin{theorem}[Deuring correspondence III]
+  \label{th:deuring-funct}
     The contravariant functor $\Hom(-,E)$
     defines an equivalence of categories
     \begin{equation*}
@@ -4220,192 +4226,235 @@ Luckily, some curves have a natural quaternion representation.
 From now on we shall call \emph{special} a supersingular curve
 produced by the proposition. %
 In practice, virtually all supersingular isogeny based cryptography
-uses $p = 3 \mod 4$ and chooses $y^2 = x^3 + x$ as special curve. %
+uses $p = 3 \mod 4$ and sets $E_0:y^2 = x^3 + x$. %
 We shall thus only focus on this case in the rest of the manuscript.
 
-%%
+Having an efficient representation of $\End(E_0)$ is sufficient, in
+principle, to efficiently represent the endomorphism ring of any other
+curve in the isogeny class. %
+Indeed, from the Deuring correspondence we have the following
+description of $\End(E)$ for any curve isogenous to $E_0$.
 
-Now that we have at least one quaternion representation, we can extend
-it to any supersingular curve by walking in the $\ell$-isogeny
-graph. %
-Let $E_0$ be a special curve and let $ω_0$ be one of its
-endomorphisms. %
-Let $ϕ : E_0 → E$ be a walk in the $ℓ$-isogeny graph, i.e.\ an
-$ℓ^n$-isogeny. %
-Consider the map $\omega = ϕ∘ω∘\hat{ϕ}$, represented by the diagram
-\begin{equation*}
-  \begin{tikzpicture}
-    \node (E0) at (0,0) {\(E_0\)};
-    \node (E) at (2,0) {\(E\)};
+\begin{proposition}
+  Let $ϕ : E_0 → E$ be an isogeny of supersingular curves and let
+  $ι_0 : \End(E_0) \hookrightarrow \O_0 ⊂ B_{p,∞}$ be a representation of $\End(E_0)$. %
+  The map
+  \begin{align*}
+    ι_ϕ : \End(E) &\hookrightarrow B_{p,∞}\\
+    ω &\mapsto \frac{ι_0(\hat{ϕ}∘ω∘ϕ)}{\deg ϕ}
+  \end{align*}
+  is injective and $ι_ϕ(\End(E)) = \O_R(I(E_0[ϕ]))$.
+\end{proposition}
+\begin{proof}
+  See~\cite[Lemma~42.2.10]{Voight2018}.
+\end{proof}
 
-    \draw[-latex]
-    (E0) edge[transform canvas={yshift=1mm}] node[above]{\(ϕ\)} (E)
-    (E)  edge[transform canvas={yshift=-1mm}] node[below]{\(\hat{ϕ}\)} (E0);
-%     edge[loop left,in=135,out=215,looseness=8] node[left]{\(ω\)} (E0);
-    \draw[-latex] (E0.south) arc (330:30:.6);
-    \draw (E0) +(-1.4,0) node {\(ω\)} ;
-  \end{tikzpicture}
-\end{equation*}
-It is an endomorphism of $E$ of degree $ℓ^{2n}\deg ω$.
+Said otherwise, we have an explicit representation of $\End(E)$ as a
+subring of $B_{p,∞}$ as soon as we have an isogeny $ϕ:E_0→E$, but is
+it an efficient representation? %
+Suppose we have a quaternion $α ∈ B_{p,∞}$ representing an
+endomorphism of $E$, and let $d = \deg ϕ$. %
+Applying the isomorphism backwards we know there exists
+$ω_0 ∈ \End(E_0)$ such that $ι_0(ω_0) = dβ$; then, 
+\[ι_0^{-1}(dβ) = ω_0 = \hat{ϕ} ∘ ω ∘ ϕ\]
+and
+\[d^2 ω = ϕ ∘ ω_0 ∘ \hat{ϕ},\] %
+and every $ω ∈ \End(E)$ can be written this way. %
+Suppose we want to evaluate $ω$ at a point $P ∈ E$, we can compute $Q$
+such that $[d^2]Q = P$, then
+\[ϕω_0\hat{ϕ}(Q) = d^2ω(Q) = ω(P).\]
+Thus we have an efficient representation of $ω$ as long as:
+\begin{enumerate}
+\item $ϕ$ is efficiently represented,
+\item we can efficiently ``divide by $d^2$''.
+\end{enumerate}
 
+Let us start from the case where $d$ is ``small'', then
+\hyperref[th:velu]{Vélu's formulas} provide an efficient
+representation of $ϕ$. %
+Moreover, if $P ∈ E(\F_q)$, a point $Q$ such that $[d^2]Q = P$ is
+defined in an extension of $\F_q$ of degree less than $d^4$ (see
+Appendix~\ref{sec:appl-point-count} and in particular
+Definition~\ref{def:divpol}). %
+Hence, we have an efficient representation of $ω$ whenever
+$d ∈ \polylog(p)$.
 
-\footnote{The endomorphism $ω$ is sometimes called a ``lollipop'' in
-  the cryptographic literature, for obvious reasons.}
+We easily extend this to the case where $d$ is \emph{powersmooth},
+i.e.\ where $d = \prod_{i=1}^n ℓ_i^{e_i}$ with the $ℓ_i$ coprime and
+$n,ℓ_i^{e_i} ∈ \polylog(p)$. %
+Indeed, by Corollary~\ref{coro:isog-basic}, $ϕ$ can be efficiently
+represented as a composition of isogenies of degree $ℓ_i$. %
+Dividing by $d^2$ is trickier: for each $i$ we can efficiently compute
+$Q_i$ such that $[ℓ_i^{2e_i}]Q_i = P$, implying that $Q = \sum_i Q_i$
+satisfies $[d^2]Q = P$. %
+Then we evaluate $ϕω_0\hat{ϕ}(Q)$ as
+\[ϕω_0\hat{ϕ}(Q) = ϕω_0\hat{ϕ}\left(\sum_i Q_i\right) = \sum_i
+  ϕω_0\hat{ϕ}(Q_i),\] %
+involving only computations in extensions of $\F_q$ of degree less
+than $ℓ_i^{4e_i}$ and a final chain of point additions over $\F_q$.
 
+In summary, whenever we know an isogeny $ϕ:E_0→E$ of powersmooth
+degree, we have an efficient representation of $\End(E)$. %
+Knowledge of endomorphism rings is contagious! %
+We can prove that such an isogeny always exists.
 
-Figure~\ref{fig:CM-eval}
+\begin{proposition}
+  Let $E_0$ be a special curve as defined by Proposition~\ref{th:E0},
+  let $E$ be an arbitrary curve in the same isogeny class, then,
+  assuming GRH, there exists an isogeny $ϕ:E_0→E$ of degree
+  $\polylog(p)$-powersmooth.
+\end{proposition}
+\begin{proof}
+  Thanks to the Deuring correspondence, after fixing an appropriate
+  smoothness bound $B ∈ \polylog(p)$, it suffices to prove that any
+  ideal class of $\O_0$ contains an ideal of $B$-powersmooth norm. %
+  See~\cite{FOCS:Wesolowski21} for details.
+\end{proof}
+
+Even though $ϕ:E_0→E$ always exists, it is not necessarily easy to
+compute. %
+We will come back to the problem of computing isogenies of
+supersingular curves and its relationship to computing their
+endomorphsim rings in Section~\ref{sec:security}.
+
 
 \section{Signatures based on the Deuring correspondence}
 \label{sec:sqisign}
 
-TODO: GPS, SQIsign
+\textcolor{red}{TODO: this section will cover the signature schemes
+  GPS~\cite{JC:GalPetSil20} and SQISign~\cite{AC:DKLPW20} (see also
+  \url{https://sqisign.org/}).}
 
 
 \section{Security of supersingular isogeny problems}
 \label{sec:security}
 
-TODO: EndRing, IsoPath, SIDH, $Γ$-SIDH, reductions, attacks
+\textcolor{red}{TODO: this section will cover the security reductions
+  between hard problems in supersingular isogeny
+  cryptography~\cite{EC:Wesolowski22} and in particular the
+  equivalence between the isogeny path problem and the endormorphism
+  ring problem~\cite{FOCS:Wesolowski21}.}
 
-Since we stated some hard computational problems related to complex
-multiplication, and thus to isogenies, let us state some more
-\emph{easy} and \emph{hard} isogeny problems.
+% TODO: EndRing, IsoPath, SIDH, $Γ$-SIDH, reductions, attacks
 
-\begin{problem}[Isogeny computation]
-  Let $E$ be an elliptic curve defined over some field $k$. %
-  Given a description (e.g.\ a list of generators) of a subgroup
-  $G⊂E(k)$ of order $ℓ$, compute the rational fractions and the image
-  curve of the unique separable isogeny of kernel $G$.
-\end{problem}
+% \begin{problem}[Isogeny computation]
+%   Let $E$ be an elliptic curve defined over some field $k$. %
+%   Given a description (e.g.\ a list of generators) of a subgroup
+%   $G⊂E(k)$ of order $ℓ$, compute the rational fractions and the image
+%   curve of the unique separable isogeny of kernel $G$.
+% \end{problem}
 
-Vélu's formulas (Proposition~\ref{th:velu}) give a solution to this
-problem, in $\tildO(ℓ)$ operations over $k$. %
-This is nearly optimal, given that the output has size $O(ℓ)$. %
-More generally the group $G$ may live in a finite extension of $k$,
-however as long as the isogeny is $k$-rational it is still possible to
-represent $G$ so that Vélu's formulas take $\tildO(ℓ)$ operations over
-$k$~\cite{kohel}.
+% A slight variation on this problem asks to output, instead of the full
+% rational fractions representing the isogeny, simply its evaluation at
+% a point.
 
-In some special instances, e.g.\ when the isogeny can be decomposed as
-many isogenies of smaller degree (e.g.\ when $\ell = 2^n$), the
-rational fractions may be represented more compactly, and the cost may
-become only logarithmic in $ℓ$.
+% \begin{problem}[Isogeny evaluation]
+%   Let $E$ be an elliptic curve defined over some field $k$. %
+%   Given a description of a subgroup $G⊂E(k)$ of order $ℓ$, given a
+%   point $P∈E$, letting $ϕ$ be the unique separable isogeny of kernel
+%   $G$, compute $ϕ(P)$.
+% \end{problem}
 
-A slight variation on this problem asks to output, instead of the full
-rational fractions representing the isogeny, simply its evaluation at
-a point.
+% The following problems are less central to isogeny based
+% cryptosystems, but appear, e.g., when counting points of elliptic
+% curves.
 
-\begin{problem}[Isogeny evaluation]
-  Let $E$ be an elliptic curve defined over some field $k$. %
-  Given a description of a subgroup $G⊂E(k)$ of order $ℓ$, given a
-  point $P∈E$, letting $ϕ$ be the unique separable isogeny of kernel
-  $G$, compute $ϕ(P)$.
-\end{problem}
+% \begin{problem}[Explicit isogeny problem]
+%   \label{prob:expl-isog}
+%   Let $E$ be an elliptic curve, and let $ℓ$ be an integer. %
+%   Find, if it exists, an isogeny of degree $ℓ$ with domain $E$.
+% \end{problem}
 
-Surprisingly, this problem can be solved more efficiently than the
-isogeny computation problem, in $\tildO(\sqrt{ℓ})$ time and
-space~\cite{bernstein2020faster}. %
-This algorithm is at the heart of essentially any isogeny based
-scheme.
+% A slightly modified version of the same problem is often found in the
+% literature.
 
-The following problems are less central to isogeny based
-cryptosystems, but appear, e.g., when counting points of elliptic
-curves.
+% \begin{problem}
+%   Given two elliptic curves $E,E'$, isogenous of known degree $ℓ$,
+%   find an isogeny $ϕ:E\to E'$ of degree $ℓ$.
+% \end{problem}
 
-\begin{problem}[Explicit isogeny problem]
-  \label{prob:expl-isog}
-  Let $E$ be an elliptic curve, and let $ℓ$ be an integer. %
-  Find, if it exists, an isogeny of degree $ℓ$ with domain $E$.
-\end{problem}
+% Elkies was the first to formulate these two problems and give an
+% algorithm~\cite{elkies92,elkies98} that solves both with complexity
+% $O(\ell^3)$ in
+% general~\cite{bostan+morain+salvy+schost08,lercier+sirvent08}. %
+% Alternate algorithms, with similar complexity, are due to Couveignes
+% and
+% others~\cite{couveignes94,couveignes96,couveignes00,df+schost09,defeo2016explicit}.
 
-A slightly modified version of the same problem is often found in the
-literature.
+% All previous problems can be considered to be "easy" problems,
+% because they have a polynomial time solution in the size of their
+% output. %
+% The next problem is the blueprint for all "hard" isogeny problems used in
+% isogeny based cryptography. %
 
-\begin{problem}
-  Given two elliptic curves $E,E'$, isogenous of known degree $ℓ$,
-  find an isogeny $ϕ:E\to E'$ of degree $ℓ$.
-\end{problem}
+% \begin{problem}[Isogeny path]
+%   Given two elliptic curves $E,E'$ over a finite field $\F_q$, such that
+%   $\#E=\#E'$, find an isogeny $ϕ:E\to E'$ of smooth degree.
+% \end{problem}
 
-Elkies was the first to formulate these two problems and give an
-algorithm~\cite{elkies92,elkies98} that solves both with complexity
-$O(\ell^3)$ in
-general~\cite{bostan+morain+salvy+schost08,lercier+sirvent08}. %
-Alternate algorithms, with similar complexity, are due to Couveignes
-and
-others~\cite{couveignes94,couveignes96,couveignes00,df+schost09,defeo2016explicit}.
+% The difficulty of this problem depends on the distributions $E$ and
+% $E'$ are drawn from, but it is in general a very difficult one, for
+% which only algorithms exponential in $\log(q)$ are known. %
+% Remark that, in general, $\degϕ$ will be exponential in $\log(q)$,
+% hence the "smooth degree" constraint, which lets us represent the
+% output as a composition of small degree isogenies.
 
-All previous problems can be considered to be "easy" problems,
-because they have a polynomial time solution in the size of their
-output. %
-The next problem is the blueprint for all "hard" isogeny problems used in
-isogeny based cryptography. %
+% A general strategy to tackle the problem is by a \emph{meet in the
+%   middle} random walk~\cite{Gal}: choose an expander graph $G$
+% containing both $E$ and $E'$, and start a random walk from each
+% curve. %
+% By the birthday paradox, the two walks are expected to meet after
+% roughly $O(\sqrt{\#G})$ steps; when a collision is detected, the
+% composition of the walks yields the desired isogeny.
 
-\begin{problem}[Isogeny path]
-  Given two elliptic curves $E,E'$ over a finite field $\F_q$, such that
-  $\#E=\#E'$, find an isogeny $ϕ:E\to E'$ of smooth degree.
-\end{problem}
+% The meet in the middle strategy was notoriously used to extend the
+% power of the GHS attack on elliptic curves defined over extension
+% fields of composite degree~\cite{JC:GauHesSma02,EC:GalHesSma02}. %
+% Without going into the details of the GHS attacks, one of its
+% remarkable properties is that only a small fraction of a given isogeny
+% class is vulnerable to it. %
+% Finding an isogeny from an immune curve to a weak curve allows the
+% attacker to map the discrete logarithm problem from one to the
+% other. %
+% The average size of the isogeny class of a random ordinary elliptic
+% curve is $O(\sqrt{\#E})$ (more on this later), thus the meet in the
+% middle strategy yields an $O(\#E^{1/4})$ attack on any curve in the
+% class: better than a generic attack on the discrete logarithm
+% problem. %
+% The attack is pictured in Figure~\ref{fig:ghs}.
 
-The difficulty of this problem depends on the distributions $E$ and
-$E'$ are drawn from, but it is in general a very difficult one, for
-which only algorithms exponential in $\log(q)$ are known. %
-Remark that, in general, $\degϕ$ will be exponential in $\log(q)$,
-hence the "smooth degree" constraint, which lets us represent the
-output as a composition of small degree isogenies.
+% \begin{figure}
+%   \centering
+%   \begin{tikzpicture}
+%     \path (0,0) node[anchor=east] {$E$} (6,0) node[anchor=west] {$E'$};
+%     \path (-0.8,0) node[anchor=east] {weak curve}
+%     (6.8,0) node[anchor=west] {strong curve};
 
-A general strategy to tackle the problem is by a \emph{meet in the
-  middle} random walk~\cite{Gal}: choose an expander graph $G$
-containing both $E$ and $E'$, and start a random walk from each
-curve. %
-By the birthday paradox, the two walks are expected to meet after
-roughly $O(\sqrt{\#G})$ steps; when a collision is detected, the
-composition of the walks yields the desired isogeny.
+%     \draw[->] (0,0) -- (0.5,-0.2);
+%     \draw[->] (6,0) -- (5.5,0.2);
+%     \draw[->] (0.5,-0.2) -- (1,0.2);
+%     \draw[->] (5.5,0.2) -- (5,-0.2);
+%     \begin{scope}[densely dotted,coils/.style={decorate,decoration={coil,aspect=0,amplitude=2pt}}]
+%       \draw[coils] (1,0.2) -- (3,0.4);
+%       \draw[coils] (5,-0.2) -- (3,0.4);
+%       \draw[-angle 90,coils] (3,0.4) -- (3, -0.4) node[anchor=north] {$E''$};
+%     \end{scope}
+%   \end{tikzpicture}
+%   \caption{The meet in the middle attack in weak isogeny classes.}
+%   \label{fig:ghs}
+% \end{figure}
 
-The meet in the middle strategy was notoriously used to extend the
-power of the GHS attack on elliptic curves defined over extension
-fields of composite degree~\cite{JC:GauHesSma02,EC:GalHesSma02}. %
-Without going into the details of the GHS attacks, one of its
-remarkable properties is that only a small fraction of a given isogeny
-class is vulnerable to it. %
-Finding an isogeny from an immune curve to a weak curve allows the
-attacker to map the discrete logarithm problem from one to the
-other. %
-The average size of the isogeny class of a random ordinary elliptic
-curve is $O(\sqrt{\#E})$ (more on this later), thus the meet in the
-middle strategy yields an $O(\#E^{1/4})$ attack on any curve in the
-class: better than a generic attack on the discrete logarithm
-problem. %
-The attack is pictured in Figure~\ref{fig:ghs}.
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    \path (0,0) node[anchor=east] {$E$} (6,0) node[anchor=west] {$E'$};
-    \path (-0.8,0) node[anchor=east] {weak curve}
-    (6.8,0) node[anchor=west] {strong curve};
-
-    \draw[->] (0,0) -- (0.5,-0.2);
-    \draw[->] (6,0) -- (5.5,0.2);
-    \draw[->] (0.5,-0.2) -- (1,0.2);
-    \draw[->] (5.5,0.2) -- (5,-0.2);
-    \begin{scope}[densely dotted,coils/.style={decorate,decoration={coil,aspect=0,amplitude=2pt}}]
-      \draw[coils] (1,0.2) -- (3,0.4);
-      \draw[coils] (5,-0.2) -- (3,0.4);
-      \draw[-angle 90,coils] (3,0.4) -- (3, -0.4) node[anchor=north] {$E''$};
-    \end{scope}
-  \end{tikzpicture}
-  \caption{The meet in the middle attack in weak isogeny classes.}
-  \label{fig:ghs}
-\end{figure}
-
-Similar ideas have been used to construct \emph{key escrow
-  systems}~\cite{JC:Teske06}, and to prove random reducibility of
-discrete logarithms inside some isogeny
-classes~\cite{jao+miller+venkatesan09}.
+% Similar ideas have been used to construct \emph{key escrow
+%   systems}~\cite{JC:Teske06}, and to prove random reducibility of
+% discrete logarithms inside some isogeny
+% classes~\cite{jao+miller+venkatesan09}.
 
 
-\section{SIDH-like proofs of knowledge}
-\label{sec:sidh-poks}
+% \section{SIDH-like proofs of knowledge}
+% \label{sec:sidh-poks}
 
-TODO
+% TODO
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
@@ -4569,6 +4618,7 @@ polynomial that vanishes on the whole $E[\ell]$; the smallest such
 polynomial is provided by the \emph{division polynomial} $ψ_ℓ$.
 
 \begin{definition}[Division polynomial]
+  \label{def:divpol}
   Let $E:y^2=x^3+ax+b$ be an elliptic curve, the \emph{division
     polynomials} $ψ_m$ are defined by the initial values
   \begin{align*}
@@ -4800,12 +4850,7 @@ eventually forms a cycle, the \emph{crater} of a volcano.
 
 TODO
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{comment}
-\section{Hash functions from Ramanujan graphs}
-
-
-\section{Key exchange from supersingular graphs}
 
 With CSIDH, we have seen how supersingular curves allowed us to
 go from a dramatically slow protocol to a fairly efficient one. %
