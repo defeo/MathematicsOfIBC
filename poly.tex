@@ -209,7 +209,7 @@ Rabbat.
 Many students have contributed by pointing out mistakes and helping
 fixing them. %
 We would like to thank, in particular, Simon Masson, Marcel Müller,
-Martin Strand, Vadym Fedyukovych and Tomáš Novotny, Sina Schaeffler,
+Martin Strand, Vadym Fedyukovych, Tomáš Novotny, Sina Schaeffler,
 Val\'erien Hatey, Mehdi Kermaoui, and apologize to all those students
 whose name we've forgot.
 
@@ -3023,18 +3023,21 @@ For example, for the group action of complex multiplication, the three
 hardness properties correspond to the following three problems.
 
 \begin{problem}[Group action inverse problem, Vectorization]
+  \label{prob:gaip}
   Given two elliptic curves $E,E'$ with complex multiplication by an
   order $\O$, find an ideal (class) $\frak a⊂\O$ such that
   $E'=\frak a · E$.
 \end{problem}
 
 \begin{problem}[Parallelization, Group action CDH]
+  \label{prob:ga-cdh}
   Let $E,E'$ be elliptic curves with complex multiplication by $\O$. %
   Let $\frak a ∈ \Cl(\O)$. %
   Given $(E, \frak a·E, E')$, compute $\frak a·E'$.
 \end{problem}
 
 \begin{problem}[Group action DDH]
+  \label{prob:ga-ddh}
   Let $E,E'$ be elliptic curves with complex multiplication by $\O$. %
   Let $\frak a ∈ \Cl(\O)$. %
   Given a tuple $(E,\frak a·E,E',E'')$, decide whether
@@ -3374,7 +3377,8 @@ Hence $ℤ[π]$ is a quadratic imaginary order and a subring of
 $\End(E)$; it is, in fact, (almost) the subring of $\F_q$-rational
 endomorphism of $E$.%
 \footnote{There are, in fact, two possibilities for $\End_{\F_p}(E)$,
-  namely $ℤ[π]$ or $ℤ[(π+1)/2]$.} %
+  namely $ℤ[π]$ or $ℤ[(π-1)/2]$, depending on whether $π-1$ vanishes
+  on all of $E[2]$ or not.} %
 Then, $\Cl(ℤ[π])$ acts on the set of $\F_q$-isomorphism classes of
 supersingular curves, like in the CM case. %
 This fact was first observed in~\cite{Delfs2016} and then leveraged
@@ -3410,86 +3414,127 @@ The scheme is summarized in Figure~\ref{fig:csidh}.
   \label{fig:csidh}
 \end{figure}
 
-Supersingular curves over a prime field and the CSIDH group action are
-a special case of a more general setting called \emph{orientations of
-  supersingular curves}. %
-Oriented curves are pairs $(E, \O \hookrightarrow \End(E))$, where $E$
-is a supersingular curve and $\O \hookrightarrow \End(E)$ is an
-embedding of a quadratic imaginary order inside $\End(E)$. %
-As Kohel and Coló showed~\cite{ColoKohel+2020+414+437}, $\Cl(\O)$ acts
-on these curves like in the CM case, and this was leveraged
+To encompass the ordinary and the supersingular case at once, we
+introduce the terminology of orientations. %
+
+\begin{definition}[Oriented curve]
+  \label{def:oriented-curve}
+  Let $\O$ be an imaginary quadratic order. %
+  An \emph{$\O$-oriented curve} is a curve $E$ together with an
+  injection $\O \hookrightarrow \End(E)$. %
+  If there is no other quadratic order $\O' ⊃ \O$ such that
+  $\O' \hookrightarrow \End(E)$, we say that the orientation is
+  \emph{primitive}.
+\end{definition}
+
+Theorems analogous to the \hyperref[th:compl-mul]{fundamental theorem
+  of complex multiplication} apply to oriented curves; in particular,
+$\Cl(\O)$ acts faithfully%
+\footnote{The action is not always transitive: depending on the case,
+  there may be one or two orbits.} %
+on primitively $\O$-oriented curves.
+See~\cite{ColoKohel+2020+414+437,onuki2021} for details.
+
+Thus, CSIDH is an instance of a $ℤ[π]$-orientation. %
+Orientations induced by the Frobenius endomorphism are easy to work
+with, because the action of Frobenius on $E[ℓ_i]$ is particularly easy
+to compute. %
+However, with some extra effort, it is possible to compute the class
+group action on many other oriented supersingular isogeny classes:
+This was first observed by Kohel and
+Coló~\cite{ColoKohel+2020+414+437}, and then leveraged
 in~\cite{PKC:DFKLMPW23} to define an analogue of CSIDH, named SCALLOP,
-based on orientations by arbitrary orders.
+based on orientations by suborders of large prime conductor inside a
+maximal order of small discriminant.
 
 
 \section{Security and quantum computers}
 
 We now do a quick review of the security of protocols based on complex
 multiplication. %
-The cornerstone of isogeny based cryptography is the isogeny path
-problem: given isogenous curves $E$, $E'$, find an isogeny of smooth
-degree between them. %
-CM based protocols are no exception: find an isogeny walk between $E$
-and $E'$, and the group action inverse problem is solved. %
-Naturally, the first parameter to look at is the size of the isogeny
-class of $E,E'$: too small, and we can find the isogeny by brute
-force. %
+The cornerstone of isogeny based cryptography is the \emph{isogeny
+  path problem}: given isogenous curves $E$, $E'$, find a path between
+them in \emph{some} isogeny graph. %
+CM-based protocols are no exception: find an isogeny walk between $E$
+and $E'$ in the CM graph, and the \hyperref[prob:gaip]{group action
+  inverse problem} is solved. %
+We restate this problem using our newly introduced terminology; for
+simplicity, we restrict to primitive orientations.
 
-For simplicity we assume that $E$ and $E'$ have complex multiplication
-by a maximal order. %
-Indeed, if this is not the case, we may use the theory of isogeny
-volcanoes to find ascending paths from $E$ and $E'$ to two curves
-$\hat{E},\hat{E}'$ with complex multiplication by the maximal order.%
-\footnote{Ascending an $\ell$-volcano can be done efficiently as long
-  as $\ell$ is polynomially sized. %
-  However SCALLOP~\cite{PKC:DFKLMPW23} uses supersingular curves
-  oriented by a non-maximal quadratic order of large prime conductor,
-  a case where it is not currently known how to efficiently walk to
-  the maximal order.} %
-Then, we are left with the problem of finding a horizontal isogeny
-between $\hat{E}$ and $\hat{E'}$. %
-Since the horizontal isogeny class of $\O_K$ is the smallest among all
-horizontal isogeny classes of curves with complex multiplication by
-some $\O⊂\O_K$, this is an easier problem to solve, as first noted by
-Galbraith, Hess and
-Smart~\cite{EC:GalHesSma02,galbraith+stolbunov11}.%
-
-\begin{problem}[Horizontal isogeny path problem]
+\begin{problem}[Oriented isogeny path problem]
   \label{prob:hiwp}
-  Let $\F_q$ be a finite field, and let $\O_K$ be the ring of integers
-  of a quadratic imaginary field $K=ℚ(\sqrt{-D})$. %
-  Given two elliptic curves $E,E'$ defined over $\F_q$ with complex
-  multiplication by $\O_K$, find an isogeny $E→E'$ of smooth degree.
+  \footnote{This problem is almost identical to the \emph{effective
+      $\O$-vectorization} problem of~\cite{EC:Wesolowski22}.}  %
+  Let $\F_q$ be a finite field, and let $\O$ be a quadratic imaginary
+  order $\O ⊂ K$. %
+  Given two isogenous primitively $\O$-oriented elliptic curves $E,E'$
+  defined over $\F_q$, find an isogeny $E→E'$ of smooth degree.
 \end{problem}
 
-The size of the horizontal isogeny class is $h(\O_K)$; it is known by
-the class number formula that this is in $O(\sqrt{Δ_K}\log Δ_K)$, and,
-for the typical isogeny class\footnote{Including the isogeny class of
-  trace zero supersingular curves used in CSIDH.}, $Δ_K=O(q)$. %
+Naturally, the first parameter to look at is the size of the
+$\O$-oriented isogeny class: too small, and we can find an isogeny by
+brute force. %
 The best generic attack against the \nameref{prob:hiwp} is a
 Pollard-rho style algorithm, performing random walks from $E$ and $E'$
 until a collision is found~\cite{GHS}. %
-Its average complexity is $O(\sqrt{h(\O_K)})$, thus $O(q^{1/4})$ for a
-typical isogeny class. %
-This justifies choosing a prime $q$ of $4n$ bits, for a security level
-of $2^n$, and this is indeed and what CSIDH
-does~\cite{AC:CLMPR18}.
+Its average complexity is $O(\sqrt{h(\O)})$, the square root of the
+class number of $\O$. %
 
-However, we must also ensure that the key space covers the whole
-$\Ell_q(\O_K)$, possibly approaching the uniform distribution. %
-This means that isogeny walks, as in Eq.~\eqref{eq:iso-walk}, must be
-sampled from a relatively large subset $S⊂\Cl(\O_K)$, implying that
-$\#S\gg \log q$. %
-For efficiency reasons, practical instantiations take $S$ just large
-enough: $\#S\sim (\log q)/2$;%
-\footnote{Additional constraints in CSIDH force $\#S$ to grow as
-  $(\log q)/(\loglog q)$.} %
-however it will not go unnoticed that this choice is insufficient to
-apply Theorem~\ref{th:ord-exp}. %
-We may as well live with it, changing our security assumptions to take
-into account the biased distributions given by random walks in graphs
-that are not provably expander families, but behave in practice as
-such. %
+When $\O$ is the maximal order of $K$, it is known by the class number
+formula that $h(\O)$ is in $O(\sqrt{Δ_K}\log Δ_K)$. %
+If we take an elliptic curve over $\F_q$ at random, then with
+overwhelming probability it will be ordinary and $Δ_K=O(q)$.%
+\footnote{The discriminant of Frobenius can be computed in polynomial
+  time using Schoof's algorithm (see
+  Appendix~\ref{sec:appl-point-count}), then factoring it gives
+  $Δ_K$. %
+  Thus it is generally feasible to find by trial-and-error ordinary
+  curves with an adequately large $Δ_K$.} %
+Similarly, in the case of Frobenius-oriented supersingular curves
+(i.e., CSIDH and variants) $Δ_K = -4q$ or $Δ_K = -q$. %
+Either way, the generic attack runs in $O(q^{1/4})$, which
+justifies choosing a prime $q$ of $4n$ bits for a security level of
+$2^n$, as done in~\cite{10.1007/978-3-030-03332-3_14,AC:CLMPR18}.
+
+The generic attack is relevant when the distributions of $E$ and $E'$
+are independent, e.g.\ when at least one of the two is uniformly
+distributed in the class. %
+However if the key space of a key exchange scheme is not large enough,
+it may be more efficient to perform a brute force search on it. %
+Ideally, we would construct CM graphs with a sufficiently large subset
+of edges $S⊂\Cl(\O_K)$, and take random walks long enough that
+Theorem~\ref{th:ord-exp} applies, thus ensuring that public keys are
+uniformly distributed. %
+However this is seldom efficient, and practical schemes take instead a
+key space just large enough that a search for the secret key is at
+least as expensive as the generic algorithm. %
+
+\begin{remark}
+  When the orientation is not principal, the first step consists in
+  reducing to the principal case using the theory of isogeny
+  volcanoes, as first outlined by Galbraith, Hess and
+  Smart~\cite{EC:GalHesSma02,galbraith+stolbunov11}.
+  
+  Let $E$ be $\O$-oriented and let $\O_K ⊃ \O$ be the maximal order. %
+  For each prime $ℓ$ dividing the conductor $[\O_K:\O]$ we determine
+  the level of $E$ in the $ℓ$-volcano, then an ascending walk to a
+  curve on the crater. %
+  Repeating for each prime, we obtain an $\O_K$-principally oriented
+  curve $\hat{E}$ and a walk $E→\hat{E}$. %
+  Doing the same for the second curve $E'$, we reduce to the
+  $\O_K$-oriented problem between $\hat{E}$ and $\hat{E}'$.
+  
+  However, these steps are only doable for ``small'' primes $ℓ$ (say
+  $ℓ∈\polylog(q)$). %
+  In most practical cases, the conductor $[\O_K:\O]$ will only contain
+  a handful of small primes and the reduction applies. %
+  One notable exception are the public keys used in
+  SCALLOP~\cite{PKC:DFKLMPW23}, which are all principally oriented by
+  the same order $\O$ of large prime conductor $f = [\O_K:\O]$. %
+  In this case, it can be shown that evaluating the ascending
+  $f$-isogeny is in fact equivalent to breaking the system.
+\end{remark}
+
 
 \paragraph{Quantum security.}
 The discussion on security would not be complete without surveying
@@ -3542,10 +3587,11 @@ the HShP in subexponential quantum time $\exp(\sqrt{\log\#G})$. %
 As first noted in~\cite{childs2014constructing} and then improved
 in~\cite{BIJ18,Jao-etal-kuperberg-2018,EC:BonSch20,EC:Peikert20},
 Kuperberg's algorithm can be used to solve the \nameref{prob:hiwp} as
-follows: let $E,E'$ be the two curves with complex multiplication by
-$\O_K$, define two functions $f_0,f_1:\Cl(\O_K)\to\Ell_q(\O_K)$ as
-$f_0(\a)=\a·E$ and $f_1(\a)=\a·E'$, then the hidden shift defines a
-horizontal isogeny between $E$ and $E'$. %
+follows: let $E,E'$ be the two oriented curves in the same isogeny
+class $\mathcal{C}$, define two functions
+$f_0,f_1:\Cl(\O)\to\mathcal{C}$ as $f_0(\a)=\a·E$ and $f_1(\a)=\a·E'$,
+then the hidden shift corresponds to the class of a horizontal isogeny
+between $E$ and $E'$. %
 
 Kuperberg's algorithm is a game changer for protocols based on complex
 multiplication: indeed, to ensure $2^n$ quantum security we need to
@@ -4312,7 +4358,7 @@ We can prove that such an isogeny always exists.
 \end{proof}
 
 Even though $ϕ:E_0→E$ always exists, it is not necessarily easy to
-compute. %
+find. %
 We will come back to the problem of computing isogenies of
 supersingular curves and its relationship to computing their
 endomorphsim rings in Section~\ref{sec:security}.
