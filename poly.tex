@@ -81,6 +81,7 @@
 \DeclareMathOperator{\im}{Im} % imaginary part
 \DeclareMathOperator{\re}{Re} % real part
 \DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\PGL}{PGL}
 \DeclareMathOperator{\SL}{SL}
 \DeclareMathOperator{\Cl}{Cl}
 \DeclareMathOperator{\Ell}{Ell}
@@ -218,8 +219,8 @@ Many students have contributed by pointing out mistakes and helping
 fixing them. %
 We would like to thank, in particular, Simon Masson, Marcel Müller,
 Martin Strand, Vadym Fedyukovych, Tomáš Novotny, Sina Schaeffler,
-Val\'erien Hatey, Mehdi Kermaoui, and apologize to all those students
-whose name we've forgot.
+Val\'erien Hatey, Mehdi Kermaoui, Ryan Rueger, and apologize to all
+those students whose name we've forgot.
 
 \clearpage
 {
@@ -2045,8 +2046,9 @@ is a symmetric relation. %
 Remark that being $ℓ$-isogenous is also well defined up to
 isomorphism.
 
-Let us start from the local structure: given an elliptic curve $E$ and
-a prime $ℓ$, how many isogenies of degree $ℓ$ have $E$ as domain? %
+Let us start with the local structure of the graph: given an elliptic
+curve $E$ and a prime $ℓ$, how many isogenies of degree $ℓ$ have $E$
+as domain? %
 Thanks to Proposition~\ref{prop:isoker}, we know this is equivalent to
 asking how many subgroups of order $ℓ$ the curve has; but then we
 immediately know there are exactly $ℓ+1$ isogenies whenever $ℓ≠p$.
@@ -2098,9 +2100,10 @@ $π(\ker ϕ)=\ker ϕ$, which suggests looking at the restriction of $π$
 to $E[ℓ]$. %
 Assume $ℓ≠p$, then $E[ℓ]$ is a group of rank $2$ and $π$ acts on it
 like an element of $\GL_2(\F_ℓ)$, up to conjugation. %
-Clearly, the order of $π$ in $\GL_2(\F_ℓ)$ is the degree of the
-smallest extension of $\F_q$ where all $ℓ$-isogenies of $E$ are
-defined. %
+If $n$ is the smallest exponent such that $π^n$ acts like a scalar
+multiplication, i.e.\ if $n$ is the order of $π$ in $\PGL_2(\F_ℓ)$,
+then $\F_{q^n}$ is the smallest field where all $ℓ$-isogenies of $E$
+are defined. %
 But we can tell even more by diagonalizing the matrix: $π$ must have
 between $0$ and $2$ eigenvalues, and the corresponding eigenvectors
 define kernels of rational isogenies. %
@@ -2129,7 +2132,7 @@ Naturally, the number of eigenvalues of $π$ depends on the
 factorization of its characteristic polynomial $x^2-tx+q$ over $\F_ℓ$,
 or equivalently on whether $Δ_π=t^2-4q$ is a square modulo $ℓ$. %
 
-But what about the global structure? %
+But what about the global structure of the graph? %
 Any curve $E/\F_q$ can be seen as the reduction modulo $p$ of some
 curve $E/\bar{ℚ}$; thus it must inherit the connectivity structure of
 the isogeny graph of $E/\bar{ℚ}$. %
